@@ -10,6 +10,7 @@ export default function Main() {
 
   const handleHovder = () => {
     setisHover(true);
+    console.log(123);
   };
 
   return (
