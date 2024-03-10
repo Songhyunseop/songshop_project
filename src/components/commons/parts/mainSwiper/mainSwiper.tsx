@@ -41,7 +41,6 @@ export default function MainSWiper() {
         speed={1500}
         loop={true}
         autoplay={{ delay: 5000, disableOnInteraction: false }}
-        spaceBetween={10}
         slidesPerView={3}
         onSwiper={(swiper) => setItemSwiper(swiper)}
       >

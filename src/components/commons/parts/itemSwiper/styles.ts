@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { ArrowProps } from '@/commons/types/arrowtype';
+import { ArrowProps } from '@/commons/types/arrow_type';
 
 // interface ArrowProps {
 //   direction: string;

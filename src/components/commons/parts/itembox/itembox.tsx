@@ -1,5 +1,6 @@
+import { ItemBoxProps } from '@/commons/types/itemBox_type';
 import * as S from './styles';
 
-export default function ItemBox() {
-  return <S.ItemBox></S.ItemBox>;
+export default function ItemBox(props: ItemBoxProps) {
+  return <S.ItemBox>{props.isBest && <S.Label>BEST</S.Label>}</S.ItemBox>;
 }

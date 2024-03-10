@@ -7,7 +7,7 @@ const globalStyle = css`
     box-sizing: border-box;
     font-family: 'NanumSquareNeo';
     font-weight: 200;
-    font-size: 16px;
+    font-size: 62.5%;
   }
 
   // main 캐러셀
@@ -19,7 +19,7 @@ const globalStyle = css`
     position: relative;
     width: 300px;
     overflow: hidden;
-    transition: all 0.9s ease;
+    transition: all 0.8s ease;
 
     &:hover {
       filter: brightness(0.8);

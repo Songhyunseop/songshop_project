@@ -2,6 +2,7 @@ import ItemBox from '@/components/commons/parts/itembox/itembox';
 import * as S from './styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faCarAlt,
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
@@ -28,6 +29,7 @@ export default function ItemList() {
 
   return (
     <S.Main>
+      <FontAwesomeIcon icon={faChevronRight} />
       <S.Category_Title>OUTWEAR</S.Category_Title>
       <S.Category_Nav>
         {categoryArr.map((el, idx) => (
@@ -38,13 +40,13 @@ export default function ItemList() {
         <S.Item_Title>BEST ITEM</S.Item_Title>
         <S.Items>
           {new Array(4).fill(1).map((_, idx) => (
-            <ItemBox key={idx} />
+            <ItemBox isBest={true} key={idx} />
           ))}
         </S.Items>
       </S.BestItem_Section>
       <S.AllItem_Section>
         <S.Item_Title>ALL ITEM</S.Item_Title>
-        <S.Items>
+        <S.Items isAll={true}>
           {new Array(8).fill(1).map((_, idx) => (
             <ItemBox key={idx} />
           ))}

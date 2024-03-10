@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 export const Main = styled.main`
-  width: 1280px;
+  max-width: 1280px;
   margin: 0 auto;
   border: 2px solid blue;
 `;
@@ -23,7 +23,7 @@ export const Item = styled.div`
 `;
 
 export const Section_Title = styled.span`
-  font-size: 26px;
+  font-size: 2.6rem;
   font-weight: 300;
   margin-bottom: 40px;
 `;
@@ -96,6 +96,7 @@ export const Button = styled.button`
   width: 170px;
   height: 60px;
   color: #f7f3f5;
+  font-size: 1.5rem;
   font-weight: 500;
   letter-spacing: 3px;
 `;

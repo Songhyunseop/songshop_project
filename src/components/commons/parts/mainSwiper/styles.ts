@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { ArrowProps } from '@/commons/types/arrowtype';
+import { ArrowProps } from '@/commons/types/arrow_type';
 
 export const Wrapper = styled.div`
   position: relative;
@@ -53,7 +53,7 @@ export const Main_Title = styled.p`
   bottom: 10px;
   padding-left: 10px;
   color: #f7f3f5;
-  font-size: 3rem;
+  font-size: 4.5rem;
   font-weight: 500;
   z-index: 2;
 `;
