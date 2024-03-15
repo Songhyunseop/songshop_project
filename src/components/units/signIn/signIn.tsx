@@ -3,7 +3,6 @@ import * as S from './styles';
 
 export default function Login() {
   // input, button height 통일 변수
-  console.log('hello world');
 
   const loginOption = {
     bgColor: '#e2c2b3',
