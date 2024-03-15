@@ -2,7 +2,6 @@ import ItemBox from '@/components/commons/parts/itembox/itembox';
 import * as S from './styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCarAlt,
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
@@ -14,8 +13,8 @@ export default function ItemList() {
   const [currentPage, setCurrentPage] = useState(1);
 
   // 총 페이지 수
-  const totalItems = 69;
-  const totalPages = Math.ceil(totalItems / 5);
+  // const totalItems = 69;
+  // const totalPages = Math.ceil(totalItems / 5);
 
   // 현재 페이지 그룹
   const currentPageGroup = Math.ceil(currentPage / 5);

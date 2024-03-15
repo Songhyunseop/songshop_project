@@ -1,5 +1,5 @@
 import * as S from './styles';
 
-export default function DetailComponents() {
+export default function QuestionComponent() {
   return <S.QuestionComponents></S.QuestionComponents>;
 }

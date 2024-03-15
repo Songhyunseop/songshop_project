@@ -1,3 +1,4 @@
+import { isThumbsImageProps } from '@/commons/types/detail_type';
 import styled from '@emotion/styled';
 
 export const Main = styled.main`
@@ -6,6 +7,7 @@ export const Main = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0px 2.5rem;
 `;
 
 export const DetailWrapper_Top = styled.section`
@@ -13,17 +15,38 @@ export const DetailWrapper_Top = styled.section`
   height: 750px;
   display: flex;
   align-items: flex-start;
+  padding-bottom: 4rem;
   gap: 5%;
 `;
 
 export const Product_Pic_Carousel = styled.div`
   width: 45%;
-  height: 80%;
-  background-color: gray;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const Main_Pic_Section = styled.section`
+  height: 75%;
+`;
+
+export const Swiper_Img = styled.img<isThumbsImageProps>`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: ${(props) =>
+    props.isSameSlide && props.isThumbs ? '4px solid #e2c2b3' : 'none'};
+`;
+
+export const Thumbs_Section = styled.section`
+  height: 25%;
+  display: flex;
+  align-items: center;
 `;
 
 export const Details = styled.section`
   width: 55%;
+  height: 100%;
   background-color: rgba(226, 194, 179, 0.12);
   border-radius: 5px;
   padding: 1.9rem;
@@ -83,54 +106,13 @@ export const Button_Bascket = styled.button`
 `;
 
 export const DetailWrapper_Bottom = styled.section`
-  width: 100%;
-  height: 750px;
+  max-width: 1280px;
+  margin: 0 auto;
+  min-height: 750px;
   display: flex;
   flex-direction: column;
   align-items: center;
   border-top: 1.5px solid #d2d2d2;
+  position: relative;
+  z-index: 1;
 `;
-
-// export const Select_Nav = styled.nav`
-//   margin-top: 6rem;
-//   margin-bottom: 15rem;
-// `;
-
-// export const Nav_List = styled.ul`
-//   list-style: none;
-//   display: flex;
-// `;
-
-// export const Nav_Item = styled.li`
-//   font-size: 2.4rem;
-//   display: flex;
-//   align-items: center;
-
-//   &:not(:nth-child(3)):after {
-//     content: '|';
-//     margin: 0 1rem;
-//   }
-
-//   & :hover {
-//     color: #e2c2b3;
-//   }
-//   cursor: pointer;
-// `;
-
-// export const Nav_Content = styled.span`
-//   font-size: 2.1rem;
-// `;
-
-// export const Count = styled.div`
-//   width: 25px;
-//   height: 25px;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   color: #f7f3f5;
-//   font-size: 1.6rem;
-//   font-weight: 500;
-//   margin-left: 5px;
-//   border-radius: 5px;
-//   background-color: rgba(160, 160, 160, 0.8);
-// `;

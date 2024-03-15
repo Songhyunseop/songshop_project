@@ -8,6 +8,7 @@ export const Main = styled.main`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 0px 2.5rem;
 `;
 
 export const Category_Title = styled.h1`
@@ -65,13 +66,6 @@ export const Items = styled.article<ItemsProps>`
   grid-gap: 1.5rem;
   border: 3px solid blue;
 `;
-
-// export const TestDiv = styled.div`
-//   display: grid;
-//   grid-template-columns: repeat(4, minmax(150px, 1fr));
-//   grid-gap: 1.5rem;
-//   border: 3px solid blue;
-// `;
 
 export const Item_Title = styled.span`
   margin-bottom: 30px;

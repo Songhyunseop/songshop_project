@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 export const Main = styled.main`
   max-width: 1280px;
   margin: 0 auto;
+  padding: 0px 2.5rem;
   border: 2px solid blue;
 `;
 
@@ -82,10 +83,9 @@ export const NewItem_Section = styled.section`
 
 export const Item_List = styled.div`
   width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  row-gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  grid-gap: 1.5rem;
   border: 2px solid yellowgreen;
 `;
 

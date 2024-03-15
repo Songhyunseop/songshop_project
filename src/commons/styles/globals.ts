@@ -39,9 +39,22 @@ const globalStyle = css`
     overflow: hidden;
   }
 
-  @font-face {
-    font-family: 'NanumSquareNeo';
-    src: url('../../../fonts/nanumsquareneo-variable.woff') format('woff');
+  // detail 캐러셀
+  .detail_swiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .detail_thumbs_swiper {
+    width: 70%;
+    height: 120px;
+  }
+
+  // swiper-zoom-container 기본 속성 수정
+  .detail_swiper .swiper-zoom-container > img,
+  .swiper-zoom-container > svg,
+  .swiper-zoom-container > canvas {
+    object-fit: cover;
   }
 `;
 
