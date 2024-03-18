@@ -1,30 +1,13 @@
 import Button from '@/components/commons/parts/signIn/buttons/buttons';
+import {
+  loginOption,
+  googleLoginOption,
+  naverLoginOption,
+} from '@/components/commons/constants/constants';
+
 import * as S from './styles';
 
 export default function Login() {
-  // input, button height 통일 변수
-
-  const loginOption = {
-    bgColor: '#e2c2b3',
-    fontColor: '#F7F3F5',
-    content: '로그인',
-    icon: 'none',
-  };
-
-  const googleLoginOption = {
-    bgColor: '#f7f3f5',
-    fontColor: '#000000',
-    content: 'Google로 로그인',
-    icon: 'google',
-  };
-
-  const naverLoginOption = {
-    bgColor: '#2DB400',
-    fontColor: '#ffffff',
-    content: 'Naver로 로그인',
-    icon: 'naver',
-  };
-
   return (
     <S.Main>
       <S.Title>LOGIN</S.Title>
@@ -33,7 +16,10 @@ export default function Login() {
         <S.Login_Input />
       </S.Input_Section>
       <Button options={loginOption} />
-      <S.User_Contact_Section>ID찾기, 회원가입</S.User_Contact_Section>
+      <S.User_Contact_Section>
+        <S.Contact_Info>ID찾기</S.Contact_Info>
+        <S.Contact_Info>회원가입</S.Contact_Info>
+      </S.User_Contact_Section>
       <Button options={googleLoginOption} />
       <Button options={naverLoginOption} />
     </S.Main>

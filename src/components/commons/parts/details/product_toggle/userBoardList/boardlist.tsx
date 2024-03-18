@@ -6,8 +6,7 @@ export default function UserBoardList({
   reviewProps,
   questionProps,
 }: IUserBoardListProps) {
-  const { isReview, title, subtitle, button_name } =
-    reviewProps || questionProps || {};
+  const { title, subtitle, button_name } = reviewProps || questionProps || {};
 
   // 임시 데이터 (DB 받아오는 데이터로 변경예정)
   const arr = Array.from({ length: 8 }).map(() => ({ isClicked: false }));

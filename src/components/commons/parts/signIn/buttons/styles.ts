@@ -1,6 +1,7 @@
+import { IButtonProps } from '@/commons/types/signIn_type';
 import styled from '@emotion/styled';
 
-export const Main = styled.button`
+export const Main = styled.button<IButtonProps>`
   width: 100%;
   height: calc(110px * (45 / 100)); //받아오는 container 높이값의 45%로 계산
   letter-spacing: 0.08rem;

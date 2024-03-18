@@ -36,7 +36,15 @@ export const Login_Input = styled.input`
 export const User_Contact_Section = styled.section`
   width: 100%;
   text-align: end;
-  font-size: 1.6rem;
-  font-weight: 300;
   padding: 0 0 10% 0;
+`;
+
+export const Contact_Info = styled.span`
+  font-size: 1.8rem;
+  font-weight: 300;
+
+  :nth-child(1)::after {
+    content: '|';
+    margin: 0 0.8rem;
+  }
 `;
