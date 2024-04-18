@@ -12,14 +12,16 @@ const globalStyle = css`
 
   // main 캐러셀
   .main_swiper {
+    width: 100%;
     height: 500px;
+    border: 3px solid red;
   }
 
   .main_swiper .swiper-slide {
+    border: 2px solid blue;
     position: relative;
-    width: 300px;
     overflow: hidden;
-    transition: all 0.8s ease;
+    transition: filter 0.8s ease;
 
     &:hover {
       filter: brightness(0.8);
@@ -37,6 +39,7 @@ const globalStyle = css`
     display: flex;
     justify-content: space-evenly;
     overflow: hidden;
+    border: 2px solid green;
   }
 
   // detail 캐러셀

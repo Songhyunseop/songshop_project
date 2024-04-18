@@ -29,7 +29,6 @@ export default function MainSWiper() {
       >
         <S.Arrow_Direction src='/arrow.png' direction='next' />
       </S.Arrow>
-
       <Swiper
         className='main_swiper'
         modules={[Pagination, Autoplay]}
@@ -39,7 +38,7 @@ export default function MainSWiper() {
           prevEl: '.swipers-prev',
         }}
         speed={1500}
-        loop={true}
+        // loop={true}
         autoplay={{ delay: 5000, disableOnInteraction: false }}
         slidesPerView={3}
         onSwiper={(swiper) => setItemSwiper(swiper)}

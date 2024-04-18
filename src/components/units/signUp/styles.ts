@@ -8,6 +8,7 @@ export const Main = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   padding: 0 30rem;
   padding-top: 10rem;
 
@@ -22,9 +23,17 @@ export const Title = styled.h1`
   margin-bottom: 6rem;
 `;
 
+export const SignUpForm = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10rem;
+`;
+
 export const SignUp_Button = styled.button`
   width: 17%;
-  height: 6%;
+  height: 40px;
   font-size: 1.7rem;
   font-weight: 400;
   color: #f7f3f5;

@@ -2,11 +2,12 @@ import * as S from './styles';
 
 import MainSWiper from '@/components/commons/parts/mainSwiper/mainSwiper';
 import ItemSwiper from '@/components/commons/parts/itemSwiper/itemSwiper';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ItemBox from '@/components/commons/parts/itembox/itembox';
 
 export default function Main() {
   const [ishover, setisHover] = useState(false);
+  const [isLoad, setIsLoad] = useState(false);
 
   const [count, setCount] = useState(8);
 
@@ -23,6 +24,10 @@ export default function Main() {
   const countUp = () => {
     setCount((prev) => prev + 4);
   };
+
+  useEffect(() => {
+    setIsLoad(true);
+  }, []);
 
   return (
     <S.Main>
