@@ -1,15 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import InputContainer from '@/components/commons/parts/signUp/InputBox/inputBox';
-import {
-  FieldValue,
-  FieldValues,
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import supabase from '@/commons/utils/supabase/client';
 
 import * as S from './styles';
 
 export default function SignUp() {
+  const supabaseClient = supabase();
+
   const {
     register,
     handleSubmit,
@@ -20,13 +18,36 @@ export default function SignUp() {
 
   const SignUpInputDataArr = [
     {
-      title: '아이디',
-      field: 'id',
+      title: '이름',
+      field: 'name',
+      type: 'text',
+      args: {
+        required: '빈 칸으로 둘 수 없습니다',
+        pattern: {
+          value: /[ㄱ-ㅎㅏ-ㅣ가-힣]/,
+          message: '올바르지 않은 형식입니다',
+        },
+      },
+    },
+    {
+      title: '닉네임',
+      field: 'nickName',
       type: 'text',
       args: {
         required: '빈 칸으로 둘 수 없습니다',
         pattern: {
           value: /^[a-zA-Z0-9]+$/,
+          message: '올바르지 않은 형식입니다',
+        },
+      },
+    },
+    {
+      title: 'E-MAIL',
+      field: 'email',
+      args: {
+        required: '빈 칸으로 둘 수 없습니다',
+        pattern: {
+          value: /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/,
           message: '올바르지 않은 형식입니다',
         },
       },
@@ -62,37 +83,35 @@ export default function SignUp() {
       },
     },
     {
-      title: '이름',
-      field: 'name',
-      type: 'text',
-      args: {
-        required: '빈 칸으로 둘 수 없습니다',
-        pattern: {
-          value: /[ㄱ-ㅎㅏ-ㅣ가-힣]/,
-          message: '올바르지 않은 형식입니다',
-        },
-      },
-    },
-    {
       title: '휴대전화',
       filed: 'phone',
     },
-    {
-      title: 'E-MAIL',
-      field: 'email',
-      args: {
-        required: '빈 칸으로 둘 수 없습니다',
-        pattern: {
-          value: /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/,
-          message: '올바르지 않은 형식입니다',
-        },
-      },
-    },
   ];
 
-  const onSubmit: SubmitHandler<FieldValues> = (data, e) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data, e) => {
     e?.preventDefault();
-    console.log(data);
+    // console.log(data);
+
+    const phone = data.phone;
+    const phoneNum = phone.map((el) => el).join('-');
+
+    try {
+      const { data: signUpData, error } = await supabaseClient.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            user_name: data.name,
+            user_nickName: data.nickName,
+            user_phone: phoneNum,
+          },
+        },
+      });
+      if (error) throw error;
+    } catch (error) {
+      if (error.message === 'User already registered')
+        alert('이미 가입한 사용자입니다');
+    }
   };
 
   return (

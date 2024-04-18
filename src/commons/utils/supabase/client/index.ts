@@ -1,10 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
 
-export default function Supabase() {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL as string,
-    process.env.NEXT_PUBLIC_SERVICE_KEY as string
-  );
+const client = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL as string,
+  process.env.NEXT_PUBLIC_SERVICE_KEY as string
+);
 
-  return supabase;
-}
+const supabase = () => client;
+
+export default supabase;
