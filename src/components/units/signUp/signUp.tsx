@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import InputContainer from '@/components/commons/parts/signUp/InputBox/inputBox';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
+
 import supabase from '@/commons/utils/supabase/client';
 
 import * as S from './styles';
 
 export default function SignUp() {
   const supabaseClient = supabase();
+  const router = useRouter();
 
   const {
     register,
@@ -36,7 +39,7 @@ export default function SignUp() {
       args: {
         required: '빈 칸으로 둘 수 없습니다',
         pattern: {
-          value: /^[a-zA-Z0-9]+$/,
+          value: /^[a-zA-Z0-9ㄱ-힣]*$/,
           message: '올바르지 않은 형식입니다',
         },
       },
@@ -90,10 +93,9 @@ export default function SignUp() {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data, e) => {
     e?.preventDefault();
-    // console.log(data);
 
     const phone = data.phone;
-    const phoneNum = phone.map((el) => el).join('-');
+    const phoneNum = phone.map((el: string) => el).join('-');
 
     try {
       const { data: signUpData, error } = await supabaseClient.auth.signUp({
@@ -102,15 +104,19 @@ export default function SignUp() {
         options: {
           data: {
             user_name: data.name,
-            user_nickName: data.nickName,
+            user_nickname: data.nickName,
             user_phone: phoneNum,
           },
         },
       });
       if (error) throw error;
+
+      router.push('/');
     } catch (error) {
-      if (error.message === 'User already registered')
-        alert('이미 가입한 사용자입니다');
+      if (error instanceof Error) {
+        if (error.message === 'User already registered')
+          alert('이미 가입한 사용자입니다');
+      }
     }
   };
 
