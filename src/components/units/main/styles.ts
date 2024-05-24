@@ -78,13 +78,13 @@ export const NewItem_Section = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 2px solid green;
+  border: 2px solid red;
 `;
 
 export const Item_List = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  grid-template-columns: repeat(4, minmax(50px, 1fr));
   grid-gap: 1.5rem;
   border: 2px solid yellowgreen;
 `;

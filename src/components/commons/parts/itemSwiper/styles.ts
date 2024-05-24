@@ -1,9 +1,6 @@
 import styled from '@emotion/styled';
 import { ArrowProps } from '@/commons/types/arrow_type';
-
-// interface ArrowProps {
-//   direction: string;
-// }
+import { SwiperSlide } from 'swiper/react';
 
 export const Wrapper = styled.div`
   position: relative;
@@ -19,10 +16,15 @@ export const Wrapper = styled.div`
 `;
 
 export const ItemImg = styled.img`
-  width: 300px;
-  height: 100%;
-  object-fit: cover;
+  max-width: 300px;
+  width: 100%;
   z-index: 1;
+
+  &:before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+  }
 `;
 
 export const Arrow = styled.div<ArrowProps>`
@@ -45,4 +47,16 @@ export const Arrow_Direction = styled.img<ArrowProps>`
   height: 50px;
   opacity: 0.5;
   transform: ${(props) => (props.direction === 'prev' ? 'scaleX(-1)' : 'none')};
+`;
+
+export const Styled_SwiperSlide = styled(SwiperSlide)`
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+
+  &:before {
+    content: '';
+    padding-top: 100%;
+  }
 `;

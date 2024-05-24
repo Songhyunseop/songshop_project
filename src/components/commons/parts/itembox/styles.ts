@@ -2,18 +2,17 @@ import styled from '@emotion/styled';
 
 export const ItemBox = styled.div`
   max-width: 320px;
-  width: 100%;
+  /* width: 100%; */
   font-size: 2rem;
   background-color: gray;
   display: flex;
   justify-content: flex-end;
-  border: 2px solid black;
 
   // width값에 따라 padding으로 비율 유지
   &:before {
     content: '';
     display: block;
-    padding-top: 109.375%;
+    padding-top: 100%;
   }
 `;
 

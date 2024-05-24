@@ -30,16 +30,16 @@ const globalStyle = css`
 
   // item 캐러셀
   .item_swiper {
-    height: 350px;
+    width: 100%;
     margin-bottom: 200px;
   }
 
   .item_swiper .swiper-slide {
-    width: 300px;
+    max-width: 320px;
+    max-height: 320px;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     overflow: hidden;
-    border: 2px solid green;
   }
 
   // detail 캐러셀

@@ -7,6 +7,7 @@ import SwiperCore from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { useState } from 'react';
+import { css } from '@emotion/react';
 
 export default function ItemSwiper() {
   const [swiper, setSwiper] = useState<SwiperCore>();
@@ -33,9 +34,9 @@ export default function ItemSwiper() {
         onSwiper={(swiper) => setSwiper(swiper)}
       >
         {new Array(12).fill(1).map((_, idx) => (
-          <SwiperSlide key={idx}>
-            <S.ItemImg src='/items.png' />
-          </SwiperSlide>
+          <S.Styled_SwiperSlide key={idx}>
+            <S.ItemImg src='/carousel3.jpeg' />
+          </S.Styled_SwiperSlide>
         ))}
       </Swiper>
       <S.Arrow
