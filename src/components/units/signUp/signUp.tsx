@@ -111,7 +111,8 @@ export default function SignUp() {
       });
       if (error) throw error;
 
-      router.push('/');
+      alert('회원가입이 완료되었습니다 다시 로그인 해주세요');
+      router.push('/signIn');
     } catch (error) {
       if (error instanceof Error) {
         if (error.message === 'User already registered')

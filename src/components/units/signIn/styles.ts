@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Link from 'next/link';
 
 export const Main = styled.main`
   max-width: 1280px;
@@ -10,6 +11,7 @@ export const Main = styled.main`
   align-items: center;
   padding: 0 40rem;
   padding-top: 10rem;
+  border: 2px solid blue;
 `;
 
 export const Title = styled.h1`
@@ -39,9 +41,11 @@ export const User_Contact_Section = styled.section`
   padding: 0 0 10% 0;
 `;
 
-export const Contact_Info = styled.span`
+export const StyledLink = styled(Link)`
   font-size: 1.8rem;
   font-weight: 300;
+  text-decoration: none;
+  color: black;
 
   :nth-child(1)::after {
     content: '|';
