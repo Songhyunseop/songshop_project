@@ -1,16 +1,14 @@
 import Link from 'next/link';
 import styled from 'node_modules/@emotion/styled';
 
-export const Header_Wrapper = styled.header`
-  border: 2px solid blue;
-`;
+export const Header_Wrapper = styled.header``;
 
 export const Header_Main = styled.section`
   height: 240px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 3px solid red;
+  border-bottom: 1px solid #d2d2d2;
 `;
 
 export const Main_Left = styled.div`
@@ -53,7 +51,10 @@ export const Main_Right = styled.div`
   align-items: center;
 `;
 
-export const Main_Title = styled.p`
+export const Main_Title = styled.p``;
+
+export const Styled_TitleLink = styled(Link)`
+  text-decoration-line: none;
   color: #544d4e;
   font-size: 4.5rem;
   font-weight: 500;

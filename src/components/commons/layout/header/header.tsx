@@ -23,7 +23,9 @@ export default function Header() {
               </S.Nav_List>
             </S.User_SelectNav>
           </S.Main_Left>
-          <S.Main_Title>SONGSHOP</S.Main_Title>
+          <S.Main_Title>
+            <S.Styled_TitleLink href={'/'}>SONGSHOP</S.Styled_TitleLink>
+          </S.Main_Title>
           <S.Main_Right>
             <S.Search_Box></S.Search_Box>
             <S.Basket src='/bag.png' />

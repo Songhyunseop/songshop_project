@@ -6,13 +6,14 @@ import {
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
-
-import { faShoppingBag } from '@fortawesome/free-solid-svg-icons/faShoppingBag';
+import { useSearchParams } from 'next/navigation';
 
 export default function ItemList() {
   const categoryArr = ['JACKET', 'COAT', 'JUMPER'];
 
   const [currentPage, setCurrentPage] = useState(1);
+
+  const searchParams = useSearchParams();
 
   // 총 페이지 수
   // const totalItems = 69;
@@ -20,7 +21,6 @@ export default function ItemList() {
 
   // 현재 페이지 그룹
   const currentPageGroup = Math.ceil(currentPage / 5);
-
   const firstPage = (currentPageGroup - 1) * 5 + 1;
 
   const pageHandler = (idx: number) => {
@@ -28,10 +28,14 @@ export default function ItemList() {
     setCurrentPage(idx + 1);
   };
 
+  // queryString 추출
+  const category = searchParams.get('category');
+  console.log(category);
+
   return (
     <S.Main>
       <FontAwesomeIcon icon={faChevronRight} />
-      <S.Category_Title>OUTWEAR</S.Category_Title>
+      <S.Category_Title>{category}</S.Category_Title>
       <S.Category_Nav>
         {categoryArr.map((el, idx) => (
           <S.Category key={idx}>{el}</S.Category>

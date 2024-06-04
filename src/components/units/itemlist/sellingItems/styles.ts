@@ -62,7 +62,7 @@ export const Items = styled.article<ItemsProps>`
   grid-template-columns: ${(props) =>
     props.isAll
       ? 'repeat(4, minmax(150px, 1fr));'
-      : 'repeat(auto-fit, minmax(150px, 1fr));'};
+      : 'repeat(4, minmax(150px, 1fr));'};
   grid-gap: 1.5rem;
   border: 3px solid blue;
 `;

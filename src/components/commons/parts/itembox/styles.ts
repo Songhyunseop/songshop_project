@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 
 export const ItemBox = styled.div`
   max-width: 320px;
-  /* width: 100%; */
   font-size: 2rem;
   background-color: gray;
   display: flex;
