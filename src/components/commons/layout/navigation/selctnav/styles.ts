@@ -18,7 +18,7 @@ export const Nav_Item = styled.li`
 
   cursor: pointer;
 
-  &:not(:nth-child(3)):after {
+  &:not(:nth-of-type(3)):after {
     content: '|';
     margin: 0 1rem;
   }

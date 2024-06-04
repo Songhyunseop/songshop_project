@@ -7,7 +7,6 @@ import SwiperCore from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { useState } from 'react';
-import { css } from '@emotion/react';
 
 export default function ItemSwiper() {
   const [swiper, setSwiper] = useState<SwiperCore>();

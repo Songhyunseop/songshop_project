@@ -1,10 +1,9 @@
-import { IBasketListProps } from '@/commons/types/list_type';
 import * as S from './styles';
 
-export default function BasketList(props: IBasketListProps) {
+export default function ItemList(props) {
   return (
     <S.ItemList_Wrapper>
-      <S.Title>{props.isBasket ? '장바구니' : '주문목록'}</S.Title>
+      <S.Title>{'장바구니 또는 주문목록 또는 판매상품'}</S.Title>
       <S.Table_Header>
         <S.Table_List>ORDERS</S.Table_List>
         <S.Table_List>IMAGE</S.Table_List>

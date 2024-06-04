@@ -7,6 +7,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 
+import { faShoppingBag } from '@fortawesome/free-solid-svg-icons/faShoppingBag';
+
 export default function ItemList() {
   const categoryArr = ['JACKET', 'COAT', 'JUMPER'];
 

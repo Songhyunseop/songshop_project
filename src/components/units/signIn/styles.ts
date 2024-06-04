@@ -47,7 +47,7 @@ export const StyledLink = styled(Link)`
   text-decoration: none;
   color: black;
 
-  :nth-child(1)::after {
+  :nth-of-type(1)::after {
     content: '|';
     margin: 0 0.8rem;
   }

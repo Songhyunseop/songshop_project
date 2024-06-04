@@ -1,19 +1,24 @@
 import * as S from './styles';
 
+import supabase from '@/commons/utils/supabase/client';
 import MainSWiper from '@/components/commons/parts/mainSwiper/mainSwiper';
 import ItemSwiper from '@/components/commons/parts/itemSwiper/itemSwiper';
-import { useEffect, useState } from 'react';
 import ItemBox from '@/components/commons/parts/itembox/itembox';
 
-export default function Main() {
-  const [ishover, setisHover] = useState(false);
-  const [isLoad, setIsLoad] = useState(false);
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
+import { getDataList } from '@/components/commons/hooks/query/useQueryGetAllProducts';
+
+export default function Main() {
   const [count, setCount] = useState(8);
 
-  const handleHover = () => {
-    setisHover(true);
-  };
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['product'],
+    queryFn: getDataList,
+  });
+
+  console.log(data);
 
   const timeDelay = () => {
     setTimeout(() => {
@@ -25,10 +30,6 @@ export default function Main() {
     setCount((prev) => prev + 4);
   };
 
-  useEffect(() => {
-    setIsLoad(true);
-  }, []);
-
   return (
     <S.Main>
       <MainSWiper />
@@ -37,15 +38,8 @@ export default function Main() {
         <ItemSwiper />
       </S.BestItem_Section>
       <S.Board_Section>
-        <S.Board_Box className={ishover ? 'hovered' : ''}>
-          광고용 네비게이션자리
-        </S.Board_Box>
-        <S.Board_Box
-          onMouseEnter={() => handleHover()}
-          onMouseLeave={() => setisHover(false)}
-        >
-          광고용 네비게이션자리
-        </S.Board_Box>
+        <S.Board_Box>광고용 네비게이션자리 폰트</S.Board_Box>
+        <S.Board_Box>광고용 네비게이션자리 폰트</S.Board_Box>
       </S.Board_Section>
       <S.NewItem_Section>
         <S.Section_Title>NEW ITEM</S.Section_Title>

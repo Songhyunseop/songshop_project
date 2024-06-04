@@ -6,7 +6,7 @@ const globalStyle = css`
     padding: 0;
     box-sizing: border-box;
     font-family: 'NanumSquareNeo';
-    font-weight: 200;
+    font-weight: 300;
     font-size: 62.5%;
   }
 
@@ -31,7 +31,6 @@ const globalStyle = css`
   // item 캐러셀
   .item_swiper {
     width: 100%;
-    margin-bottom: 200px;
   }
 
   .item_swiper .swiper-slide {
@@ -58,6 +57,37 @@ const globalStyle = css`
   .swiper-zoom-container > svg,
   .swiper-zoom-container > canvas {
     object-fit: cover;
+  }
+
+  @font-face {
+    font-family: 'NanumSquareNeo';
+    font-style: normal;
+    font-weight: 200;
+    src: url('/public/fonts/NanumSquareNeo-aLt.ttf') format('ttf');
+  }
+  @font-face {
+    font-family: 'NanumSquareNeo';
+    font-style: normal;
+    font-weight: 300;
+    src: url('/public/fonts/NanumSquareNeo-bRg.ttf') format('ttf');
+  }
+  @font-face {
+    font-family: 'NanumSquareNeo';
+    font-style: normal;
+    font-weight: 400;
+    src: url('/public/fonts/NanumSquareNeo-cBd.ttf') format('ttf');
+  }
+  @font-face {
+    font-family: 'NanumSquareNeo';
+    font-style: normal;
+    font-weight: 500;
+    src: url('/public/fonts/NanumSquareNeo-dEb.ttf') format('ttf');
+  }
+  @font-face {
+    font-family: 'NanumSquareNeo';
+    font-style: normal;
+    font-weight: 700;
+    src: url('/public/fonts/NanumSquareNeo-eHv.ttf') format('ttf');
   }
 `;
 

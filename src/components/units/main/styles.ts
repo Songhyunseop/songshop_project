@@ -13,7 +13,6 @@ export const BestItem_Section = styled.section`
   justify-content: center;
   align-items: center;
   margin-top: 200px;
-  border: 3px solid green;
 `;
 
 export const Item = styled.div`
@@ -55,18 +54,18 @@ export const Board_Box = styled.div`
     opacity: 0;
   }
 
-  &:nth-child(1):hover {
+  &:nth-of-type(1):hover {
     margin-right: -60%;
     background-color: black;
     color: white;
     z-index: 1;
   }
 
-  &:nth-child(1):hover ~ :nth-child(2) {
+  &:nth-of-type(1):hover ~ :nth-of-type(2) {
     opacity: 0;
   }
 
-  &:nth-child(2):hover {
+  &:nth-of-type(2):hover {
     margin-left: -60%;
     background-color: black;
     color: white;

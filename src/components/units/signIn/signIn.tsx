@@ -9,11 +9,13 @@ import {
   naverLoginOption,
 } from '@/components/commons/constants/constants';
 import { AuthApiError } from '@supabase/supabase-js';
+import { useRouter } from 'next/router';
 
 export default function Login() {
-  const { register, handleSubmit } = useForm({ mode: 'onChange' });
+  const router = useRouter();
 
   const supabaseClient = supabase();
+  const { register, handleSubmit } = useForm({ mode: 'onChange' });
 
   const onSubmit = async (data) => {
     try {
@@ -24,6 +26,8 @@ export default function Login() {
         });
 
       if (error) throw error;
+
+      router.push('/');
     } catch (error) {
       if (error instanceof AuthApiError) {
         if (

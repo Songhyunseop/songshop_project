@@ -7,9 +7,3 @@ export interface PageProps {
 export interface ItemsProps {
   isAll?: boolean;
 }
-
-// 장바구니 타입
-
-export interface IBasketListProps {
-  isBasket: boolean;
-}

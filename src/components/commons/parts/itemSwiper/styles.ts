@@ -5,7 +5,9 @@ import { SwiperSlide } from 'swiper/react';
 export const Wrapper = styled.div`
   position: relative;
   width: 100%;
+  margin-bottom: 130px;
   display: flex;
+  border: 3px solid green;
 
   &:hover {
     .swiper-prev,
@@ -35,7 +37,7 @@ export const Arrow = styled.div<ArrowProps>`
   position: absolute;
   width: 50px;
   height: 100px;
-  top: 22%;
+  top: calc(50% - 50px);
   z-index: 99;
   opacity: 0;
   left: ${(props) => (props.direction === 'next' ? 0 : 'calc(100% - 50px)')};
