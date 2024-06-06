@@ -59,6 +59,11 @@ const globalStyle = css`
     object-fit: cover;
   }
 
+  // 모달 창 바깥 컨텐츠 영역 스크롤 방지
+  .ReactModal__Body--open {
+    overflow: hidden;
+  }
+
   @font-face {
     font-family: 'NanumSquareNeo';
     font-style: normal;

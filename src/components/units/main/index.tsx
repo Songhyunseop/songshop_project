@@ -1,6 +1,5 @@
 import * as S from './styles';
 
-import supabase from '@/commons/utils/supabase/client';
 import MainSWiper from '@/components/commons/parts/mainSwiper/mainSwiper';
 import ItemSwiper from '@/components/commons/parts/itemSwiper/itemSwiper';
 import ItemBox from '@/components/commons/parts/itembox/itembox';
@@ -9,6 +8,8 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { getDataList } from '@/components/commons/hooks/query/useQueryGetAllProducts';
+
+import Select from 'react-select';
 
 export default function Main() {
   const [count, setCount] = useState(8);

@@ -7,17 +7,33 @@ export const ItemList_Wrapper = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: 2px solid red;
 `;
 
 export const Title = styled.h1`
   font-size: 3rem;
   font-weight: 400;
+  margin-bottom: 8rem;
+`;
+
+export const Button_Wrapper = styled.div`
+  width: 100%;
+  margin-bottom: 10px;
+`;
+
+export const Add_Button = styled.button`
+  width: 90px;
+  height: 30px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  border: none;
+  color: #f7f3f5;
+  background-color: #e2c2b3;
 `;
 
 export const Table_Header = styled.ul`
   width: 100%;
   height: 35px;
-  margin-top: 8rem;
   list-style: none;
   display: flex;
   justify-content: center;

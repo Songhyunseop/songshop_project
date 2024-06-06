@@ -7,3 +7,8 @@ export interface PageProps {
 export interface ItemsProps {
   isAll?: boolean;
 }
+
+// itemInfoList 타입
+export interface IItemInfoList {
+  [key: string]: string;
+}

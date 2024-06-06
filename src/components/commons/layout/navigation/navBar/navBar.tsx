@@ -8,7 +8,7 @@ export default function NavBar() {
     'SHOES',
     'BAG',
     'ONSALE',
-    'REVIEWS',
+    'NEW',
   ];
 
   return (
