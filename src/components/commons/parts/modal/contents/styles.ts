@@ -13,8 +13,9 @@ export const Modal_Header = styled.header`
 
 export const Modal_Body = styled.div`
   display: grid;
-  grid-template-rows: 1fr 1fr 3.5fr 2fr 1fr 1fr 4fr 4fr;
+  grid-template-rows: 1fr 1fr 4fr 2fr 1fr 1fr auto 4fr;
   padding: 1.5rem;
+  border: 2px solid red;
 `;
 
 export const Body_Container = styled.div`
@@ -28,7 +29,6 @@ export const Body_Container = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     margin-top: 0.6rem;
-    border: 3px solid red;
   }
 `;
 
@@ -43,7 +43,7 @@ export const Body_Left = styled.div`
 export const Body_Right = styled.div`
   padding: 0 1.2rem;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
 `;
 
 export const AddInput = styled.input<{ detail?: boolean }>`
@@ -57,6 +57,7 @@ export const Stocks = styled.div`
   align-items: center;
   width: 100%;
   padding: 1rem;
+  margin-bottom: 0.5rem;
   border-radius: 3px;
   background-color: rgba(64, 50, 52, 0.77);
 `;
@@ -110,11 +111,13 @@ export const Close = styled.div`
 `;
 
 export const AddItem = styled.button`
+  cursor: pointer;
   width: 100px;
   height: 35px;
   color: #f7f3f5;
   font-size: 1.5rem;
   margin-top: 10px;
+  margin-bottom: 10px;
   background-color: #403234;
 `;
 
@@ -125,6 +128,7 @@ export const Styled_Select = styled(Select)`
   & .Select__control {
     border-radius: 2px;
     box-shadow: none;
+    outline: none;
     border: 1px solid black;
   }
 

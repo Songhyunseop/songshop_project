@@ -7,7 +7,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/navigation';
 import 'swiper/css/zoom';
 
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import InfoComponent from '@/components/commons/parts/details/product_top_info/info/info';
