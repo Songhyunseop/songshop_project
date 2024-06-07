@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { ColorPicker } from 'react-color-palette';
 import Select from 'react-select';
 
 export const Modal_Header = styled.header`
@@ -55,11 +56,18 @@ export const AddInput = styled.input<{ detail?: boolean }>`
 export const Stocks = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   padding: 1rem;
   margin-bottom: 0.5rem;
   border-radius: 3px;
   background-color: rgba(64, 50, 52, 0.77);
+`;
+
+export const Select_Stock = styled.div`
+  width: 75%;
+  display: flex;
+  align-items: center;
 `;
 
 export const Stocks_Info = styled.div`
@@ -68,20 +76,12 @@ export const Stocks_Info = styled.div`
   color: #f7f3f5;
 `;
 
-export const CloseBox = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-`;
-
 export const Close = styled.div`
   position: relative;
   cursor: pointer;
   width: 25px;
   height: 25px;
-  border: 1px solid #f7f3f5;
   border-radius: 3px;
-  justify-self: end;
 
   ::before {
     position: absolute;
@@ -152,6 +152,81 @@ export const Styled_Select = styled(Select)`
       background-color: #969696;
     }
   }
+`;
+
+export const Color_PickBox = styled.div``;
+
+export const Color_PickButton = styled.div`
+  position: relative;
+  cursor: pointer;
+  width: 25px;
+  height: 25px;
+  border-radius: 3px;
+  background-color: #d9d9d9;
+
+  ::before {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+    content: ' ';
+    width: 2px;
+    height: 15px;
+    background-color: #9d9d9d;
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  ::after {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+    content: ' ';
+    width: 2px;
+    height: 15px;
+    background-color: #9d9d9d;
+
+    transform: translate(-50%, -50%);
+  }
+`;
+
+export const Custom_Color_Layout = styled.div`
+  position: absolute;
+  z-index: 9999;
+  width: 20%;
+  min-width: 200px;
+  height: 35%;
+  min-height: 250px;
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  background-color: #403234;
+  /* display: none; */
+`;
+
+export const ColorBtn_Box = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+`;
+
+export const ColorPickBtn = styled.button`
+  cursor: pointer;
+  width: 25px;
+  height: 25px;
+  border: none;
+  border-radius: 3px;
+  margin-right: 1rem;
+  background-color: rgb(226, 194, 179, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const StyledColorPicker = styled(ColorPicker)`
+  width: 180px;
 `;
 
 export const Add_Button = styled.button`
