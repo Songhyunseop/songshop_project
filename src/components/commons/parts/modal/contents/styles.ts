@@ -154,6 +154,13 @@ export const Styled_Select = styled(Select)`
   }
 `;
 
+export const Colors = styled.div`
+  width: 25px;
+  height: 25px;
+  border-radius: 3px;
+  background-color: black;
+`;
+
 export const Color_PickBox = styled.div``;
 
 export const Color_PickButton = styled.div`
@@ -162,6 +169,7 @@ export const Color_PickButton = styled.div`
   width: 25px;
   height: 25px;
   border-radius: 3px;
+  margin-left: 10px;
   background-color: #d9d9d9;
 
   ::before {

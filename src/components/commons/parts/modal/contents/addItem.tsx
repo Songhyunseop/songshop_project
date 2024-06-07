@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ColorService, Hue, Saturation, useColor } from 'react-color-palette';
 import 'react-color-palette/css';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { faCheck, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -82,6 +82,7 @@ export default function AddItemModalContents() {
 
   const clickOpenOrClose = (e) => {
     // 색상 선택 버튼을 클릭 시 로직
+
     if (e.isOpen) {
       const CopiedOptions = structuredClone(options);
 
@@ -100,22 +101,23 @@ export default function AddItemModalContents() {
     }
 
     // ColorPicker 여는 버튼 클릭 시 로직
-    const openColorPicker = () => {
-      console.log(options);
 
+    const openColorPicker = () => {
       const isChecked = options.find((opt) => opt.item === e.item);
+
+      console.log('Tlqkf');
+      console.log(isChecked);
 
       if (!isChecked) {
         alert('사이즈를 먼저 체크해주세요');
         return;
       }
 
-      console.log(options.find((opt) => opt.item === e.item));
-      // console.log(options);
-
       setPickerState({ ...e, isOpen: !e.isOpen });
     };
-    return openColorPicker;
+
+    openColorPicker();
+    // return openColorPicker;
   };
 
   const resetColor = () => {
@@ -124,6 +126,14 @@ export default function AddItemModalContents() {
     const hsv = ColorService.toHsv(hex);
     setColor({ hex, rgb, hsv });
   };
+
+  // 렌더링 횟수 제한 로직
+  const handleButtonClick = useCallback(
+    (item) => () => {
+      clickOpenOrClose(item);
+    },
+    [clickOpenOrClose]
+  );
 
   return (
     <>
@@ -193,9 +203,10 @@ export default function AddItemModalContents() {
                     }
                   />
                   <S.Stocks_Info>COLOR</S.Stocks_Info>
+                  <S.Colors>d</S.Colors>
                   <S.Color_PickBox>
                     <S.Color_PickButton
-                      onClick={clickOpenOrClose({ item })}
+                      onClick={handleButtonClick({ item })}
                     ></S.Color_PickButton>
                     {pickerState.isOpen && pickerState.item === item && (
                       <S.Custom_Color_Layout>
