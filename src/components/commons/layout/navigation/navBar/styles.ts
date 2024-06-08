@@ -2,11 +2,12 @@ import Link from 'next/link';
 import styled from 'node_modules/@emotion/styled';
 
 export const Nav_Wrapper = styled.nav`
+  width: 100%;
   height: 80px;
   display: flex;
   justify-content: center;
   box-shadow: 0 5px 12px 3px #d2d2d2;
-  margin-bottom: 150px;
+  background-color: white;
 `;
 
 export const CategoryList = styled.ul`

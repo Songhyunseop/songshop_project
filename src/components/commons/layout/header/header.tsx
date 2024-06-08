@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import * as S from './styles';
+import NavBar from '../navigation/navBar/navBar';
 
 export default function Header() {
   return (
@@ -41,6 +42,7 @@ export default function Header() {
             </Link>
           </S.Main_Right>
         </S.Header_Main>
+        {/* <NavBar /> */}
       </S.Header_Wrapper>
     </>
   );

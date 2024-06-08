@@ -9,8 +9,6 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getDataList } from '@/components/commons/hooks/query/useQueryGetAllProducts';
 
-import Select from 'react-select';
-
 export default function Main() {
   const [count, setCount] = useState(8);
 

@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import styled from 'node_modules/@emotion/styled';
 
-export const Header_Wrapper = styled.header``;
+export const Header_Wrapper = styled.header`
+  width: 100%;
+  background-color: white;
+`;
 
 export const Header_Main = styled.section`
   height: 240px;

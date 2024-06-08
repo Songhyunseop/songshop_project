@@ -83,7 +83,7 @@ export default function AddItemModalContents() {
       (opt) => opt.item === selectedStockId
     );
 
-    if (selectIndex !== -1 && selectedOne !== undefined) {
+    if (selectedOne && selectIndex !== -1) {
       selectedOne.item = '';
       selectedOne.color = [];
       selectedOne.isdisabled = false;
