@@ -65,7 +65,7 @@ export const Stocks = styled.div`
 `;
 
 export const Select_Stock = styled.div`
-  width: 75%;
+  width: 80%;
   display: flex;
   align-items: center;
 `;
@@ -154,14 +154,19 @@ export const Styled_Select = styled(Select)`
   }
 `;
 
-export const Colors = styled.div`
+export const Colors = styled.div<{ color: string }>`
   width: 25px;
   height: 25px;
   border-radius: 3px;
-  background-color: black;
+  margin-left: 0.3rem;
+  background-color: ${(props) => props.color};
 `;
 
-export const Color_PickBox = styled.div``;
+export const Color_PickBox = styled.div`
+  position: relative;
+  display: flex;
+  min-width: 180px;
+`;
 
 export const Color_PickButton = styled.div`
   position: relative;
@@ -169,7 +174,7 @@ export const Color_PickButton = styled.div`
   width: 25px;
   height: 25px;
   border-radius: 3px;
-  margin-left: 10px;
+  margin-right: 10px;
   background-color: #d9d9d9;
 
   ::before {
@@ -200,17 +205,18 @@ export const Color_PickButton = styled.div`
 
 export const Custom_Color_Layout = styled.div`
   position: absolute;
+  top: 100%;
   z-index: 9999;
   width: 20%;
   min-width: 200px;
   height: 35%;
   min-height: 250px;
+  margin-top: 0.5rem;
   padding: 0.8rem;
   display: flex;
   flex-direction: column;
   border-radius: 5px;
   background-color: #403234;
-  /* display: none; */
 `;
 
 export const ColorBtn_Box = styled.div`

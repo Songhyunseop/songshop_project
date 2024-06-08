@@ -15,17 +15,32 @@ export default function AddItemModalContents() {
     isdisabled: boolean;
   }
 
+  type IColorType = {
+    color: string;
+    item: string;
+  };
+
+  interface OptionType {
+    value: string;
+    label: string;
+    item: string;
+    color: string[];
+    isdisabled: boolean;
+  }
+
   const optionObj = [
     { value: 'S', label: 'small', item: '', color: [], isdisabled: false },
     { value: 'M', label: 'medium', item: '', color: [], isdisabled: false },
     { value: 'L', label: 'Large', item: '', color: [], isdisabled: false },
   ];
 
-  const [options, setOptions] = useState(optionObj);
+  const [options, setOptions] = useState<OptionType[]>(optionObj);
   const [stocks, setStocks] = useState<string[]>([]);
 
   const [color, setColor] = useColor('#561ecb');
   const [pickerState, setPickerState] = useState([]);
+
+  const [colorList, setColorList] = useState<IColorType[]>([]);
 
   const handleOptionChange = (select: IOptionProps, item: string) => {
     const copiedOptions = structuredClone(options);
@@ -81,6 +96,10 @@ export default function AddItemModalContents() {
   };
 
   const clickOpenOrClose = (e) => {
+    console.log(111);
+    console.log(options);
+    console.log(111);
+
     // 색상 선택 버튼을 클릭 시 로직
 
     if (e.isOpen) {
@@ -97,16 +116,33 @@ export default function AddItemModalContents() {
       setOptions(CopiedOptions);
       setPickerState({ ...e, isOpen: !e.isOpen });
 
+      const isSameColor = colorList.some((el) => el.color === color.hex);
+      if (isSameColor) {
+        alert('같은 색상을 담을 수 없습니다');
+        return;
+      }
+
+      //stocks의 id값을 활용해서 배열 형식 만들어 색상 목록 구별하자!
+
+      console.log(123);
+      console.log(stocks);
+      console.log(colorList);
+
+      // const aa = setColorList((prev) => [
+      //   ...prev,
+      //   { color: color.hex, item: e.item },
+      // ]);
+
       return;
     }
 
     // ColorPicker 여는 버튼 클릭 시 로직
 
     const openColorPicker = () => {
+      console.log(options);
+      console.log('sll');
+      console.log(e);
       const isChecked = options.find((opt) => opt.item === e.item);
-
-      console.log('Tlqkf');
-      console.log(isChecked);
 
       if (!isChecked) {
         alert('사이즈를 먼저 체크해주세요');
@@ -117,7 +153,6 @@ export default function AddItemModalContents() {
     };
 
     openColorPicker();
-    // return openColorPicker;
   };
 
   const resetColor = () => {
@@ -125,6 +160,22 @@ export default function AddItemModalContents() {
     const rgb = ColorService.toRgb(hex);
     const hsv = ColorService.toHsv(hex);
     setColor({ hex, rgb, hsv });
+  };
+
+  const removeColor = (item: string, color: string) => {
+    const CopiedOptions: OptionType[] = structuredClone(options);
+
+    const selectedOption = CopiedOptions?.find(
+      (el) => el.item === item
+    ) as OptionType;
+
+    selectedOption.color = selectedOption.color.filter((el) => el !== color);
+
+    for (const [index, option] of CopiedOptions.entries()) {
+      if (option.item === item) CopiedOptions[index] = selectedOption;
+    }
+
+    setOptions(CopiedOptions);
   };
 
   // 렌더링 횟수 제한 로직
@@ -176,7 +227,7 @@ export default function AddItemModalContents() {
         <S.Body_Container>
           <S.Body_Left>재고</S.Body_Left>
           <S.Body_Right className='stock'>
-            {stocks.map((item) => (
+            {stocks.map((item, idx) => (
               <S.Stocks key={item}>
                 <S.Select_Stock>
                   <S.Stocks_Info>SIZE</S.Stocks_Info>
@@ -203,11 +254,31 @@ export default function AddItemModalContents() {
                     }
                   />
                   <S.Stocks_Info>COLOR</S.Stocks_Info>
-                  <S.Colors>d</S.Colors>
                   <S.Color_PickBox>
                     <S.Color_PickButton
                       onClick={handleButtonClick({ item })}
                     ></S.Color_PickButton>
+                    {options
+                      .find((el) => el.item === item)
+                      ?.color.map((c) => (
+                        <S.Colors
+                          key={uuidv4()}
+                          onClick={() => removeColor(item, c)}
+                          color={c}
+                        ></S.Colors>
+                      ))}
+                    {/* {colorList.map((list) => {
+                      if (list.item === item)
+                        return (
+                          <S.Colors
+                            onClick={() => removeColor(list)}
+                            isFirst={true}
+                            key={uuidv4()}
+                            color={list.color}
+                          ></S.Colors>
+                        );
+                    })} */}
+
                     {pickerState.isOpen && pickerState.item === item && (
                       <S.Custom_Color_Layout>
                         <Saturation
