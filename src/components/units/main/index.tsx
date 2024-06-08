@@ -17,8 +17,6 @@ export default function Main() {
     queryFn: getDataList,
   });
 
-  console.log(data);
-
   const timeDelay = () => {
     setTimeout(() => {
       countUp();

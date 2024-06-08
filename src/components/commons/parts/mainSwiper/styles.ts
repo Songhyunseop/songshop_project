@@ -22,7 +22,7 @@ export const Arrow = styled.div<ArrowProps>`
   transition: all 0.5s ease;
   width: 70px;
   height: 220px;
-  z-index: 9;
+  z-index: 5;
   left: ${(props) => (props.direction === 'next' ? 0 : 'calc(100% - 70px)')};
   background-color: lightgray;
   opacity: 0;

@@ -38,7 +38,7 @@ export const Arrow = styled.div<ArrowProps>`
   width: 50px;
   height: 100px;
   top: calc(50% - 50px);
-  z-index: 99;
+  z-index: 9;
   opacity: 0;
   left: ${(props) => (props.direction === 'next' ? 0 : 'calc(100% - 50px)')};
   background-color: lightgray;

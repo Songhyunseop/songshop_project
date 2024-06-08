@@ -1,5 +1,3 @@
-import ReactModal from 'react-modal';
-
 import * as S from './styles';
 
 export default function Modal(props) {
@@ -13,6 +11,7 @@ export default function Modal(props) {
       right: 0,
       bottom: 0,
       backgroundColor: 'rgba(255, 255, 255, 0.75)',
+      zIndex: 9999,
     },
     //     content: {
     // ,

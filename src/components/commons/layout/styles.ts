@@ -5,12 +5,12 @@ export const Layout_Wrapper = styled.main`
   flex-direction: column;
 `;
 
-export const Wrapper_Top = styled.header`
+export const Nav_Sticky_Container = styled.div`
   width: 100%;
-  position: fixed;
+  position: sticky;
   z-index: 99;
+  top: 0;
+  margin-bottom: clamp(0.3rem, 7vw, 7vw);
 `;
 
-export const Layout_Child = styled.div`
-  padding-top: clamp(30rem, 30vw, 30vw);
-`;
+export const Layout_Child = styled.div``;

@@ -14,7 +14,7 @@ const globalStyle = css`
   .main_swiper {
     width: 100%;
     height: 500px;
-    border: 3px solid red;
+    border: 5px solid red;
   }
 
   .main_swiper .swiper-slide {
