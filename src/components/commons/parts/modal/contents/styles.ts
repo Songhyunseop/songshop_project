@@ -25,10 +25,9 @@ export const Body_Container = styled.div`
   border-top: 1px solid #b2a0a0;
   border-right: 1px solid #b2a0a0;
 
-  :nth-of-type(7) > .stock {
+  :nth-of-type(7) > :nth-of-type(2) {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     margin-top: 0.6rem;
   }
 `;
@@ -48,9 +47,19 @@ export const Body_Right = styled.div`
 `;
 
 export const AddInput = styled.input<{ detail?: boolean }>`
-  width: ${(props) => (props.detail ? '100%' : '50%')};
+  width: 50%;
   min-width: 300px;
-  height: ${(props) => (props.detail ? '90%' : '80%')};
+  height: 80%;
+  font-size: 1.7rem;
+  padding: 0.5rem;
+`;
+
+export const DetailText = styled.textarea`
+  width: 100%;
+  height: 90%;
+  padding: 0.8rem;
+  font-size: 1.7rem;
+  resize: none;
 `;
 
 export const Stocks = styled.div`
@@ -68,12 +77,18 @@ export const Select_Stock = styled.div`
   width: 80%;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 `;
 
 export const Stocks_Info = styled.div`
   font-size: 1.5rem;
-  margin-right: 10px;
   color: #f7f3f5;
+
+  margin-right: 1rem;
+
+  :not(:nth-of-type(1)) {
+    margin-left: 4rem;
+  }
 `;
 
 export const Close = styled.div`
@@ -121,32 +136,70 @@ export const AddItem = styled.button`
   background-color: #403234;
 `;
 
-export const Styled_Select = styled(Select)`
-  width: 30%;
-  margin-right: 90px;
+export const Size_Select = styled(Select)`
+  width: 25%;
 
-  & .Select__control {
+  & .SizeSelect__control {
     border-radius: 2px;
     box-shadow: none;
     outline: none;
     border: 1px solid black;
   }
 
-  & .Select__placeholder {
+  & .SizeSelect__placeholder {
     font-size: 1.5rem;
   }
 
-  & .Select__single-value {
+  & .SizeSelect__single-value {
     font-size: 1.5rem;
   }
 
-  & .Select__menu {
+  & .SizeSelect__menu {
     border-radius: 2px;
   }
 
-  & .Select__option {
+  & .SizeSelect__option {
     background-color: white;
     font-size: 1.5rem;
+
+    :hover {
+      background-color: #969696;
+    }
+  }
+`;
+
+export const Count_Select = styled(Select)`
+  width: 25%;
+
+  & .CountSelect__control {
+    border-radius: 2px;
+    box-shadow: none;
+    outline: none;
+    border: 1px solid black;
+  }
+
+  & .CountSelect__placeholder {
+    font-size: 1.5rem;
+  }
+
+  & .CountSelect__single-value {
+    font-size: 1.5rem;
+  }
+
+  & .CountSelect__menu {
+    border-radius: 2px;
+  }
+
+  & .CountSelect__menu-list {
+    z-index: 99;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  & .CountSelect__option {
+    background-color: white;
+    font-size: 1.5rem;
+    color: black;
 
     :hover {
       background-color: #969696;
@@ -157,6 +210,7 @@ export const Styled_Select = styled(Select)`
 export const Colors = styled.div<{ color: string }>`
   width: 25px;
   height: 25px;
+  cursor: pointer;
   border-radius: 3px;
   margin-left: 0.3rem;
   background-color: ${(props) => props.color};
@@ -165,7 +219,9 @@ export const Colors = styled.div<{ color: string }>`
 export const Color_PickBox = styled.div`
   position: relative;
   display: flex;
+  width: 25%;
   min-width: 180px;
+  border: 3px solid gold;
 `;
 
 export const Color_PickButton = styled.div`
