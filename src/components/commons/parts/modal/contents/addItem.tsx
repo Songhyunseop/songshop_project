@@ -13,6 +13,7 @@ export default function AddItemModalContents() {
     [key: string]: {
       label: string;
       item: string;
+      count: number;
       color: string[];
     };
   }
@@ -30,15 +31,12 @@ export default function AddItemModalContents() {
   };
 
   const selectedStocks: IStockDataType = {
-    S: { label: 'SMALL', item: '', color: [] },
-    M: { label: 'MEDIUM', item: '', color: [] },
-    L: { label: 'LARGE', item: '', color: [] },
+    S: { label: 'SMALL', item: '', count: 1, color: [] },
+    M: { label: 'MEDIUM', item: '', count: 1, color: [] },
+    L: { label: 'LARGE', item: '', count: 1, color: [] },
   };
-  // { value: 'S', label: 'small', item: '', color: [], isdisabled: false },
-  // { value: 'M', label: 'medium', item: '', color: [], isdisabled: false },
-  // { value: 'L', label: 'Large', item: '', color: [], isdisabled: false },
 
-  const sizeOptions = [
+  const sizeOptions: IOptionSize[] = [
     { value: 'S', label: 'small', item: '', isdisabled: false },
     { value: 'M', label: 'medium', item: '', isdisabled: false },
     { value: 'L', label: 'Large', item: '', isdisabled: false },
@@ -58,14 +56,11 @@ export default function AddItemModalContents() {
   ];
 
   const [stockData, setStockData] = useState<IStockDataType>(selectedStocks);
-
-  const [selectedOption, setSelectedOption] = useState(sizeOptions);
-
-  const [stocks, setStocks] = useState<string[]>([]);
+  const [selectedOption, setSelectedOption] =
+    useState<IOptionSize[]>(sizeOptions);
 
   const [color, setColor] = useColor('#561ecb');
   const [pickerState, setPickerState] = useState([]);
-
   const [colorList, setColorList] = useState<IColorType[]>([]);
 
   // 객체 배열 변환 함수 (재사용성)
@@ -74,6 +69,7 @@ export default function AddItemModalContents() {
       size: val,
       item: detail.item,
       label: detail.label,
+      count: detail.count,
     }));
 
     return dataArr;
@@ -81,87 +77,100 @@ export default function AddItemModalContents() {
 
   const handleSizeChange = (select: IOptionSize, item: string) => {
     const copiedStocks = structuredClone(stockData);
-    const copiedSelectedOption = [...selectedOption];
+    const copiedOptions = [...selectedOption];
     const size = select.value;
 
-    const checkedList = getStocksByArray(copiedStocks);
-    const prevCheckedSize = checkedList.find((el) => el.item === item)?.size;
+    const prevSelectSize = copiedOptions.find((el) => el.item === item)?.value;
 
-    if (prevCheckedSize) copiedStocks[prevCheckedSize].item = '';
-    copiedStocks[size].item = item;
+    // api 전송용 객체의 데이터 값 변경
+    if (prevSelectSize) {
+      copiedStocks[prevSelectSize].item = '';
+      copiedStocks[prevSelectSize].count = 1;
 
-    const editedSelectOption = copiedSelectedOption.map((el) => {
-      if (el.value === prevCheckedSize) return { ...el, isdisabled: false };
-      if (el.value === size) return { ...el, isdisabled: true };
+      copiedStocks[size].item = item;
+    }
+
+    // selectOption default 값 변경
+    const newOptions = copiedOptions.map((el) => {
+      if (el.value === prevSelectSize && el.item !== '')
+        return { ...el, item: '', isdisabled: false };
+      if (el.value === size) return { ...el, item, isdisabled: true };
       return { ...el };
     });
 
     setStockData(copiedStocks);
-    setSelectedOption(editedSelectOption);
+    setSelectedOption(newOptions);
   };
 
   const handleCountChange = (select, item: string) => {
-    // const copiedOptions = structuredClone(options);
+    const copiedStocks = structuredClone(stockData);
+    const copiedOptions = [...selectedOption];
+
+    const selectOne = copiedOptions.find((el) => el.item === item);
+    if (selectOne) copiedStocks[selectOne?.value].count = select.value;
 
     console.log(1111);
-    console.log(stocks);
-    console.log(item);
+    // console.log(select);
+    console.log(copiedStocks);
+    console.log(copiedOptions);
     console.log(1111);
+
+    setStockData(copiedStocks);
   };
 
   const addItemStock = () => {
     const newStockId = uuidv4();
     const copiedStocks = structuredClone(stockData);
-    const copiedSelectedOption = [...selectedOption];
+    const copiedOptions = [...selectedOption];
 
-    const emptySize = copiedSelectedOption.find(
-      (data) => data.isdisabled === false
-    )?.value;
+    const selectOne = copiedOptions.find((el) => el.isdisabled === false);
 
-    console.log(222323232);
-    console.log(copiedSelectedOption);
+    // 체크 안된 사이즈 stock에 고유한 item코드 추가
+    if (selectOne) copiedStocks[selectOne.value].item = newStockId;
 
-    // 체크 안된 사이즈 stock에 item 고유코드 추가
-    copiedStocks[emptySize].item = newStockId;
-
-    //
-    const editedSelectOption = copiedSelectedOption.map((option) => {
-      if (option.value === emptySize) return { ...option, isdisabled: true };
+    const newOptions = copiedOptions.map((option) => {
+      if (option.value === selectOne?.value)
+        return { ...option, item: newStockId, isdisabled: true };
       return { ...option };
     });
 
-    console.log('수정쓰');
-    console.log(editedSelectOption);
-
     setStockData(copiedStocks);
-    setSelectedOption(editedSelectOption);
+    setSelectedOption(newOptions);
+  };
+
+  const isRemainingSpace = () => {
+    const remainingSpace = selectedOption.filter(
+      (option) => option.item === ''
+    );
+
+    if (remainingSpace.length === 0) return false;
+    return true;
   };
 
   const removeItemStock = (e) => {
+    const copiedStocks = structuredClone(stockData);
+    const copiedOptions = [...selectedOption];
     const selectedStockId = e.target.id;
 
-    // 배열 내 현재 아이템 제거
-    const stocksList = [...stocks];
-    const remainStockList = stocksList.filter((id) => id !== selectedStockId);
+    // select Option 에서 선택된 item과 같은 객체 검열
+    const selectOne = copiedOptions.find((el) => el.item === selectedStockId);
 
-    // 현재 아이템과 일치하는 옵션 선택 및 초기화
-    const newOptions = structuredClone(options);
-    const selectedOne = newOptions.find((opt) => opt.item === selectedStockId);
-
-    const selectIndex = newOptions.findIndex(
-      (opt) => opt.item === selectedStockId
-    );
-
-    if (selectedOne && selectIndex !== -1) {
-      selectedOne.item = '';
-      selectedOne.color = [];
-      selectedOne.isdisabled = false;
-
-      newOptions[selectIndex] = selectedOne;
+    // 실제 api 호출에 보내지는 객체 data 값 변경
+    if (selectOne) {
+      copiedStocks[selectOne.value].item = '';
+      copiedStocks[selectOne.value].count = 1;
     }
 
-    setStocks(remainStockList);
-    // setOptions(newOptions);
+    // select Option default 값 변경 (메뉴 활성화 여부)
+    const newOptions = copiedOptions.map((option) => {
+      if (option.item === selectedStockId)
+        return { ...option, item: '', isdisabled: false };
+
+      return { ...option };
+    });
+
+    setStockData(copiedStocks);
+    setSelectedOption(newOptions);
   };
 
   const clickOpenOrClose = (e) => {
@@ -367,6 +376,10 @@ export default function AddItemModalContents() {
                       </S.Color_PickBox>
                       <S.Stocks_Info>COUNT</S.Stocks_Info>
                       <S.Count_Select
+                        value={{
+                          value: data.count,
+                          label: `${data.count}개`,
+                        }}
                         classNamePrefix={'CountSelect'}
                         defaultValue={{ label: '1개', value: 1 }}
                         options={countOptions}
@@ -390,7 +403,7 @@ export default function AddItemModalContents() {
                   </S.Stocks>
                 )
             )}
-            {stocks.length < 3 && (
+            {isRemainingSpace() && (
               <S.AddItem onClick={addItemStock}>재고추가</S.AddItem>
             )}
           </S.Body_Right>

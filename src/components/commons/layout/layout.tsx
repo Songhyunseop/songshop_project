@@ -1,5 +1,3 @@
-import AddItemModalContents from '../parts/modal/contents/addItem';
-import Modal from '../parts/modal/modal';
 import Header from './header/header';
 import NavBar from './navigation/navBar/navBar';
 import * as S from './styles';

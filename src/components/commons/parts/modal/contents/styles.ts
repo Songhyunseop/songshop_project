@@ -25,10 +25,16 @@ export const Body_Container = styled.div`
   border-top: 1px solid #b2a0a0;
   border-right: 1px solid #b2a0a0;
 
+  :nth-of-type(7) {
+    border: 3px solid blue;
+  }
+
   :nth-of-type(7) > :nth-of-type(2) {
     display: flex;
     flex-direction: column;
     margin-top: 0.6rem;
+
+    border: 3px solid red;
   }
 `;
 
@@ -144,6 +150,8 @@ export const Size_Select = styled(Select)`
     box-shadow: none;
     outline: none;
     border: 1px solid black;
+    height: 38px;
+    /* min-height: 10px; */
   }
 
   & .SizeSelect__placeholder {
@@ -175,6 +183,8 @@ export const Count_Select = styled(Select)`
     border-radius: 2px;
     box-shadow: none;
     outline: none;
+    height: 38px;
+    /* min-height: 10px; */
     border: 1px solid black;
   }
 
@@ -220,7 +230,7 @@ export const Color_PickBox = styled.div`
   position: relative;
   display: flex;
   width: 25%;
-  min-width: 180px;
+  /* min-width: 180px; */
   border: 3px solid gold;
 `;
 
