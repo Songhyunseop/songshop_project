@@ -21,20 +21,18 @@ export const Modal_Body = styled.div`
 
 export const Body_Container = styled.div`
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 20% 80%;
   border-top: 1px solid #b2a0a0;
   border-right: 1px solid #b2a0a0;
 
   :nth-of-type(7) {
-    border: 3px solid blue;
+    display: grid;
   }
 
   :nth-of-type(7) > :nth-of-type(2) {
     display: flex;
     flex-direction: column;
     margin-top: 0.6rem;
-
-    border: 3px solid red;
   }
 `;
 
@@ -90,10 +88,8 @@ export const Stocks_Info = styled.div`
   font-size: 1.5rem;
   color: #f7f3f5;
 
-  margin-right: 1rem;
-
   :not(:nth-of-type(1)) {
-    margin-left: 4rem;
+    margin-left: 3rem;
   }
 `;
 
@@ -143,7 +139,9 @@ export const AddItem = styled.button`
 `;
 
 export const Size_Select = styled(Select)`
+  min-width: 100px;
   width: 25%;
+  margin-left: 1rem;
 
   & .SizeSelect__control {
     border-radius: 2px;
@@ -177,7 +175,9 @@ export const Size_Select = styled(Select)`
 `;
 
 export const Count_Select = styled(Select)`
+  min-width: 100px;
   width: 25%;
+  margin-left: 1rem;
 
   & .CountSelect__control {
     border-radius: 2px;
@@ -217,28 +217,42 @@ export const Count_Select = styled(Select)`
   }
 `;
 
+export const Color_PickBox = styled.div`
+  position: relative;
+  display: flex;
+  margin-left: 1rem;
+  /* max-width: 150px; */
+  min-width: 90px;
+  width: 25%;
+`;
+
+export const ColorsList = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+`;
+
 export const Colors = styled.div<{ color: string }>`
-  width: 25px;
-  height: 25px;
+  min-width: 25px;
+  min-height: 25px;
   cursor: pointer;
   border-radius: 3px;
   margin-left: 0.3rem;
   background-color: ${(props) => props.color};
 `;
 
-export const Color_PickBox = styled.div`
-  position: relative;
-  display: flex;
-  width: 25%;
-  /* min-width: 180px; */
-  border: 3px solid gold;
-`;
-
 export const Color_PickButton = styled.div`
   position: relative;
   cursor: pointer;
-  width: 25px;
-  height: 25px;
+  min-width: 25px;
+  min-height: 25px;
   border-radius: 3px;
   margin-right: 10px;
   background-color: #d9d9d9;
