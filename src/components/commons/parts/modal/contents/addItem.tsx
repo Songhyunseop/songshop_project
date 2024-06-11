@@ -1,12 +1,19 @@
 import * as S from './styles';
 
 import { v4 as uuidv4 } from 'uuid';
+import dynamic from 'next/dynamic';
+import { Editor as editorType } from '@toast-ui/react-editor';
+
 import { ColorService, Hue, Saturation, useColor } from 'react-color-palette';
 import 'react-color-palette/css';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { faCheck, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+const WriteEditor = dynamic(() => import('../../editor/writeeditor'), {
+  ssr: false,
+});
 
 export default function AddItemModalContents() {
   interface IStockDataType {
@@ -81,8 +88,9 @@ export default function AddItemModalContents() {
   const [stockData, setStockData] = useState<IStockDataType>(selectedStocks);
   const [selectedOption, setSelectedOption] =
     useState<IOptionSize[]>(sizeOptions);
-
   const [color, setColor] = useColor('#561ecb');
+
+  const editorRef = useRef<editorType>();
 
   const handleSizeChange = (select: IOptionSize, item: string) => {
     const copiedStocks = structuredClone(stockData);
@@ -238,6 +246,13 @@ export default function AddItemModalContents() {
     }
 
     setStockData(copiedStocks);
+  };
+
+  const changeContent = () => {
+    if (editorRef.current) {
+      const textData = editorRef.current.getInstance().getHTML();
+      console.log(textData);
+    }
   };
 
   return (
@@ -396,7 +411,7 @@ export default function AddItemModalContents() {
         <S.Body_Container>
           <S.Body_Left>상품 디테일</S.Body_Left>
           <S.Body_Right>
-            <S.DetailText maxLength={300} value={'reactQuill 자리'} />
+            <WriteEditor changeContent={changeContent} editorRef={editorRef} />
           </S.Body_Right>
         </S.Body_Container>
         <S.Add_Button>상품등록</S.Add_Button>

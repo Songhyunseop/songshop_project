@@ -14,7 +14,7 @@ export const Modal_Header = styled.header`
 
 export const Modal_Body = styled.div`
   display: grid;
-  grid-template-rows: 1fr 1fr 4fr 2fr 1fr 1fr auto 4fr;
+  grid-template-rows: 1fr 1fr 4fr 2fr 1fr 1fr auto 8fr;
   padding: 1.5rem;
   border: 2px solid red;
 `;
