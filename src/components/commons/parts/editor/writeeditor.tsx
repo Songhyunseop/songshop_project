@@ -13,25 +13,21 @@ import 'tui-editor-plugin-font-size/dist/tui-editor-plugin-font-size.css';
 import * as S from './styles';
 
 export default function WriteEditor({ changeContent, editorRef }) {
+  const scrollToBottom = () => {
+    const targetModal = document.getElementById('modal');
+    if (targetModal) {
+      const scrollHeight = targetModal.scrollHeight;
+      targetModal.scrollTop = scrollHeight;
+    }
+  };
+
   return (
     <S.EditorWrapper>
       <Editor
         ref={editorRef}
         toolbarItems={[
           ['heading', 'bold', 'italic'],
-          [
-            'quote',
-            'strike',
-            'ul',
-            'indent',
-            'outdent',
-            'ol',
-            'task',
-            'hr',
-            'heading',
-            'bold',
-            'italic',
-          ],
+          ['quote', 'strike', 'ul', 'indent', 'outdent', 'ol', 'task', 'hr'],
         ]}
         onChange={changeContent}
         language='ko-KR'
@@ -42,6 +38,7 @@ export default function WriteEditor({ changeContent, editorRef }) {
         height='100%'
         initialEditType='wysiwyg'
         useCommandShortcut={false}
+        onFocus={scrollToBottom}
         plugins={[colorSyntax, fontSize]}
       />
     </S.EditorWrapper>

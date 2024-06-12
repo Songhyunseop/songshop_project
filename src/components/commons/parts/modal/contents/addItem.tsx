@@ -99,8 +99,6 @@ export default function AddItemModalContents() {
 
     const prevSelectSize = copiedOptions.find((el) => el.item === item)?.value;
 
-    console.log(copiedOptions.find((el) => el.item === item));
-    console.log(copiedOptions.find((el) => el.value === size));
     // api 전송용 객체의 데이터 값 변경
     if (prevSelectSize) {
       copiedStocks[prevSelectSize].item = '';

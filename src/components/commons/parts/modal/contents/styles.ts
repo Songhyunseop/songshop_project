@@ -45,7 +45,8 @@ export const Body_Left = styled.div`
 `;
 
 export const Body_Right = styled.div`
-  padding: 0 1.2rem;
+  width: 100%;
+  padding: 0.5rem 1.2rem;
   display: flex;
   align-items: center;
 `;
@@ -53,7 +54,7 @@ export const Body_Right = styled.div`
 export const AddInput = styled.input<{ detail?: boolean }>`
   width: 50%;
   min-width: 300px;
-  height: 80%;
+  height: 100%;
   font-size: 1.7rem;
   padding: 0.5rem;
 `;
