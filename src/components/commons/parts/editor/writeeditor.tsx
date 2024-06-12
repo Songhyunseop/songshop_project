@@ -22,7 +22,7 @@ export default function WriteEditor({ changeContent, editorRef }) {
   };
 
   return (
-    <S.EditorWrapper>
+    <S.EditorWrapper id='editor'>
       <Editor
         ref={editorRef}
         toolbarItems={[
@@ -40,6 +40,7 @@ export default function WriteEditor({ changeContent, editorRef }) {
         useCommandShortcut={false}
         onFocus={scrollToBottom}
         plugins={[colorSyntax, fontSize]}
+        events={'load'}
       />
     </S.EditorWrapper>
   );

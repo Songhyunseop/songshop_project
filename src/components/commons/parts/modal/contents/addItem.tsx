@@ -396,8 +396,12 @@ export default function AddItemModalContents() {
                           }),
                         }}
                       />
+                      <S.Close
+                        onClick={removeItemStock}
+                        id={data.item}
+                      ></S.Close>
                     </S.Select_Stock>
-                    <S.Close onClick={removeItemStock} id={data.item}></S.Close>
+                    {/* <S.Close onClick={removeItemStock} id={data.item}></S.Close> */}
                   </S.Stocks>
                 )
             )}

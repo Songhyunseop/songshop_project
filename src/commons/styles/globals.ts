@@ -7,7 +7,6 @@ const globalStyle = css`
     box-sizing: border-box;
     font-family: 'NanumSquareNeo';
     font-weight: 300;
-    font-size: 62.5%;
   }
 
   // main 캐러셀
@@ -62,6 +61,24 @@ const globalStyle = css`
   // 모달 창 바깥 컨텐츠 영역 스크롤 방지
   .ReactModal__Body--open {
     overflow: hidden;
+  }
+
+  // editor 코드
+
+  .toastui-editor-contents {
+    font-size: 1rem;
+  }
+  // 색깔 입힌 글꼴 굵게 적용
+  p strong span {
+    font-weight: inherit;
+  }
+
+  p strong em {
+    font-weight: inherit;
+  }
+
+  p strong del {
+    font-weight: inherit;
   }
 
   @font-face {
