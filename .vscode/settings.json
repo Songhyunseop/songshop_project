@@ -6,7 +6,11 @@
     "Picker",
     "Props",
     "Riding",
+    "Shortcut",
     "Stocks",
-    "uuidv"
+    "toast",
+    "toastui",
+    "uuidv",
+    "Wrapper"
   ]
 }

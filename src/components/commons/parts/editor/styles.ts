@@ -4,6 +4,8 @@ export const EditorWrapper = styled.div`
   height: 100%;
   width: 100%;
 
+  :focus:none
+
   // 매김번호(ul, ol) vertical 중앙정렬
   .toastui-editor-contents ul li,
   .toastui-editor-contents ol li {

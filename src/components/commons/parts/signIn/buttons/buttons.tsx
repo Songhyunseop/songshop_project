@@ -11,15 +11,15 @@ export default function Button(props: { options: OptionProps }) {
   const { bgColor, fontColor, content, icon } = props.options;
 
   return (
-    <S.Main bgColor={bgColor} fontColor={fontColor}>
-      <S.Content_Wrapper>
+    <S.Button_Wrapper bgColor={bgColor} fontColor={fontColor}>
+      <S.Content>
         {icon !== 'none' && (
           <S.Logo_Image
             src={icon === 'google' ? '/googleLogo.png' : '/naverLogo.png'}
           />
         )}
         {content}
-      </S.Content_Wrapper>
-    </S.Main>
+      </S.Content>
+    </S.Button_Wrapper>
   );
 }

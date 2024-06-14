@@ -3,24 +3,26 @@ import styled from '@emotion/styled';
 
 export const Input_Container = styled.article`
   width: 100%;
+  height: 80px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding: 0 2rem;
+  justify-content: flex-start;
+  padding: 0 1rem;
   border-top: 1px solid #d2d2d2;
 `;
 
 export const Input_Detail = styled.div`
   width: 100%;
-  height: 50px;
+  /* 에러 메시지 출력 칸 대비 높이값 조정 */
+  height: calc(100% - 35px);
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-top: 1rem;
+  align-items: flex-start;
+  margin-top: 0.8rem;
 `;
 
 export const Input_Title = styled.span`
-  font-size: 2rem;
+  font-size: 1.3rem;
   font-weight: 400;
   position: relative;
 
@@ -36,7 +38,7 @@ export const Input_Title = styled.span`
 
 export const SignUp_Input = styled.input<InputProps>`
   width: ${(props) => (props.isPhoneNumInput ? '30%' : '45%')};
-  height: 80%;
+  height: 100%;
 `;
 
 export const PhoneNumber_Input_Container = styled.article`
@@ -47,11 +49,11 @@ export const PhoneNumber_Input_Container = styled.article`
   align-items: center;
 `;
 
-export const Error_Msg = styled.p`
+export const Error_Msg = styled.span`
   width: 45%;
   align-self: flex-end;
-  font-size: 1.25rem;
+  margin-top: 0.2rem;
+  font-size: 0.8rem;
   font-weight: 400;
   color: red;
-  margin-bottom: 0.8rem;
 `;

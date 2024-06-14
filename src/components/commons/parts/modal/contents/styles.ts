@@ -3,6 +3,9 @@ import { ColorPicker } from 'react-color-palette';
 import Select from 'react-select';
 
 export const Modal_Header = styled.header`
+  position: sticky;
+  z-index: 9999;
+  top: 0;
   height: 12%;
   color: #f7f3f5;
   font-size: 2.5rem;
@@ -14,7 +17,7 @@ export const Modal_Header = styled.header`
 
 export const Modal_Body = styled.div`
   display: grid;
-  grid-template-rows: 1fr 1fr 4fr 2fr 1fr 1fr auto 8fr;
+  grid-template-rows: 1fr 1fr 4fr 1fr 1fr 1fr auto 8fr;
   padding: 0.5rem;
   border: 2px solid red;
 `;
@@ -47,7 +50,7 @@ export const Body_Left = styled.div`
 
 export const Body_Right = styled.div`
   width: 100%;
-  padding: 0.4rem 0.4rem;
+  padding: 0.4rem 0.4rem 0.4rem 0.3rem;
   display: flex;
   align-items: center;
 `;
@@ -66,6 +69,28 @@ export const DetailText = styled.textarea`
   padding: 0.5rem 0 0.5rem 0.2rem;
   font-size: 1rem;
   resize: none;
+`;
+
+export const ThumbImages = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: 0 3px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const addImg = styled.label`
+  cursor: pointer;
+  width: 100px;
+  height: 90%;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: #403024;
 `;
 
 export const Stocks = styled.div`
@@ -142,7 +167,7 @@ export const AddItem = styled.button`
   color: #f7f3f5;
   margin-top: 10px;
   margin-bottom: 10px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   background-color: #403234;
 `;
 

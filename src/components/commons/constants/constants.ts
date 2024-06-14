@@ -4,6 +4,7 @@ export const loginOption = {
   fontColor: '#F7F3F5',
   content: '로그인',
   icon: 'none',
+  maxHeight: '70px',
 };
 
 export const googleLoginOption = {

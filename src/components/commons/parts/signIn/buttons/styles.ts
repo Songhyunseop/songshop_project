@@ -1,9 +1,11 @@
 import { IButtonProps } from '@/commons/types/signIn_type';
 import styled from '@emotion/styled';
 
-export const Main = styled.button<IButtonProps>`
+export const Button_Wrapper = styled.button<IButtonProps>`
   width: 100%;
-  height: calc(110px * (45 / 100)); //받아오는 container 높이값의 45%로 계산
+  max-height: 65px;
+  height: 60px;
+  /* height: calc(110px * (45 / 100)); //받아오는 container 높이값의 45%로 계산 */
   letter-spacing: 0.08rem;
   border: none;
   color: ${(props) => props.fontColor};
@@ -17,10 +19,10 @@ export const Logo_Image = styled.img`
   margin-right: 0.8rem;
 `;
 
-export const Content_Wrapper = styled.section`
+export const Content = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.7rem;
-  font-weight: 400;
+  font-size: 1.3rem;
+  font-weight: 500;
 `;

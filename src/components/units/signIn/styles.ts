@@ -3,27 +3,24 @@ import Link from 'next/link';
 
 export const Main = styled.main`
   max-width: 1280px;
-  height: 780px;
-  min-height: 780px;
-  margin: 0 auto;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 40rem;
-  padding-top: 10rem;
+  margin: 0 auto;
   border: 2px solid blue;
 `;
 
 export const Title = styled.h1`
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 300;
-  margin-bottom: 6rem;
+  margin-bottom: 3rem;
 `;
 
 export const Input_Section = styled.section`
   width: 100%;
-  height: 100%;
-  max-height: 110px;
+  height: 140px;
+  max-height: 130px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -32,7 +29,8 @@ export const Input_Section = styled.section`
 
 export const Login_Input = styled.input`
   width: 100%;
-  height: 45%;
+  height: 100%;
+  max-height: 60px;
 `;
 
 export const User_Contact_Section = styled.section`
@@ -42,7 +40,7 @@ export const User_Contact_Section = styled.section`
 `;
 
 export const StyledLink = styled(Link)`
-  font-size: 1.8rem;
+  font-size: 1.2rem;
   font-weight: 300;
   text-decoration: none;
   color: black;

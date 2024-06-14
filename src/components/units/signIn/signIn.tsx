@@ -42,7 +42,7 @@ export default function Login() {
   return (
     <S.Main>
       <S.Title>LOGIN</S.Title>
-      <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
+      <form onSubmit={handleSubmit(onSubmit)} style={{ width: '40%' }}>
         <S.Input_Section>
           <S.Login_Input
             type='text'
@@ -50,6 +50,7 @@ export default function Login() {
           />
           <S.Login_Input
             type='password'
+            autoComplete='off'
             {...register('password', { required: '빈 칸으로 둘 수 없습니다' })}
           />
         </S.Input_Section>
