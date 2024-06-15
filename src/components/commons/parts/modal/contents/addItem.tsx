@@ -10,13 +10,12 @@ import 'react-color-palette/css';
 import { useRef, useState } from 'react';
 import { faCheck, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMutation } from '@tanstack/react-query';
-import supabase from '@/commons/utils/supabase/client';
 import {
-  useThis,
-  useUploadStorage,
+  useGetPublicUrl,
   useUploadToStorage,
 } from '@/components/commons/hooks/query/useQueryGetAllProducts';
+import Image from 'next/image';
+import supabaseLoader from 'pages/api/faviconLoader';
 
 const WriteEditor = dynamic(() => import('../../editor/writeeditor'), {
   ssr: false,
@@ -97,7 +96,9 @@ export default function AddItemModalContents() {
     useState<IOptionSize[]>(sizeOptions);
   const [color, setColor] = useColor('#561ecb');
 
-  const [file, setFiles] = useState<File[]>();
+  // const [file, setFiles] = useState<File[]>();
+  const [uploadImgUrl, setUploadImgUrl] = useState<string[]>([]);
+
   const editorRef = useRef<editorType>();
 
   const handleSizeChange = (select: IOptionSize, item: string) => {
@@ -260,33 +261,29 @@ export default function AddItemModalContents() {
       console.log(textData);
     }
   };
-  //
-  //
-  const uploadImgFileToStorage = async (file) => {
-    console.log(file, '?');
-    const newId = uuidv4();
 
-    // const { data, error } = await supabaseClient.storage
-    //   .from('images')
-    //   .upload(`product/${newId}`, file);
-
-    // return { data, error };
-  };
-
-  const { mutate } = useMutation(uploadImgFileToStorage);
+  const { mutateAsync: uploadFiles } = useUploadToStorage();
+  const { mutateAsync: getPublicUrl } = useGetPublicUrl();
 
   const uploadToStorage = async (file) => {
-    console.log(file);
-    const result = await mutate(file);
+    try {
+      const uploadResult = await uploadFiles(file);
+      const { url } = await getPublicUrl(uploadResult.data.path);
+
+      setUploadImgUrl((prev) => [url, ...prev]);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleFiles = (e) => {
     const files = e.target.files;
     const fileArray = Array.from(files);
 
-    // uploadToStorage(123);
-
-    fileArray.forEach((file) => uploadToStorage(file));
+    fileArray.forEach(async (file) => {
+      await uploadToStorage(file);
+    });
+    console.log(uploadImgUrl);
   };
 
   return (
@@ -318,16 +315,35 @@ export default function AddItemModalContents() {
           <S.Body_Container>
             <S.Body_Left>IMAGE</S.Body_Left>
             <S.Body_Right>
-              <S.ThumbImages>
-                <div style={{ border: '1px solid black' }}>Imgitem</div>
+              <S.Upload_Container>
+                <S.ThumbsImg_Wrapper>
+                  {uploadImgUrl.map((img_url) => (
+                    <S.Upload_Stock_Container key={img_url}>
+                      <S.uploadStock>
+                        ITEMITEMITEMITEM
+                        <S.PreviewImg href={img_url}>
+                          <Image
+                            alt='미리보기'
+                            src={img_url}
+                            fill
+                            sizes='100%'
+                            unoptimized
+                            loader={supabaseLoader}
+                          />
+                        </S.PreviewImg>
+                      </S.uploadStock>
+                    </S.Upload_Stock_Container>
+                  ))}
+                </S.ThumbsImg_Wrapper>
                 <S.addImg htmlFor='imgInput'>업로드</S.addImg>
                 <input
+                  accept='image/jpeg,image/png'
                   onChange={handleFiles}
                   id='imgInput'
                   type='file'
                   hidden
                 />
-              </S.ThumbImages>
+              </S.Upload_Container>
             </S.Body_Right>
           </S.Body_Container>
           <S.Body_Container>

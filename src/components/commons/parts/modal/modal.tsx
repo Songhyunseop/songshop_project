@@ -1,4 +1,4 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import * as S from './styles';
 
 export default function Modal(props) {
@@ -28,7 +28,7 @@ export default function Modal(props) {
       style={style}
       ariaHideApp={false}
       isOpen={isOpen}
-      shouldCloseOnOverlayClick={true}
+      shouldCloseOnOverlayClick={false}
       onRequestClose={handleModal}
     >
       {children}

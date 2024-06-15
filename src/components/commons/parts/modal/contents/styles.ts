@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Link from 'next/link';
 import { ColorPicker } from 'react-color-palette';
 import Select from 'react-select';
 
@@ -8,7 +9,7 @@ export const Modal_Header = styled.header`
   top: 0;
   height: 12%;
   color: #f7f3f5;
-  font-size: 2.5rem;
+  font-size: 2rem;
   display: flex;
   align-items: center;
   padding-left: 1rem;
@@ -41,7 +42,7 @@ export const Body_Container = styled.div`
 `;
 
 export const Body_Left = styled.div`
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 500;
   color: #f7f3f5;
   background-color: #e2c2b3;
@@ -71,7 +72,7 @@ export const DetailText = styled.textarea`
   resize: none;
 `;
 
-export const ThumbImages = styled.div`
+export const Upload_Container = styled.div`
   width: 100%;
   height: 100%;
   padding: 0 3px;
@@ -79,6 +80,52 @@ export const ThumbImages = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+
+export const ThumbsImg_Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  max-width: 500px;
+  border: 2px solid red;
+`;
+
+export const Upload_Stock_Container = styled.div`
+  position: relative;
+
+  &:not(:nth-of-type(1)) {
+    margin-left: 0.3rem;
+  }
+`;
+
+export const uploadStock = styled.div`
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  height: 25px;
+  color: black;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  padding: 0 0.3rem;
+  border: none;
+  background-color: lightgray;
+`;
+
+export const PreviewImg = styled(Link)`
+  position: absolute;
+  left: 0;
+  top: 100%;
+  z-index: 999;
+  width: 100px;
+  height: 100px;
+  padding: 0.9rem;
+  margin-top: 0.7rem;
+  border: 3px solid rgba(226, 194, 179, 0.7);
+  display: none;
+
+  ${uploadStock}:hover ${PreviewImg} {
+    border: 2px solid blue;
+  }
 `;
 
 export const addImg = styled.label`
@@ -315,6 +362,11 @@ export const Custom_Color_Layout = styled.div`
   flex-direction: column;
   border-radius: 5px;
   background-color: #403234;
+
+  // 색상 선택 박스 테두리
+  & .rcp-saturation {
+    border-radius: 3px;
+  }
 `;
 
 export const ColorBtn_Box = styled.div`

@@ -12,16 +12,35 @@ export const getDataList = async () => {
 
   return { productData, error };
 };
+//
+//
 // 이미지 Storage에 업로드 API
-// const uploadImgFileToStorage = (file) => {
-//   console.log(file);
-//   const newId = uuidv4();
+const uploadImgFileToStorage = async (file) => {
+  const newId = uuidv4();
 
-//   const { data, error } = supabaseClient.storage
-//     .from('images')
-//     .upload(`product/${newId}`, file);
+  const { data, error } = await supabaseClient.storage
+    .from('images')
+    .upload(`product/${newId}`, file);
 
-//   return { data };
-// };
+  if (error) throw error;
 
-// export const useThis = () => useMutation(uploadImgFileToStorage);
+  return { data };
+};
+
+export const useUploadToStorage = () =>
+  useMutation({
+    mutationFn: uploadImgFileToStorage,
+  });
+
+// 이미지 업로드 후 storage에서 PublicUrl 반환
+const getPublicUrl = async (path) => {
+  const { data } = await supabaseClient.storage
+    .from('images')
+    .getPublicUrl(path);
+
+  const url = data.publicUrl;
+
+  return { url };
+};
+
+export const useGetPublicUrl = () => useMutation({ mutationFn: getPublicUrl });
