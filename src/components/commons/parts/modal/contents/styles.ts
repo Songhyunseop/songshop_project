@@ -20,7 +20,6 @@ export const Modal_Body = styled.div`
   display: grid;
   grid-template-rows: 1fr 1fr 4fr 1fr 1fr 1fr auto 8fr;
   padding: 0.5rem;
-  border: 2px solid red;
 `;
 
 export const Body_Container = styled.div`
@@ -86,15 +85,27 @@ export const ThumbsImg_Wrapper = styled.div`
   display: flex;
   align-items: center;
   max-width: 500px;
-  border: 2px solid red;
 `;
 
 export const Upload_Stock_Container = styled.div`
-  position: relative;
-
   &:not(:nth-of-type(1)) {
     margin-left: 0.3rem;
   }
+`;
+
+export const PreviewImg = styled(Link)`
+  position: absolute;
+  left: 20%;
+  top: 100%;
+  z-index: 999;
+  width: 100px;
+  height: 100px;
+  padding: 0.9rem;
+  margin-top: 0.7rem;
+  border: 2px solid rgba(226, 194, 179, 0.7);
+  opacity: 0;
+  transform: translateY(0);
+  transition: transform 0.5s ease, opacity 0.5s ease;
 `;
 
 export const uploadStock = styled.div`
@@ -104,27 +115,16 @@ export const uploadStock = styled.div`
   align-items: center;
   height: 25px;
   color: black;
-  border-radius: 10px;
-  font-size: 0.8rem;
+  border-radius: 7px;
+  font-size: 0.7rem;
   padding: 0 0.3rem;
   border: none;
   background-color: lightgray;
-`;
+  position: relative;
 
-export const PreviewImg = styled(Link)`
-  position: absolute;
-  left: 0;
-  top: 100%;
-  z-index: 999;
-  width: 100px;
-  height: 100px;
-  padding: 0.9rem;
-  margin-top: 0.7rem;
-  border: 3px solid rgba(226, 194, 179, 0.7);
-  display: none;
-
-  ${uploadStock}:hover ${PreviewImg} {
-    border: 2px solid blue;
+  &:hover ${PreviewImg} {
+    opacity: 1;
+    transform: translateY(-5%);
   }
 `;
 
@@ -361,9 +361,7 @@ export const Custom_Color_Layout = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 5px;
-  background-color: #403234;
-
-  // 색상 선택 박스 테두리
+  background-color: rgb(64, 50, 52, 0.75); // 색상 선택 박스 테두리
   & .rcp-saturation {
     border-radius: 3px;
   }

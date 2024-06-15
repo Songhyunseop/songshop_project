@@ -5,6 +5,9 @@ const nextConfig = {
     loader: 'custom',
     path: './pages/api/faviconLoader.tsx',
   },
+  compiler: {
+    emotion: true,
+  },
 };
 
 export default nextConfig;
