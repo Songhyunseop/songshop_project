@@ -44,11 +44,7 @@ export default function AddItemModalContents() {
     isPickerOpen: boolean;
   }
 
-  type IColorType = {
-    color: string;
-    item: string;
-  };
-
+  // 요청 용 데이터
   const selectedStocks: IStockDataType = {
     S: { label: 'SMALL', item: '', count: 1, color: [] },
     M: { label: 'MEDIUM', item: '', count: 1, color: [] },
@@ -93,6 +89,25 @@ export default function AddItemModalContents() {
     { label: '8개', value: 8 },
     { label: '9개', value: 9 },
     { label: '10개', value: 10 },
+  ];
+
+  const CategoryOptions = [
+    {
+      OUTWEAR: [
+        { label: 'COAT' },
+        { label: 'JACKET' },
+        { label: 'HOOD' },
+        { label: 'CASUAL' },
+      ],
+      label: 'OUTWEAR',
+      isdisabled: false,
+      name: 'mainCategory',
+    },
+    { TOP: [], label: 'TOP', isdisabled: false, name: 'mainCategory' },
+    { BOTTOM: [], label: 'BOTTOM', isdisabled: false, name: 'mainCategory' },
+    { SHOES: [], label: 'SHOES', isdisabled: false, name: 'mainCategory' },
+    { BAG: [], label: 'BAG', isdisabled: false, name: 'mainCategory' },
+    { ACC: [], label: 'ACC', isdisabled: false, name: 'mainCategory' },
   ];
 
   const [stockData, setStockData] = useState<IStockDataType>(selectedStocks);
@@ -292,8 +307,8 @@ export default function AddItemModalContents() {
     console.log(uploadImgUrl);
   };
 
-  const removeImg = (imgIndex) => {
-    const aa = () => {
+  const removeImg = (imgIndex: number) => {
+    const reduceListItem = () => {
       const newFileList = fileList.filter((el, idx) => idx !== imgIndex);
       const newUrlList = uploadImgUrl.filter((el, idx) => idx !== imgIndex);
 
@@ -301,7 +316,12 @@ export default function AddItemModalContents() {
       setUploadImgUrl(newUrlList);
     };
 
-    return aa;
+    return reduceListItem;
+  };
+
+  const changeCategory = (e) => {
+    // 메인 카테고리 관련 로직
+    if (e.name === 'mainCategory') console.log(e);
   };
 
   return (
@@ -381,13 +401,48 @@ export default function AddItemModalContents() {
           <S.Body_Container>
             <S.Body_Left>카테고리</S.Body_Left>
             <S.Body_Right>
-              <S.AddInput />
+              <S.Category_Select
+                classNamePrefix={'CategorySelect'}
+                options={CategoryOptions}
+                placeholder={'카테고리를 선택하세요'}
+                isSearchable={false}
+                onChange={changeCategory}
+                // defaultValue={{ label: '1개', value: 1 }}
+                // onChange={(select) => handleCountChange(select, data.item)}
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    border: '1px solid black',
+                    boxShadow: 'none',
+                    '&:hover': {
+                      border: '1px solid black',
+                    },
+                  }),
+                }}
+              />
             </S.Body_Right>
           </S.Body_Container>
           <S.Body_Container>
             <S.Body_Left>상세 카테고리</S.Body_Left>
             <S.Body_Right>
-              <S.AddInput />
+              <S.SubCategory_Select
+                classNamePrefix={'SubCategorySelect'}
+                placeholder={'카테고리를 선택하세요'}
+                isSearchable={false}
+                onChange={changeCategory}
+                // defaultValue={{ label: '1개', value: 1 }}
+                // onChange={(select) => handleCountChange(select, data.item)}
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    border: '1px solid black',
+                    boxShadow: 'none',
+                    '&:hover': {
+                      border: '1px solid black',
+                    },
+                  }),
+                }}
+              />
             </S.Body_Right>
           </S.Body_Container>
           <S.Body_Container>
@@ -417,10 +472,10 @@ export default function AddItemModalContents() {
                           classNamePrefix={'SizeSelect'}
                           options={selectedOption}
                           isSearchable={false}
-                          onChange={(select: unknown) =>
+                          onChange={(select) =>
                             handleSizeChange(select as IOptionSize, data.item)
                           }
-                          isOptionDisabled={(option: unknown) =>
+                          isOptionDisabled={(option) =>
                             (option as IOptionSize).isdisabled
                           }
                         />
@@ -495,11 +550,11 @@ export default function AddItemModalContents() {
                             }),
                           }}
                         />
-                        <S.Close
-                          onClick={removeItemStock}
-                          id={data.item}
-                        ></S.Close>
                       </S.Select_Stock>
+                      <S.Close
+                        onClick={removeItemStock}
+                        id={data.item}
+                      ></S.Close>
                     </S.Stocks>
                   )
               )}

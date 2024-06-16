@@ -34,7 +34,6 @@ export default function ItemList() {
 
   return (
     <S.Main>
-      <FontAwesomeIcon icon={faChevronRight} />
       <S.Category_Title>{category}</S.Category_Title>
       <S.Category_Nav>
         {categoryArr.map((el, idx) => (

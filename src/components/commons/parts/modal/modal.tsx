@@ -28,7 +28,7 @@ export default function Modal(props) {
       style={style}
       ariaHideApp={false}
       isOpen={isOpen}
-      shouldCloseOnOverlayClick={false}
+      shouldCloseOnOverlayClick={true}
       onRequestClose={handleModal}
     >
       {children}

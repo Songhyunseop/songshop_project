@@ -59,11 +59,8 @@ export const BestItem_Section = styled.section`
 
 export const Items = styled.article<ItemsProps>`
   display: grid;
-  grid-template-columns: ${(props) =>
-    props.isAll
-      ? 'repeat(4, minmax(150px, 1fr));'
-      : 'repeat(4, minmax(150px, 1fr));'};
-  grid-gap: 1.5rem;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  grid-gap: 1rem;
   border: 3px solid blue;
 `;
 

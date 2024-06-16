@@ -50,6 +50,7 @@ export const Body_Left = styled.div`
 `;
 
 export const Body_Right = styled.div`
+  position: relative;
   width: 100%;
   padding: 0.4rem 0.4rem 0.4rem 0.3rem;
   display: flex;
@@ -132,6 +133,35 @@ export const StyledFontawesomeCloseIcon = styled(FontAwesomeIcon)`
   margin-left: 3px;
 `;
 
+export const Category_Select = styled(Select)`
+  width: 50%;
+
+  & .CategorySelect__option {
+    background-color: white;
+    color: black;
+
+    :hover {
+      background-color: #969696;
+    }
+  }
+
+  & .CountSelect__menu {
+    /* 아래의 editor에 가려짐 방지를 위해 zIndex 값 부여 */
+    z-index: 9999;
+    border-radius: 2px;
+  }
+`;
+
+export const SubCategory_Select = styled(Select)`
+  width: 50%;
+
+  & .SubCategorySelect__menu {
+    /* 아래의 editor에 가려짐 방지를 위해 zIndex 값 부여 */
+    z-index: 9999;
+    border-radius: 2px;
+  }
+`;
+
 export const addImg = styled.label`
   cursor: pointer;
   width: 100px;
@@ -158,6 +188,7 @@ export const Stocks = styled.div`
 `;
 
 export const Select_Stock = styled.div`
+  position: relative;
   width: 80%;
   display: flex;
   align-items: center;
@@ -182,7 +213,6 @@ export const Close = styled.div`
   width: 25px;
   height: 25px;
   border-radius: 3px;
-  border: 3px solid blue;
 
   ::before {
     position: absolute;
@@ -250,7 +280,6 @@ export const Size_Select = styled(Select)`
 `;
 
 export const Count_Select = styled(Select)`
-  position: relative;
   min-width: 100px;
   width: 25%;
   margin-left: 0.8rem;
@@ -266,11 +295,14 @@ export const Count_Select = styled(Select)`
   }
 
   & .CountSelect__menu {
+    /* 아래의 editor에 가려짐 방지를 위해 zIndex 값 부여 */
+    z-index: 9999;
     border-radius: 2px;
   }
 
   & .CountSelect__menu-list {
-    z-index: 99;
+    z-index: 999;
+    border: 2px solid red;
     max-height: 200px;
     overflow-y: auto;
   }
