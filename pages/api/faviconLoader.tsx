@@ -1,3 +1,3 @@
-export default function supabaseLoader(src: string) {
+export default function supabaseLoader(src) {
   return src;
 }

@@ -8,7 +8,11 @@ import { ColorService, Hue, Saturation, useColor } from 'react-color-palette';
 import 'react-color-palette/css';
 
 import { useRef, useState } from 'react';
-import { faCheck, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCheck,
+  faCircleXmark,
+  faRotateLeft,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   useGetPublicUrl,
@@ -96,7 +100,7 @@ export default function AddItemModalContents() {
     useState<IOptionSize[]>(sizeOptions);
   const [color, setColor] = useColor('#561ecb');
 
-  // const [file, setFiles] = useState<File[]>();
+  const [fileList, setFilesList] = useState<File[]>([]);
   const [uploadImgUrl, setUploadImgUrl] = useState<string[]>([]);
 
   const editorRef = useRef<editorType>();
@@ -266,11 +270,13 @@ export default function AddItemModalContents() {
   const { mutateAsync: getPublicUrl } = useGetPublicUrl();
 
   const uploadToStorage = async (file) => {
+    // console.log(fileList[0].name);
     try {
       const uploadResult = await uploadFiles(file);
       const { url } = await getPublicUrl(uploadResult.data.path);
 
       setUploadImgUrl((prev) => [url, ...prev]);
+      setFilesList((filesList) => [file, ...filesList]);
     } catch (e) {
       console.log(e);
     }
@@ -284,6 +290,18 @@ export default function AddItemModalContents() {
       await uploadToStorage(file);
     });
     console.log(uploadImgUrl);
+  };
+
+  const removeImg = (imgIndex) => {
+    const aa = () => {
+      const newFileList = fileList.filter((el, idx) => idx !== imgIndex);
+      const newUrlList = uploadImgUrl.filter((el, idx) => idx !== imgIndex);
+
+      setFilesList(newFileList);
+      setUploadImgUrl(newUrlList);
+    };
+
+    return aa;
   };
 
   return (
@@ -317,21 +335,35 @@ export default function AddItemModalContents() {
             <S.Body_Right>
               <S.Upload_Container>
                 <S.ThumbsImg_Wrapper>
-                  {uploadImgUrl.map((img_url) => (
+                  {uploadImgUrl.map((img_url, idx) => (
                     <S.Upload_Stock_Container key={img_url}>
                       <S.uploadStock>
-                        ITEMITEMITEMITEM
-                        <S.PreviewImg href={img_url}>
-                          <Image
-                            alt='미리보기'
-                            src={img_url}
-                            fill
-                            sizes='100%'
-                            unoptimized
-                            loader={supabaseLoader}
-                          />
-                        </S.PreviewImg>
+                        {/* Text 중앙 맞추기 위한 스타일 */}
+                        <span
+                          style={{
+                            marginTop: '1.6px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {fileList[idx]?.name}
+                        </span>
+                        <S.StyledFontawesomeCloseIcon
+                          onClick={removeImg(idx)}
+                          icon={faCircleXmark}
+                        />
                       </S.uploadStock>
+                      <S.PreviewImg href={img_url}>
+                        <Image
+                          alt='미리보기'
+                          src={img_url}
+                          fill
+                          sizes='100%'
+                          unoptimized
+                          loader={supabaseLoader}
+                        />
+                      </S.PreviewImg>
                     </S.Upload_Stock_Container>
                   ))}
                 </S.ThumbsImg_Wrapper>

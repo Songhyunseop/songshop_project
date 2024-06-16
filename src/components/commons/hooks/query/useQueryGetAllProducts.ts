@@ -17,7 +17,6 @@ export const getDataList = async () => {
 // 이미지 Storage에 업로드 API
 const uploadImgFileToStorage = async (file) => {
   const newId = uuidv4();
-
   const { data, error } = await supabaseClient.storage
     .from('images')
     .upload(`product/${newId}`, file);

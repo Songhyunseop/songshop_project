@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { ColorPicker } from 'react-color-palette';
 import Select from 'react-select';
@@ -95,8 +96,6 @@ export const Upload_Stock_Container = styled.div`
 
 export const PreviewImg = styled(Link)`
   position: absolute;
-  left: 20%;
-  top: 100%;
   z-index: 999;
   width: 100px;
   height: 100px;
@@ -110,22 +109,27 @@ export const PreviewImg = styled(Link)`
 
 export const uploadStock = styled.div`
   cursor: pointer;
-  text-align: center;
   display: flex;
   align-items: center;
-  height: 25px;
+  max-width: 200px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  padding: 3.2px;
   color: black;
   border-radius: 7px;
-  font-size: 0.7rem;
-  padding: 0 0.3rem;
-  border: none;
   background-color: lightgray;
-  position: relative;
+  border: none;
 
-  &:hover ${PreviewImg} {
+  &:hover + ${PreviewImg} {
     opacity: 1;
     transform: translateY(-5%);
   }
+`;
+
+export const StyledFontawesomeCloseIcon = styled(FontAwesomeIcon)`
+  margin-left: 3px;
 `;
 
 export const addImg = styled.label`

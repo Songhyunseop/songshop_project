@@ -70,7 +70,7 @@ export default function ItemList() {
           </S.Page_Number>
         ))}
         <FontAwesomeIcon
-          style={{ fontSize: '0.95rem' }}
+          // style={{ fontSize: '0.95rem' }}
           icon={faChevronRight}
         />
       </S.Pagination>

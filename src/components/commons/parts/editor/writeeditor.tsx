@@ -19,7 +19,18 @@ export default function WriteEditor({ changeContent, editorRef }) {
         ref={editorRef}
         toolbarItems={[
           ['heading', 'bold', 'italic'],
-          ['quote', 'strike', 'ul', 'indent', 'outdent', 'ol', 'task', 'hr'],
+          [
+            'quote',
+            'strike',
+            'ul',
+            'indent',
+            'outdent',
+            'ol',
+            'task',
+            'hr',
+            'image',
+            'link',
+          ],
         ]}
         onChange={changeContent}
         language='ko-KR'
