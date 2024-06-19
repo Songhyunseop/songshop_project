@@ -20,6 +20,7 @@ import {
 } from '@/components/commons/hooks/query/useQueryGetAllProducts';
 import Image from 'next/image';
 import supabaseLoader from 'pages/api/faviconLoader';
+import { deepCopy } from '@/commons/utils/deepcopy';
 
 const WriteEditor = dynamic(() => import('../../editor/writeeditor'), {
   ssr: false,
@@ -79,16 +80,16 @@ export default function AddItemModalContents() {
   ];
 
   const countOptions = [
-    { label: '1개', value: 1 },
-    { label: '2개', value: 2 },
-    { label: '3개', value: 3 },
-    { label: '4개', value: 4 },
-    { label: '5개', value: 5 },
-    { label: '6개', value: 6 },
-    { label: '7개', value: 7 },
-    { label: '8개', value: 8 },
-    { label: '9개', value: 9 },
-    { label: '10개', value: 10 },
+    { label: '1개', value: 1, isdisabled: false },
+    { label: '2개', value: 2, isdisabled: false },
+    { label: '3개', value: 3, isdisabled: false },
+    { label: '4개', value: 4, isdisabled: false },
+    { label: '5개', value: 5, isdisabled: false },
+    { label: '6개', value: 6, isdisabled: false },
+    { label: '7개', value: 7, isdisabled: false },
+    { label: '8개', value: 8, isdisabled: false },
+    { label: '9개', value: 9, isdisabled: false },
+    { label: '10개', value: 10, isdisabled: false },
   ];
 
   const CategoryOptions = [
@@ -110,9 +111,11 @@ export default function AddItemModalContents() {
     { ACC: [], label: 'ACC', isdisabled: false, name: 'mainCategory' },
   ];
 
+  const OptionsData = { sizeOptions, countOptions, CategoryOptions };
+
   const [stockData, setStockData] = useState<IStockDataType>(selectedStocks);
-  const [selectedOption, setSelectedOption] =
-    useState<IOptionSize[]>(sizeOptions);
+  const [options, setOptions] = useState(OptionsData);
+
   const [color, setColor] = useColor('#561ecb');
 
   const [fileList, setFilesList] = useState<File[]>([]);
@@ -121,11 +124,11 @@ export default function AddItemModalContents() {
   const editorRef = useRef<editorType>();
 
   const handleSizeChange = (select: IOptionSize, item: string) => {
-    const copiedStocks = structuredClone(stockData);
-    const copiedOptions = [...selectedOption];
-    const size = select.value;
+    const [copiedStocks, copiedOptionGroup] = deepCopy([stockData, options]);
+    const copiedSizes = [...copiedOptionGroup.sizeOptions];
 
-    const prevSelectSize = copiedOptions.find((el) => el.item === item)?.value;
+    const size = select.value;
+    const prevSelectSize = copiedSizes.find((el) => el.item === item)?.value;
 
     // api 전송용 객체의 데이터 값 변경
     if (prevSelectSize) {
@@ -135,7 +138,7 @@ export default function AddItemModalContents() {
     }
 
     // selectOption default 값 변경
-    const newOptions = copiedOptions.map((option) => {
+    const newOptions = copiedSizes.map((option) => {
       if (option.value === prevSelectSize && option.item !== '')
         return { ...option, item: '', isdisabled: false };
       if (option.value === size) return { ...option, item, isdisabled: true };
@@ -143,62 +146,73 @@ export default function AddItemModalContents() {
     });
 
     setStockData(copiedStocks);
-    setSelectedOption(newOptions);
+    setOptions((prev) => {
+      return { ...prev, sizeOptions: newOptions };
+    });
   };
 
   const handleCountChange = (select, item: string) => {
-    const copiedStocks = structuredClone(stockData);
-    const copiedOptions = [...selectedOption];
+    const [copiedStocks, copiedOptionGroup] = deepCopy([stockData, options]);
+    const copiedSizes = [...copiedOptionGroup.sizeOptions];
 
-    const selectOne = copiedOptions.find((el) => el.item === item);
+    const selectOne = copiedSizes.find((el) => el.item === item);
     if (selectOne) copiedStocks[selectOne?.value].count = select.value;
 
-    const newOptions = copiedOptions.map((option) => {
+    const newOptions = copiedSizes.map((option) => {
       if (option.item === selectOne?.item)
         return { ...option, count: select.value };
       return { ...option };
     });
 
     setStockData(copiedStocks);
-    setSelectedOption(newOptions);
+    setOptions((prev) => {
+      return { ...prev, sizeOptions: newOptions };
+    });
+
+    console.log(options.sizeOptions);
   };
 
   const addItemStock = () => {
     const newStockId = uuidv4();
-    const copiedStocks = structuredClone(stockData);
-    const copiedOptions = [...selectedOption];
 
-    const selectOne = copiedOptions.find((el) => el.isdisabled === false);
+    const [copiedStocks, copiedOptionGroup] = deepCopy([stockData, options]);
+    const copiedSizes = [...copiedOptionGroup.sizeOptions];
+
+    const selectOne = copiedSizes.find((el) => el.isdisabled === false);
 
     // 체크 안된 사이즈 stock에 고유한 item코드 추가
     if (selectOne) copiedStocks[selectOne.value].item = newStockId;
 
-    const newOptions = copiedOptions.map((option) => {
+    const newOptions = copiedSizes.map((option) => {
       if (option.value === selectOne?.value)
         return { ...option, item: newStockId, isdisabled: true };
       return { ...option };
     });
 
     setStockData(copiedStocks);
-    setSelectedOption(newOptions);
+    setOptions((prev) => {
+      return { ...prev, sizeOptions: newOptions };
+    });
   };
 
   const isRemainingSpace = () => {
-    const remainingSpace = selectedOption.filter(
+    const copiedOption = structuredClone(options);
+
+    const remainingSpace = copiedOption.sizeOptions.filter(
       (option) => option.item === ''
     );
-
     if (remainingSpace.length === 0) return false;
     return true;
   };
 
   const removeItemStock = (e) => {
-    const copiedStocks = structuredClone(stockData);
-    const copiedOptions = [...selectedOption];
+    const [copiedStocks, copiedOptionGroup] = deepCopy([stockData, options]);
+    const copiedSizes = [...copiedOptionGroup.sizeOptions];
+
     const selectedStockId = e.target.id;
 
     // select Option 에서 선택된 item과 같은 객체 검열
-    const selectOne = copiedOptions.find((el) => el.item === selectedStockId);
+    const selectOne = copiedSizes.find((el) => el.item === selectedStockId);
 
     // 실제 api 호출에 보내지는 객체 data 값 변경
     if (selectOne) {
@@ -208,7 +222,7 @@ export default function AddItemModalContents() {
     }
 
     // select Option default 값 변경 (메뉴 활성화 여부)
-    const newOptions = copiedOptions.map((option) => {
+    const newOptions = copiedSizes.map((option) => {
       if (option.item === selectedStockId)
         return { ...option, item: '', isdisabled: false };
 
@@ -216,17 +230,23 @@ export default function AddItemModalContents() {
     });
 
     setStockData(copiedStocks);
-    setSelectedOption(newOptions);
+    setOptions((prev) => {
+      return { ...prev, sizeOptions: newOptions };
+    });
   };
 
   const openColorPick = (item) => {
-    const copiedOptions = [...selectedOption];
-    const newOptions = copiedOptions.map((el) => {
+    const [copiedOptionGroup] = deepCopy([options]);
+    const copiedSizes = [...copiedOptionGroup.sizeOptions];
+
+    const newOptions = copiedSizes.map((el) => {
       if (el.item === item) return { ...el, isPickerOpen: !el.isPickerOpen };
       return { ...el, isPickerOpen: false };
     });
 
-    setSelectedOption(newOptions);
+    setOptions((prev) => {
+      return { ...prev, sizeOptions: newOptions };
+    });
   };
 
   const resetColor = () => {
@@ -237,9 +257,10 @@ export default function AddItemModalContents() {
   };
 
   const selectColor = (item) => {
-    const copiedStocks = structuredClone(stockData);
-    const copiedOptions = [...selectedOption];
-    const selectOne = copiedOptions.find((el) => el.item === item);
+    const [copiedStocks, copiedOptionGroup] = deepCopy([stockData, options]);
+    const copiedSizes = [...copiedOptionGroup.sizeOptions];
+
+    const selectOne = copiedSizes.find((el) => el.item === item);
 
     const colors = selectOne && copiedStocks[selectOne.value].color;
     const isDuplicated = colors?.some((c) => c === color.hex);
@@ -252,19 +273,22 @@ export default function AddItemModalContents() {
     if (!isDuplicated && selectOne)
       copiedStocks[selectOne.value].color.unshift(color.hex);
 
-    const newOptions = copiedOptions.map((el) => {
+    const newOptions = copiedSizes.map((el) => {
       if (el.item === item) return { ...el, isPickerOpen: false };
       return { ...el };
     });
 
     setStockData(copiedStocks);
-    setSelectedOption(newOptions);
+    setOptions((prev) => {
+      return { ...prev, sizeOptions: newOptions };
+    });
   };
 
   const removeColor = (item: string, color: string) => {
-    const copiedStocks = structuredClone(stockData);
-    const copiedOptions = [...selectedOption];
-    const selectOne = copiedOptions.find((el) => el.item === item);
+    const [copiedStocks, copiedOptionGroup] = deepCopy([stockData, options]);
+    const copiedSizes = [...copiedOptionGroup.sizeOptions];
+
+    const selectOne = copiedSizes.find((el) => el.item === item);
 
     if (selectOne) {
       const colors = selectOne && copiedStocks[selectOne.value]?.color;
@@ -277,7 +301,6 @@ export default function AddItemModalContents() {
   const changeContent = () => {
     if (editorRef.current) {
       const textData = editorRef.current.getInstance().getHTML();
-      console.log(textData);
     }
   };
 
@@ -448,7 +471,7 @@ export default function AddItemModalContents() {
           <S.Body_Container>
             <S.Body_Left>재고</S.Body_Left>
             <S.Body_Right>
-              {selectedOption.map(
+              {options.sizeOptions.map(
                 (data) =>
                   data.item !== '' && (
                     <S.Stocks id={data.item} key={data.item}>
@@ -470,7 +493,7 @@ export default function AddItemModalContents() {
                             label: data.label,
                           }}
                           classNamePrefix={'SizeSelect'}
-                          options={selectedOption}
+                          options={options.sizeOptions}
                           isSearchable={false}
                           onChange={(select) =>
                             handleSizeChange(select as IOptionSize, data.item)
