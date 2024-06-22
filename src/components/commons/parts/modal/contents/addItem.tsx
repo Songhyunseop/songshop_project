@@ -130,20 +130,24 @@ export default function AddItemModalContents() {
     const size = select.value;
     const prevSelectSize = copiedSizes.find((el) => el.item === item)?.value;
 
+    // selectOption default 값 변경
+    const newOptions = copiedSizes.map((option) => {
+      if (option.value === prevSelectSize && option.item !== '')
+        return { ...option, count: 1, item: '', isdisabled: false };
+
+      if (option.value === size) return { ...option, item, isdisabled: true };
+      return { ...option };
+    });
+
+    console.log(item);
+    console.log(select);
+
     // api 전송용 객체의 데이터 값 변경
     if (prevSelectSize) {
       copiedStocks[prevSelectSize].item = '';
       copiedStocks[prevSelectSize].count = 1;
       copiedStocks[size].item = item;
     }
-
-    // selectOption default 값 변경
-    const newOptions = copiedSizes.map((option) => {
-      if (option.value === prevSelectSize && option.item !== '')
-        return { ...option, item: '', isdisabled: false };
-      if (option.value === size) return { ...option, item, isdisabled: true };
-      return { ...option };
-    });
 
     setStockData(copiedStocks);
     setOptions((prev) => {
@@ -168,8 +172,6 @@ export default function AddItemModalContents() {
     setOptions((prev) => {
       return { ...prev, sizeOptions: newOptions };
     });
-
-    console.log(options.sizeOptions);
   };
 
   const addItemStock = () => {
@@ -474,7 +476,7 @@ export default function AddItemModalContents() {
               {options.sizeOptions.map(
                 (data) =>
                   data.item !== '' && (
-                    <S.Stocks id={data.item} key={data.item}>
+                    <S.Stocks id={data.item} key={data.label}>
                       <S.Select_Stock>
                         <S.Stocks_Info>SIZE</S.Stocks_Info>
                         <S.Size_Select
