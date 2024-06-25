@@ -26,11 +26,6 @@ const uploadImgFileToStorage = async (file) => {
   return { data };
 };
 
-export const useUploadToStorage = () =>
-  useMutation({
-    mutationFn: uploadImgFileToStorage,
-  });
-
 // 이미지 업로드 후 storage에서 PublicUrl 반환
 const getPublicUrl = async (path) => {
   const { data } = await supabaseClient.storage
@@ -41,5 +36,10 @@ const getPublicUrl = async (path) => {
 
   return { url };
 };
+
+export const useUploadToStorage = () =>
+  useMutation({
+    mutationFn: uploadImgFileToStorage,
+  });
 
 export const useGetPublicUrl = () => useMutation({ mutationFn: getPublicUrl });
