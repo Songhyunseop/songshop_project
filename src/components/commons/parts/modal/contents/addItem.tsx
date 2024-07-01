@@ -300,6 +300,7 @@ export default function AddItemModalContents() {
     setStockData(copiedStocks);
   };
 
+  // editor 입력값 핸들링
   const changeContent = () => {
     if (editorRef.current) {
       const textData = editorRef.current.getInstance().getHTML();
@@ -528,6 +529,7 @@ export default function AddItemModalContents() {
                               <Hue color={color} onChange={setColor} />
                               <S.ColorBtn_Box>
                                 <S.ColorPickBtn
+                                  type='button'
                                   onClick={() => selectColor(data.item)}
                                 >
                                   <FontAwesomeIcon
