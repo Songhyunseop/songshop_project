@@ -41,7 +41,7 @@ export default function WriteEditor({ changeContent, editorRef }) {
         height='100%'
         initialEditType='wysiwyg'
         useCommandShortcut={false}
-        plugins={[colorSyntax, fontSize]}
+        plugins={[fontSize, colorSyntax]}
       />
     </S.EditorWrapper>
   );

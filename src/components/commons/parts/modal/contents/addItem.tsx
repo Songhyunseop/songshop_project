@@ -304,6 +304,7 @@ export default function AddItemModalContents() {
   const changeContent = () => {
     if (editorRef.current) {
       const textData = editorRef.current.getInstance().getHTML();
+      console.log(textData);
     }
   };
 

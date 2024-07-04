@@ -66,19 +66,22 @@ const globalStyle = css`
   // editor 코드
 
   .toastui-editor-contents {
-    font-size: 1rem;
+    /* font-size: 1rem; */
   }
   // 색깔 입힌 글꼴 굵게 적용
-  p strong span {
+  p strong span,
+  em,
+  del {
     font-weight: inherit;
   }
 
-  p strong em {
-    font-weight: inherit;
+  // font-size에 맞춰 취소선 중앙 정렬
+  del {
+    text-decoration-line: none;
   }
-
-  p strong del {
-    font-weight: inherit;
+  p del span {
+    color: black;
+    text-decoration-line: line-through;
   }
 
   @font-face {
