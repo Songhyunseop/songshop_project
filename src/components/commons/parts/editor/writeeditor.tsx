@@ -11,8 +11,34 @@ import fontSize from 'tui-editor-plugin-font-size';
 import 'tui-editor-plugin-font-size/dist/tui-editor-plugin-font-size.css';
 
 import * as S from './styles';
+import supabase from '@/commons/utils/supabase/client';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function WriteEditor({ changeContent, editorRef }) {
+  type HookCallback = (url: string, text?: string) => void;
+
+  const supabaseClient = supabase();
+
+  const convertBlob = async (blob: File, callbackFunc: HookCallback) => {
+    const newId = uuidv4();
+
+    try {
+      const { data, error } = await supabaseClient.storage
+        .from('images')
+        .upload(`editorblobs/${newId}`, blob);
+
+      if (error) throw error;
+
+      const { data: imgUrl } = await supabaseClient.storage
+        .from('images')
+        .getPublicUrl(data.path);
+
+      callbackFunc(imgUrl.publicUrl, '');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <S.EditorWrapper id='editor'>
       <Editor
@@ -41,6 +67,9 @@ export default function WriteEditor({ changeContent, editorRef }) {
         height='100%'
         initialEditType='wysiwyg'
         useCommandShortcut={false}
+        hooks={{
+          addImageBlobHook: convertBlob,
+        }}
         plugins={[fontSize, colorSyntax]}
       />
     </S.EditorWrapper>
