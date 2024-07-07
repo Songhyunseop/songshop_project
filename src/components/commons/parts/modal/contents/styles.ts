@@ -95,17 +95,25 @@ export const Upload_Stock_Container = styled.div`
   }
 `;
 
-export const PreviewImg = styled(Link)`
+export const PreviewImg = styled.div`
   position: absolute;
   z-index: 999;
+  cursor: pointer;
   width: 100px;
   height: 100px;
   padding: 0.9rem;
   margin-top: 0.7rem;
   border: 2px solid rgba(226, 194, 179, 0.7);
   opacity: 0;
+  visibility: hidden;
   transform: translateY(0);
   transition: transform 0.5s ease, opacity 0.5s ease;
+
+  &:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-5%);
+  }
 `;
 
 export const uploadStock = styled.div`
@@ -122,9 +130,11 @@ export const uploadStock = styled.div`
   border-radius: 7px;
   background-color: lightgray;
   border: none;
+  border: 2px solid red;
 
   &:hover + ${PreviewImg} {
     opacity: 1;
+    visibility: visible;
     transform: translateY(-5%);
   }
 `;

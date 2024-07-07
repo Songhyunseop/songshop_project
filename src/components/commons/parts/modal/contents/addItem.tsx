@@ -328,8 +328,16 @@ export default function AddItemModalContents() {
     const files = e.target.files;
     const fileArray = Array.from(files);
 
-    fileArray.forEach(async (file) => {
-      await uploadToStorage(file);
+    console.log(fileArray);
+    fileArray.forEach((file) => {
+      // await uploadToStorage(file);
+      const blobUrl = URL.createObjectURL(file);
+      // console.log('hahaha');
+      // console.log(file);
+      console.log(blobUrl);
+      console.log('hahaha');
+
+      setUploadImgUrl((prev) => [blobUrl, ...prev]);
     });
     console.log(uploadImgUrl);
   };
@@ -401,7 +409,9 @@ export default function AddItemModalContents() {
                           icon={faCircleXmark}
                         />
                       </S.uploadStock>
-                      <S.PreviewImg href={img_url}>
+                      <S.PreviewImg
+                        onClick={() => window.open(img_url, '_blank')}
+                      >
                         <Image
                           alt='미리보기'
                           src={img_url}
