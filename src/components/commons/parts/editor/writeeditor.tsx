@@ -16,10 +16,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 export default function WriteEditor({ changeContent, editorRef }) {
   type HookCallback = (url: string, text?: string) => void;
-
   const supabaseClient = supabase();
 
-  const convertBlob = async (blob: File, callbackFunc: HookCallback) => {
+  const convertBlob = async (blob: File | Blob, callbackFunc: HookCallback) => {
     const newId = uuidv4();
 
     try {
@@ -74,4 +73,5 @@ export default function WriteEditor({ changeContent, editorRef }) {
       />
     </S.EditorWrapper>
   );
+  3;
 }
