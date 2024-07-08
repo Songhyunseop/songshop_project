@@ -7,7 +7,7 @@ import { Editor as editorType } from '@toast-ui/react-editor';
 import { ColorService, Hue, Saturation, useColor } from 'react-color-palette';
 import 'react-color-palette/css';
 
-import { useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   faCheck,
   faCircleXmark,
@@ -264,21 +264,22 @@ export default function AddItemModalContents() {
   const editorRef = useRef<editorType>();
   const subCategoryRef = useRef(null);
 
-  const handleSizeChange = (select: IOptionSize, item: string) => {
-    interface ISelected {
-      value: string;
-      label: string;
-      item: string;
-      count: number;
-      isdisabled: boolean;
-      isPickerOpen: boolean;
-    }
-
+  interface ISelected {
+    value: string;
+    label: string;
+    item: string;
+    count: number;
+    isdisabled: boolean;
+    isPickerOpen: boolean;
+  }
+  const handleSizeChange = (select: IOptionSize) => {
     const { value, label, item: itemId } = select;
     const [copyStock, copyOptionGroup] = deepCopy([stocks, options]);
 
     // 선택된 항목에 입력값에 맞게 데이터 수정
-    const selected = copyStock.find((el: ISelected) => el.item === itemId);
+    const selected = copyStock.find(
+      (stock: ISelected) => stock.item === itemId
+    );
 
     const editedData = {
       ...(selected as ISelected),
@@ -287,7 +288,7 @@ export default function AddItemModalContents() {
       isdisabled: true,
     };
 
-    const targetIdx = stocks.findIndex((el) => el.item === itemId);
+    const targetIdx = stocks.findIndex((stock) => stock.item === itemId);
     copyStock[targetIdx] = editedData;
 
     setStocks(copyStock);
@@ -338,7 +339,6 @@ export default function AddItemModalContents() {
   };
 
   //
-  const sumbitStocks = [];
   const obj = {
     value: '',
     label: '',
@@ -364,18 +364,12 @@ export default function AddItemModalContents() {
     //     return { ...option, item: newStockId, isdisabled: true };
     //   return { ...option };
     // });
-    console.log(stocks);
     const newStockId = uuidv4();
 
     const [stockData] = deepCopy([obj]);
     stockData.item = newStockId;
 
     setStocks((prev) => [...prev, stockData]);
-
-    // setStockData(copiedStocks);
-    // setOptions((prev) => {
-    //   return { ...prev, sizeOptions: newOptions };
-    // });
   };
 
   const isRemainingSpace = () => {
@@ -389,33 +383,44 @@ export default function AddItemModalContents() {
   };
 
   const removeItemStock = (e) => {
-    const [copiedStocks, copiedOptionGroup] = deepCopy([stockData, options]);
-    const copiedSizes = [...copiedOptionGroup.sizeOptions];
+    const [copyStock, copyOptionGroup] = deepCopy([stocks, options]);
 
-    const selectedStockId = e.target.id;
+    const { filtered, selected } = copyStock.reduce(
+      (acc, stock) => {
+        if (stock.item === e.target.id) {
+          const a = acc.selected;
+          a.push(stock);
+        }
+        if (stock.item !== e.target.id) {
+          const b = acc.filtered;
+          b.push(stock);
+        }
+        return acc;
+      },
+      {
+        filtered: [],
+        selected: [],
+      }
+    );
 
-    // select Option 에서 선택된 item과 같은 객체 검열
-    const selectOne = copiedSizes.find((el) => el.item === selectedStockId);
-
-    // 실제 api 호출에 보내지는 객체 data 값 변경
-    if (selectOne) {
-      copiedStocks[selectOne.value].item = '';
-      copiedStocks[selectOne.value].count = 1;
-      copiedStocks[selectOne.value].color = [];
-    }
-
-    // select Option default 값 변경 (메뉴 활성화 여부)
-    const newOptions = copiedSizes.map((option) => {
-      if (option.item === selectedStockId)
-        return { ...option, item: '', isdisabled: false };
-
-      return { ...option };
+    const editedOption = copyOptionGroup.sizeOptions.map((opt) => {
+      if (opt.label === selected[0].label)
+        return {
+          ...opt,
+          count: 1,
+          item: '',
+          isPickerOpen: false,
+          isdisabled: false,
+        };
+      return { ...opt };
     });
 
-    setStockData(copiedStocks);
+    setStocks(filtered);
     setOptions((prev) => {
-      return { ...prev, sizeOptions: newOptions };
+      return { ...prev, sizeOptions: editedOption };
     });
+
+    console.log(1111111, editedOption);
   };
 
   const openColorPick = (item) => {
@@ -714,10 +719,6 @@ export default function AddItemModalContents() {
                           },
                         }),
                       }}
-                      // value={{
-                      //   value: data.label !== '' && '사이즈선택',
-                      //   label: data.label !== '' && '사이즈선택',
-                      // }}
                       classNamePrefix={'SizeSelect'}
                       options={options.sizeOptions}
                       isSearchable={false}
@@ -782,10 +783,6 @@ export default function AddItemModalContents() {
                     <S.Stocks_Info>COUNT</S.Stocks_Info>
                     <S.Count_Select
                       placeholder={'수량 선택'}
-                      // value={{
-                      //   value: data.count,
-                      //   label: `${data.count}개`,
-                      // }}
                       classNamePrefix={'CountSelect'}
                       options={countOptions}
                       onChange={(select) =>
