@@ -265,34 +265,56 @@ export default function AddItemModalContents() {
   const subCategoryRef = useRef(null);
 
   const handleSizeChange = (select: IOptionSize, item: string) => {
-    const [copiedStocks, copiedOptionGroup] = deepCopy([stockData, options]);
-    const copiedSizes = [...copiedOptionGroup.sizeOptions];
-
-    const size = select.value;
-    const prevSelectSize = copiedSizes.find((el) => el.item === item)?.value;
-
-    // selectOption default 값 변경
-    const newOptions = copiedSizes.map((option) => {
-      if (option.value === prevSelectSize && option.item !== '')
-        return { ...option, count: 1, item: '', isdisabled: false };
-
-      if (option.value === size) return { ...option, item, isdisabled: true };
-      return { ...option };
-    });
-
-    // console.log(item);
-    // console.log(select);
-
-    // api 전송용 객체의 데이터 값 변경
-    if (prevSelectSize) {
-      copiedStocks[prevSelectSize].item = '';
-      copiedStocks[prevSelectSize].count = 1;
-      copiedStocks[size].item = item;
+    interface ISelected {
+      value: string;
+      label: string;
+      item: string;
+      count: number;
+      isdisabled: boolean;
+      isPickerOpen: boolean;
     }
 
-    setStockData(copiedStocks);
+    const { value, label, item: itemId } = select;
+    const [copyStock, copyOptionGroup] = deepCopy([stocks, options]);
+
+    // 선택된 항목에 입력값에 맞게 데이터 수정
+    const selected = copyStock.find((el: ISelected) => el.item === itemId);
+
+    const editedData = {
+      ...(selected as ISelected),
+      value,
+      label,
+      isdisabled: true,
+    };
+
+    const targetIdx = stocks.findIndex((el) => el.item === itemId);
+    copyStock[targetIdx] = editedData;
+
+    setStocks(copyStock);
+
+    // 옵션값(isDisabled) 수정
+    if (selected.label !== '') {
+      const editedOption = copyOptionGroup.sizeOptions.map((opt) => {
+        if (opt.label === selected.label) return { ...opt, isdisabled: false };
+        if (opt.label === label) return { ...opt, isdisabled: true };
+        return { ...opt };
+      });
+
+      setOptions((prev) => {
+        return { ...prev, sizeOptions: editedOption };
+      });
+
+      return;
+    }
+
+    const editedOption = copyOptionGroup.sizeOptions.map((opt) => {
+      return opt.label === select.label
+        ? { ...opt, isdisabled: true }
+        : { ...opt };
+    });
+
     setOptions((prev) => {
-      return { ...prev, sizeOptions: newOptions };
+      return { ...prev, sizeOptions: editedOption };
     });
   };
 
@@ -315,27 +337,45 @@ export default function AddItemModalContents() {
     });
   };
 
+  //
+  const sumbitStocks = [];
+  const obj = {
+    value: '',
+    label: '',
+    item: '',
+    count: 1,
+    isdisabled: false,
+    isPickerOpen: false,
+  };
+
+  const [stocks, setStocks] = useState([]);
+
   const addItemStock = () => {
-    const newStockId = uuidv4();
+    // const [copiedStocks, copiedOptionGroup] = deepCopy([stockData, options]);
+    // const copiedSizes = [...copiedOptionGroup.sizeOptions];
 
-    const [copiedStocks, copiedOptionGroup] = deepCopy([stockData, options]);
-    const copiedSizes = [...copiedOptionGroup.sizeOptions];
-
-    const selectOne = copiedSizes.find((el) => el.isdisabled === false);
+    // const selectOne = copiedSizes.find((el) => el.isdisabled === false);
 
     // 체크 안된 사이즈 stock에 고유한 item코드 추가
-    if (selectOne) copiedStocks[selectOne.value].item = newStockId;
+    // if (selectOne) copiedStocks[selectOne.value].item = newStockId;
 
-    const newOptions = copiedSizes.map((option) => {
-      if (option.value === selectOne?.value)
-        return { ...option, item: newStockId, isdisabled: true };
-      return { ...option };
-    });
+    // const newOptions = copiedSizes.map((option) => {
+    //   if (option.value === selectOne?.value)
+    //     return { ...option, item: newStockId, isdisabled: true };
+    //   return { ...option };
+    // });
+    console.log(stocks);
+    const newStockId = uuidv4();
 
-    setStockData(copiedStocks);
-    setOptions((prev) => {
-      return { ...prev, sizeOptions: newOptions };
-    });
+    const [stockData] = deepCopy([obj]);
+    stockData.item = newStockId;
+
+    setStocks((prev) => [...prev, stockData]);
+
+    // setStockData(copiedStocks);
+    // setOptions((prev) => {
+    //   return { ...prev, sizeOptions: newOptions };
+    // });
   };
 
   const isRemainingSpace = () => {
@@ -484,8 +524,8 @@ export default function AddItemModalContents() {
 
   const removeImg = (imgIndex: number) => {
     const reduceListItem = () => {
-      const newFileList = fileList.filter((el, idx) => idx !== imgIndex);
-      const newUrlList = uploadImgUrl.filter((el, idx) => idx !== imgIndex);
+      const newFileList = fileList.filter((_, idx) => idx !== imgIndex);
+      const newUrlList = uploadImgUrl.filter((_, idx) => idx !== imgIndex);
 
       setFilesList(newFileList);
       setUploadImgUrl(newUrlList);
@@ -658,117 +698,115 @@ export default function AddItemModalContents() {
           <S.Body_Container>
             <S.Body_Left>재고</S.Body_Left>
             <S.Body_Right>
-              {options.sizeOptions.map(
-                (data) =>
-                  data.item !== '' && (
-                    <S.Stocks id={data.item} key={data.label}>
-                      <S.Select_Stock>
-                        <S.Stocks_Info>SIZE</S.Stocks_Info>
-                        <S.Size_Select
-                          styles={{
-                            control: (base) => ({
-                              ...base,
-                              border: '1px solid black',
-                              boxShadow: 'none',
-                              '&:hover': {
-                                border: '1px solid black',
-                              },
-                            }),
-                          }}
-                          value={{
-                            value: data.label,
-                            label: data.label,
-                          }}
-                          classNamePrefix={'SizeSelect'}
-                          options={options.sizeOptions}
-                          isSearchable={false}
-                          onChange={(select) =>
-                            handleSizeChange(select as IOptionSize, data.item)
-                          }
-                          isOptionDisabled={(option) =>
-                            (option as IOptionSize).isdisabled
-                          }
-                        />
-                        <S.Stocks_Info>COLOR</S.Stocks_Info>
-                        <S.Color_PickBox>
-                          <S.Color_PickButton
-                            onClick={() => openColorPick(data.item)}
-                          ></S.Color_PickButton>
-                          <S.ColorsList>
-                            {stockData[data.value].color.map((c) => (
-                              <S.Colors
-                                key={uuidv4()}
-                                onClick={() => removeColor(data.item, c)}
-                                color={c}
-                              ></S.Colors>
-                            ))}
-                          </S.ColorsList>
-                          {data.isPickerOpen && (
-                            <S.Custom_Color_Layout>
-                              <Saturation
-                                height={180}
-                                color={color}
-                                onChange={setColor}
+              {stocks.map((data) => (
+                <S.Stocks id={data.item} key={data.item}>
+                  <S.Select_Stock>
+                    <S.Stocks_Info>SIZE</S.Stocks_Info>
+                    <S.Size_Select
+                      placeholder={'사이즈 선택'}
+                      styles={{
+                        control: (base) => ({
+                          ...base,
+                          border: '1px solid black',
+                          boxShadow: 'none',
+                          '&:hover': {
+                            border: '1px solid black',
+                          },
+                        }),
+                      }}
+                      // value={{
+                      //   value: data.label !== '' && '사이즈선택',
+                      //   label: data.label !== '' && '사이즈선택',
+                      // }}
+                      classNamePrefix={'SizeSelect'}
+                      options={options.sizeOptions}
+                      isSearchable={false}
+                      onChange={(select) =>
+                        handleSizeChange({
+                          ...(select as IOptionSize),
+                          item: data.item,
+                        })
+                      }
+                      isOptionDisabled={(option) =>
+                        (option as IOptionSize).isdisabled
+                      }
+                    />
+                    <S.Stocks_Info>COLOR</S.Stocks_Info>
+                    <S.Color_PickBox>
+                      <S.Color_PickButton
+                        onClick={() => openColorPick(data.item)}
+                      ></S.Color_PickButton>
+                      {/* <S.ColorsList>
+                        {stockData[data.value].color.map((c) => (
+                          <S.Colors
+                            key={uuidv4()}
+                            onClick={() => removeColor(data.item, c)}
+                            color={c}
+                          ></S.Colors>
+                        ))}
+                      </S.ColorsList> */}
+                      {data.isPickerOpen && (
+                        <S.Custom_Color_Layout>
+                          <Saturation
+                            height={180}
+                            color={color}
+                            onChange={setColor}
+                          />
+                          <Hue color={color} onChange={setColor} />
+                          <S.ColorBtn_Box>
+                            <S.ColorPickBtn
+                              type='button'
+                              onClick={() => selectColor(data.item)}
+                            >
+                              <FontAwesomeIcon
+                                style={{
+                                  width: '15px',
+                                  height: '15px',
+                                }}
+                                icon={faCheck}
                               />
-                              <Hue color={color} onChange={setColor} />
-                              <S.ColorBtn_Box>
-                                <S.ColorPickBtn
-                                  type='button'
-                                  onClick={() => selectColor(data.item)}
-                                >
-                                  <FontAwesomeIcon
-                                    style={{
-                                      width: '15px',
-                                      height: '15px',
-                                    }}
-                                    icon={faCheck}
-                                  />
-                                </S.ColorPickBtn>
-                                <S.ColorPickBtn onClick={resetColor}>
-                                  <FontAwesomeIcon
-                                    style={{
-                                      width: '15px',
-                                      height: '15px',
-                                    }}
-                                    icon={faRotateLeft}
-                                  />
-                                </S.ColorPickBtn>
-                              </S.ColorBtn_Box>
-                            </S.Custom_Color_Layout>
-                          )}
-                        </S.Color_PickBox>
-                        <S.Stocks_Info>COUNT</S.Stocks_Info>
-                        <S.Count_Select
-                          value={{
-                            value: data.count,
-                            label: `${data.count}개`,
-                          }}
-                          classNamePrefix={'CountSelect'}
-                          defaultValue={{ label: '1개', value: 1 }}
-                          options={countOptions}
-                          onChange={(select) =>
-                            handleCountChange(select, data.item)
-                          }
-                          isSearchable={false}
-                          styles={{
-                            control: (base) => ({
-                              ...base,
-                              border: '1px solid black',
-                              boxShadow: 'none',
-                              '&:hover': {
-                                border: '1px solid black',
-                              },
-                            }),
-                          }}
-                        />
-                      </S.Select_Stock>
-                      <S.Close
-                        onClick={removeItemStock}
-                        id={data.item}
-                      ></S.Close>
-                    </S.Stocks>
-                  )
-              )}
+                            </S.ColorPickBtn>
+                            <S.ColorPickBtn onClick={resetColor}>
+                              <FontAwesomeIcon
+                                style={{
+                                  width: '15px',
+                                  height: '15px',
+                                }}
+                                icon={faRotateLeft}
+                              />
+                            </S.ColorPickBtn>
+                          </S.ColorBtn_Box>
+                        </S.Custom_Color_Layout>
+                      )}
+                    </S.Color_PickBox>
+                    <S.Stocks_Info>COUNT</S.Stocks_Info>
+                    <S.Count_Select
+                      placeholder={'수량 선택'}
+                      // value={{
+                      //   value: data.count,
+                      //   label: `${data.count}개`,
+                      // }}
+                      classNamePrefix={'CountSelect'}
+                      options={countOptions}
+                      onChange={(select) =>
+                        handleCountChange(select, data.item)
+                      }
+                      isSearchable={false}
+                      styles={{
+                        control: (base) => ({
+                          ...base,
+                          border: '1px solid black',
+                          boxShadow: 'none',
+                          '&:hover': {
+                            border: '1px solid black',
+                          },
+                        }),
+                      }}
+                    />
+                  </S.Select_Stock>
+                  <S.Close onClick={removeItemStock} id={data.item}></S.Close>
+                </S.Stocks>
+              ))}
               {isRemainingSpace() && (
                 <S.AddItem type='button' onClick={addItemStock}>
                   재고추가
