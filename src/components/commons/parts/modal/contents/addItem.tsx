@@ -7,7 +7,7 @@ import { Editor as editorType } from '@toast-ui/react-editor';
 import { ColorService, Hue, Saturation, useColor } from 'react-color-palette';
 import 'react-color-palette/css';
 
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import {
   faCheck,
   faCircleXmark,
@@ -94,21 +94,161 @@ export default function AddItemModalContents() {
 
   const CategoryOptions = [
     {
-      OUTWEAR: [
-        { label: 'COAT' },
-        { label: 'JACKET' },
-        { label: 'HOOD' },
-        { label: 'CASUAL' },
-      ],
       label: 'OUTWEAR',
       isdisabled: false,
       name: 'mainCategory',
+      subCategory: [
+        {
+          main: 'OUTWEAR',
+          label: 'COAT',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+        {
+          main: 'OUTWEAR',
+          label: 'JACKET',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+        {
+          main: 'OUTWEAR',
+          label: 'HOOD',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+        {
+          main: 'OUTWEAR',
+          label: 'CASUAL',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+      ],
     },
-    { TOP: [], label: 'TOP', isdisabled: false, name: 'mainCategory' },
-    { BOTTOM: [], label: 'BOTTOM', isdisabled: false, name: 'mainCategory' },
-    { SHOES: [], label: 'SHOES', isdisabled: false, name: 'mainCategory' },
-    { BAG: [], label: 'BAG', isdisabled: false, name: 'mainCategory' },
-    { ACC: [], label: 'ACC', isdisabled: false, name: 'mainCategory' },
+    {
+      label: 'TOP',
+      isdisabled: false,
+      name: 'mainCategory',
+      subCategory: [
+        { main: 'TOP', label: 'COAT', name: 'subCategory', isdisabled: false },
+        {
+          main: 'TOP',
+          label: 'JACKET',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+        { main: 'TOP', label: 'HOOD', name: 'subCategory', isdisabled: false },
+        {
+          main: 'TOP',
+          label: 'CASUAL',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+      ],
+    },
+    {
+      label: 'BOTTOM',
+      isdisabled: false,
+      name: 'mainCategory',
+      subCategory: [
+        {
+          main: 'BOTTOM',
+          label: 'COAT',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+        {
+          main: 'BOTTOM',
+          label: 'JACKET',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+        {
+          main: 'BOTTOM',
+          label: 'HOOD',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+        {
+          main: 'BOTTOM',
+          label: 'CASUAL',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+      ],
+    },
+    {
+      label: 'SHOES',
+      isdisabled: false,
+      name: 'mainCategory',
+      subCategory: [
+        {
+          main: 'SHOES',
+          label: 'COAT',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+        {
+          main: 'SHOES',
+          label: 'JACKET',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+        {
+          main: 'SHOES',
+          label: 'HOOD',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+        {
+          main: 'SHOES',
+          label: 'CASUAL',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+      ],
+    },
+    {
+      label: 'BAG',
+      isdisabled: false,
+      name: 'mainCategory',
+      subCategory: [
+        { main: 'BAG', label: 'COAT', name: 'subCategory', isdisabled: false },
+        {
+          main: 'BAG',
+          label: 'JACKET',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+        { main: 'BAG', label: 'HOOD', name: 'subCategory', isdisabled: false },
+        {
+          main: 'BAG',
+          label: 'CASUAL',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+      ],
+    },
+    {
+      label: 'ACC',
+      isdisabled: false,
+      name: 'mainCategory',
+      subCategory: [
+        { main: 'ACC', label: 'COAT', name: 'subCategory', isdisabled: false },
+        {
+          main: 'ACC',
+          label: 'JACKET',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+        { main: 'ACC', label: 'HOOD', name: 'subCategory', isdisabled: false },
+        {
+          main: 'ACC',
+          label: 'CASUAL',
+          name: 'subCategory',
+          isdisabled: false,
+        },
+      ],
+    },
   ];
 
   const OptionsData = { sizeOptions, countOptions, CategoryOptions };
@@ -122,6 +262,7 @@ export default function AddItemModalContents() {
   const [uploadImgUrl, setUploadImgUrl] = useState<string[]>([]);
 
   const editorRef = useRef<editorType>();
+  const subCategoryRef = useRef(null);
 
   const handleSizeChange = (select: IOptionSize, item: string) => {
     const [copiedStocks, copiedOptionGroup] = deepCopy([stockData, options]);
@@ -139,8 +280,8 @@ export default function AddItemModalContents() {
       return { ...option };
     });
 
-    console.log(item);
-    console.log(select);
+    // console.log(item);
+    // console.log(select);
 
     // api 전송용 객체의 데이터 값 변경
     if (prevSelectSize) {
@@ -311,7 +452,7 @@ export default function AddItemModalContents() {
   const { mutateAsync: uploadFiles } = useUploadToStorage();
   const { mutateAsync: getPublicUrl } = useGetPublicUrl();
 
-  const uploadToStorage = async (file) => {
+  const submitBoard = async (file) => {
     // console.log(fileList[0].name);
     try {
       const uploadResult = await uploadFiles(file);
@@ -324,22 +465,21 @@ export default function AddItemModalContents() {
     }
   };
 
-  const handleFiles = (e) => {
-    const files = e.target.files;
-    const fileArray = Array.from(files);
-
-    console.log(fileArray);
+  const createPreviewImg = (fileArray: File[]) => {
+    // 이미지 미리보기 로직
     fileArray.forEach((file) => {
-      // await uploadToStorage(file);
       const blobUrl = URL.createObjectURL(file);
-      // console.log('hahaha');
-      // console.log(file);
-      console.log(blobUrl);
-      console.log('hahaha');
 
       setUploadImgUrl((prev) => [blobUrl, ...prev]);
+      setFilesList((fileList) => [file, ...fileList]);
     });
-    console.log(uploadImgUrl);
+  };
+
+  const handleFiles = (e) => {
+    const files = e.target.files;
+    const fileArray: File[] = Array.from(files);
+
+    createPreviewImg(fileArray);
   };
 
   const removeImg = (imgIndex: number) => {
@@ -355,8 +495,43 @@ export default function AddItemModalContents() {
   };
 
   const changeCategory = (e) => {
-    // 메인 카테고리 관련 로직
-    if (e.name === 'mainCategory') console.log(e);
+    if (e.name === 'mainCategory') {
+      const newOptions = CategoryOptions.map((category) => {
+        if (category.label === e.label)
+          return { ...category, isdisabled: true };
+        else return { ...category, isdisabled: false };
+      });
+
+      setOptions((prev) => {
+        return { ...prev, CategoryOptions: newOptions };
+      });
+    }
+
+    if (e.name === 'subCategory') {
+      const newOptions = options.CategoryOptions.map((category) => {
+        if (category.label === e.main) {
+          const subCategory = category.subCategory.map((opt) => {
+            return opt.label === e.label
+              ? { ...opt, isdisabled: true }
+              : { ...opt };
+          });
+          return { ...category, subCategory };
+        }
+        return { ...category };
+      });
+
+      setOptions((prev) => {
+        return { ...prev, CategoryOptions: newOptions };
+      });
+    }
+  };
+
+  const returnSubCategoryOpts = () => {
+    const checked = options.CategoryOptions.filter(
+      (opt) => opt.isdisabled === true
+    )[0];
+
+    return checked ? checked?.subCategory : [];
   };
 
   return (
@@ -444,8 +619,6 @@ export default function AddItemModalContents() {
                 placeholder={'카테고리를 선택하세요'}
                 isSearchable={false}
                 onChange={changeCategory}
-                // defaultValue={{ label: '1개', value: 1 }}
-                // onChange={(select) => handleCountChange(select, data.item)}
                 styles={{
                   control: (base) => ({
                     ...base,
@@ -463,12 +636,12 @@ export default function AddItemModalContents() {
             <S.Body_Left>상세 카테고리</S.Body_Left>
             <S.Body_Right>
               <S.SubCategory_Select
+                ref={subCategoryRef}
                 classNamePrefix={'SubCategorySelect'}
+                options={returnSubCategoryOpts()}
                 placeholder={'카테고리를 선택하세요'}
                 isSearchable={false}
                 onChange={changeCategory}
-                // defaultValue={{ label: '1개', value: 1 }}
-                // onChange={(select) => handleCountChange(select, data.item)}
                 styles={{
                   control: (base) => ({
                     ...base,

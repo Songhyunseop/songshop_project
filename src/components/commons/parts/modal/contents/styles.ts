@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Link from 'next/link';
 import { ColorPicker } from 'react-color-palette';
 import Select from 'react-select';
 
@@ -169,6 +168,15 @@ export const SubCategory_Select = styled(Select)`
     /* 아래의 editor에 가려짐 방지를 위해 zIndex 값 부여 */
     z-index: 9999;
     border-radius: 2px;
+  }
+
+  & .SubCategorySelect__option {
+    background-color: white;
+    color: black;
+
+    :hover {
+      background-color: #969696;
+    }
   }
 `;
 
