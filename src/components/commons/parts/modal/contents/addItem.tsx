@@ -280,6 +280,7 @@ export default function AddItemModalContents() {
     const selected = copyStock.find(
       (stock: ISelected) => stock.item === itemId
     );
+    const targetIdx = stocks.findIndex((stock) => stock.item === itemId);
 
     const editedData = {
       ...(selected as ISelected),
@@ -288,9 +289,7 @@ export default function AddItemModalContents() {
       isdisabled: true,
     };
 
-    const targetIdx = stocks.findIndex((stock) => stock.item === itemId);
     copyStock[targetIdx] = editedData;
-
     setStocks(copyStock);
 
     // 옵션값(isDisabled) 수정
@@ -338,12 +337,13 @@ export default function AddItemModalContents() {
     });
   };
 
-  //
+  ////
   const obj = {
     value: '',
     label: '',
     item: '',
     count: 1,
+    selectColor: [],
     isdisabled: false,
     isPickerOpen: false,
   };
@@ -351,24 +351,10 @@ export default function AddItemModalContents() {
   const [stocks, setStocks] = useState([]);
 
   const addItemStock = () => {
-    // const [copiedStocks, copiedOptionGroup] = deepCopy([stockData, options]);
-    // const copiedSizes = [...copiedOptionGroup.sizeOptions];
-
-    // const selectOne = copiedSizes.find((el) => el.isdisabled === false);
-
-    // 체크 안된 사이즈 stock에 고유한 item코드 추가
-    // if (selectOne) copiedStocks[selectOne.value].item = newStockId;
-
-    // const newOptions = copiedSizes.map((option) => {
-    //   if (option.value === selectOne?.value)
-    //     return { ...option, item: newStockId, isdisabled: true };
-    //   return { ...option };
-    // });
     const newStockId = uuidv4();
-
     const [stockData] = deepCopy([obj]);
-    stockData.item = newStockId;
 
+    stockData.item = newStockId;
     setStocks((prev) => [...prev, stockData]);
   };
 
@@ -419,22 +405,50 @@ export default function AddItemModalContents() {
     setOptions((prev) => {
       return { ...prev, sizeOptions: editedOption };
     });
-
-    console.log(1111111, editedOption);
   };
 
-  const openColorPick = (item) => {
-    const [copiedOptionGroup] = deepCopy([options]);
-    const copiedSizes = [...copiedOptionGroup.sizeOptions];
+  const toggleColorPick = (item) => {
+    const [copyStocks] = deepCopy([stocks]);
 
-    const newOptions = copiedSizes.map((el) => {
-      if (el.item === item) return { ...el, isPickerOpen: !el.isPickerOpen };
-      return { ...el, isPickerOpen: false };
-    });
+    const selected = copyStocks.find((stock) => stock.item === item);
+    const targetIdx = copyStocks.findIndex((stock) => stock.item === item);
 
-    setOptions((prev) => {
-      return { ...prev, sizeOptions: newOptions };
-    });
+    if (selected.label === '') {
+      alert('사이즈를 먼저 선택해주세요');
+      return;
+    }
+
+    copyStocks[targetIdx] = {
+      ...selected,
+      isPickerOpen: !selected.isPickerOpen,
+    };
+
+    setStocks(copyStocks);
+  };
+
+  const selectColor = (item) => {
+    const [copyStocks] = deepCopy([stocks, options]);
+
+    const selected = copyStocks.find((stock) => stock.item === item);
+    const targetIdx = copyStocks.findIndex((stock) => stock.item === item);
+
+    const isDuplicate = selected.selectColor.some(
+      (itemColor) => itemColor === color.hex
+    );
+
+    if (isDuplicate) {
+      alert('이미 선택된 색상입니다');
+      return;
+    }
+
+    console.log(copyStocks);
+
+    // 선택 색상 추가하고 색상창 닫기
+    selected.selectColor.push(color.hex);
+    selected.isPickerOpen = false;
+
+    copyStocks[targetIdx] = selected;
+    setStocks(copyStocks);
   };
 
   const resetColor = () => {
@@ -444,46 +458,18 @@ export default function AddItemModalContents() {
     setColor({ hex, rgb, hsv });
   };
 
-  const selectColor = (item) => {
-    const [copiedStocks, copiedOptionGroup] = deepCopy([stockData, options]);
-    const copiedSizes = [...copiedOptionGroup.sizeOptions];
-
-    const selectOne = copiedSizes.find((el) => el.item === item);
-
-    const colors = selectOne && copiedStocks[selectOne.value].color;
-    const isDuplicated = colors?.some((c) => c === color.hex);
-
-    if (isDuplicated) {
-      alert('이미 선택한 색상입니다');
-      return;
-    }
-
-    if (!isDuplicated && selectOne)
-      copiedStocks[selectOne.value].color.unshift(color.hex);
-
-    const newOptions = copiedSizes.map((el) => {
-      if (el.item === item) return { ...el, isPickerOpen: false };
-      return { ...el };
-    });
-
-    setStockData(copiedStocks);
-    setOptions((prev) => {
-      return { ...prev, sizeOptions: newOptions };
-    });
-  };
-
   const removeColor = (item: string, color: string) => {
-    const [copiedStocks, copiedOptionGroup] = deepCopy([stockData, options]);
-    const copiedSizes = [...copiedOptionGroup.sizeOptions];
+    const [copyStocks] = deepCopy([stocks, options]);
 
-    const selectOne = copiedSizes.find((el) => el.item === item);
+    const selected = copyStocks.find((stock) => stock.item === item);
+    const targetIdx = copyStocks.findIndex((stock) => stock.item === item);
 
-    if (selectOne) {
-      const colors = selectOne && copiedStocks[selectOne.value]?.color;
-      copiedStocks[selectOne.value].color = colors?.filter((c) => c !== color);
-    }
+    const filterdColors = selected.selectColor.filter((c) => c !== color);
 
-    setStockData(copiedStocks);
+    selected.selectColor = filterdColors;
+    copyStocks[targetIdx] = selected;
+
+    setStocks(copyStocks);
   };
 
   // editor 입력값 핸들링
@@ -735,17 +721,17 @@ export default function AddItemModalContents() {
                     <S.Stocks_Info>COLOR</S.Stocks_Info>
                     <S.Color_PickBox>
                       <S.Color_PickButton
-                        onClick={() => openColorPick(data.item)}
+                        onClick={() => toggleColorPick(data.item)}
                       ></S.Color_PickButton>
-                      {/* <S.ColorsList>
-                        {stockData[data.value].color.map((c) => (
+                      <S.ColorsList>
+                        {data.selectColor?.map((color) => (
                           <S.Colors
                             key={uuidv4()}
-                            onClick={() => removeColor(data.item, c)}
-                            color={c}
+                            onClick={() => removeColor(data.item, color)}
+                            color={color}
                           ></S.Colors>
                         ))}
-                      </S.ColorsList> */}
+                      </S.ColorsList>
                       {data.isPickerOpen && (
                         <S.Custom_Color_Layout>
                           <Saturation
@@ -767,7 +753,7 @@ export default function AddItemModalContents() {
                                 icon={faCheck}
                               />
                             </S.ColorPickBtn>
-                            <S.ColorPickBtn onClick={resetColor}>
+                            <S.ColorPickBtn type='button' onClick={resetColor}>
                               <FontAwesomeIcon
                                 style={{
                                   width: '15px',
