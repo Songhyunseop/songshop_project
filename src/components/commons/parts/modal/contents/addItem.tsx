@@ -21,6 +21,8 @@ import {
 import Image from 'next/image';
 import supabaseLoader from 'pages/api/faviconLoader';
 import { deepCopy } from '@/commons/utils/deepcopy';
+import Select from 'react-select/dist/declarations/src/Select';
+import { GroupBase } from 'react-select';
 
 const WriteEditor = dynamic(() => import('../../editor/writeeditor'), {
   ssr: false,
@@ -91,6 +93,20 @@ export default function AddItemModalContents() {
     { label: '9개', value: 9, isdisabled: false },
     { label: '10개', value: 10, isdisabled: false },
   ];
+
+  interface ISubCategory {
+    main: string;
+    label: string;
+    name: string;
+    isdisabled: boolean;
+  }
+
+  interface ICategoryProps {
+    label: string;
+    isdisabled: boolean;
+    name: string;
+    subCategory: ISubCategory[];
+  }
 
   const CategoryOptions = [
     {
@@ -262,7 +278,10 @@ export default function AddItemModalContents() {
   const [uploadImgUrl, setUploadImgUrl] = useState<string[]>([]);
 
   const editorRef = useRef<editorType>();
-  const subCategoryRef = useRef(null);
+  const subCategoryRef =
+    useRef<Select<ICategoryProps, false, GroupBase<ICategoryProps>>>(null);
+
+  const isCleared = useRef(false);
 
   interface ISelected {
     value: string;
@@ -427,7 +446,7 @@ export default function AddItemModalContents() {
   };
 
   const selectColor = (item) => {
-    const [copyStocks] = deepCopy([stocks, options]);
+    const [copyStocks] = deepCopy([stocks]);
 
     const selected = copyStocks.find((stock) => stock.item === item);
     const targetIdx = copyStocks.findIndex((stock) => stock.item === item);
@@ -440,8 +459,6 @@ export default function AddItemModalContents() {
       alert('이미 선택된 색상입니다');
       return;
     }
-
-    console.log(copyStocks);
 
     // 선택 색상 추가하고 색상창 닫기
     selected.selectColor.push(color.hex);
@@ -459,7 +476,7 @@ export default function AddItemModalContents() {
   };
 
   const removeColor = (item: string, color: string) => {
-    const [copyStocks] = deepCopy([stocks, options]);
+    const [copyStocks] = deepCopy([stocks]);
 
     const selected = copyStocks.find((stock) => stock.item === item);
     const targetIdx = copyStocks.findIndex((stock) => stock.item === item);
@@ -526,8 +543,13 @@ export default function AddItemModalContents() {
   };
 
   const changeCategory = (e) => {
+    //clearValue 실행으로 인한 트리거 처리
+    if (!e) return;
+
+    const [copyOptionGroup] = deepCopy([options]);
+
     if (e.name === 'mainCategory') {
-      const newOptions = CategoryOptions.map((category) => {
+      const newOptions = copyOptionGroup.CategoryOptions.map((category) => {
         if (category.label === e.label)
           return { ...category, isdisabled: true };
         else return { ...category, isdisabled: false };
@@ -536,10 +558,12 @@ export default function AddItemModalContents() {
       setOptions((prev) => {
         return { ...prev, CategoryOptions: newOptions };
       });
+
+      if (subCategoryRef.current) subCategoryRef.current.clearValue();
     }
 
     if (e.name === 'subCategory') {
-      const newOptions = options.CategoryOptions.map((category) => {
+      const newOptions = copyOptionGroup.CategoryOptions.map((category) => {
         if (category.label === e.main) {
           const subCategory = category.subCategory.map((opt) => {
             return opt.label === e.label
@@ -672,6 +696,7 @@ export default function AddItemModalContents() {
                 options={returnSubCategoryOpts()}
                 placeholder={'카테고리를 선택하세요'}
                 isSearchable={false}
+                // value={null}
                 onChange={changeCategory}
                 styles={{
                   control: (base) => ({
