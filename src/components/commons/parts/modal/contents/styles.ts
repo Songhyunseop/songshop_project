@@ -145,6 +145,11 @@ export const StyledFontawesomeCloseIcon = styled(FontAwesomeIcon)`
 export const Category_Select = styled(Select)`
   width: 50%;
 
+  & .CategorySelect__menu-list {
+    max-height: 150px;
+    overflow: auto;
+  }
+
   & .CategorySelect__option {
     background-color: white;
     color: black;
