@@ -1,9 +1,8 @@
 import * as S from './styles';
 import { useSearchParams } from 'next/navigation';
 import { IItemInfoList } from '@/commons/types/list_type';
-import { useCustomModal } from '@/components/commons/hooks/custom/useCustomModal/customModal';
-import AddItemModalContents from '@/components/commons/parts/modal/contents/addItem';
-import WriteEditor from '@/components/commons/parts/editor/writeeditor';
+import { useCustomModal } from '@/components/commons/hooks/custom/useCustomModal/modalhook';
+import AddItemModalContents from '@/components/commons/parts/modal/contents/additem';
 
 export default function ItemList(props) {
   const itemInfoList: IItemInfoList = {

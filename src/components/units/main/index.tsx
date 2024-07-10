@@ -1,7 +1,7 @@
 import * as S from './styles';
 
-import MainSWiper from '@/components/commons/parts/mainSwiper/mainSwiper';
-import ItemSwiper from '@/components/commons/parts/itemSwiper/itemSwiper';
+import MainSWiper from '@/components/commons/parts/swiper/mainSwiper/mainSwiper';
+import ItemSwiper from '@/components/commons/parts/swiper/itemSwiper/itemSwiper';
 import ItemBox from '@/components/commons/parts/itembox/itembox';
 
 import { useState } from 'react';

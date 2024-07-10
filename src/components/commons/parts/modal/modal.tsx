@@ -14,12 +14,6 @@ export default function Modal(props) {
       backgroundColor: 'rgba(255, 255, 255, 0.75)',
       zIndex: 9999,
     },
-    //     content: {
-    // ,
-
-    //       border: '5px solid red',
-    //       overflow: 'auto',
-    //     },
   };
 
   return (
