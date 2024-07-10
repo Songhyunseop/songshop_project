@@ -4,12 +4,10 @@ import { v4 as uuidv4 } from 'uuid';
 import dynamic from 'next/dynamic';
 import { Editor as editorType } from '@toast-ui/react-editor';
 
-import { ColorService, Hue, Saturation, useColor } from 'react-color-palette';
+import { ColorService, useColor } from 'react-color-palette';
 import 'react-color-palette/css';
 
 import { useRef, useState } from 'react';
-import { faCheck, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   useGetPublicUrl,
   useUploadToStorage,
@@ -23,23 +21,17 @@ import {
   countOptions,
   sizeOptions,
 } from '@/components/commons/constants/constants';
+
 import UploadImageComponent from './imageUpload';
 import CustomSelect from '../../../select';
+import StocksComponent from './stocks';
 
+// editor 컴포넌트 클라이언트 측에서 렌더링
 const WriteEditor = dynamic(() => import('../../../editor/writeeditor'), {
   ssr: false,
 });
 
 export default function AddItemModalContents() {
-  interface IOptionSize {
-    value: string;
-    label: string;
-    item: string;
-    count: number;
-    isdisabled: boolean;
-    isPickerOpen: boolean;
-  }
-
   // interface ISubCategory {
   //   main: string;
   //   label: string;
@@ -82,65 +74,6 @@ export default function AddItemModalContents() {
   const editorRef = useRef<editorType>();
   const subCategoryRef =
     useRef<Select<unknown, boolean, GroupBase<unknown>>>(null);
-
-  const handleSizeChange = (select: IOptionSize) => {
-    const { value, label, item: itemId } = select;
-    const [copyStock, copyOptionGroup] = deepCopy([stocks, options]);
-
-    // 선택된 항목에 입력값에 맞게 데이터 수정
-    const selected = copyStock.find(
-      (stock: ISelected) => stock.item === itemId
-    );
-    const targetIdx = stocks.findIndex((stock) => stock.item === itemId);
-
-    const editedData = {
-      ...(selected as ISelected),
-      value,
-      label,
-      isdisabled: true,
-    };
-
-    copyStock[targetIdx] = editedData;
-    setStocks(copyStock);
-
-    // 옵션값(isDisabled) 수정
-    if (selected.label !== '') {
-      const editedOption = copyOptionGroup.sizeOptions.map((opt) => {
-        if (opt.label === selected.label) return { ...opt, isdisabled: false };
-        if (opt.label === label) return { ...opt, isdisabled: true };
-        return { ...opt };
-      });
-
-      setOptions((prev) => {
-        return { ...prev, sizeOptions: editedOption };
-      });
-
-      return;
-    }
-
-    const editedOption = copyOptionGroup.sizeOptions.map((opt) => {
-      return opt.label === select.label
-        ? { ...opt, isdisabled: true }
-        : { ...opt };
-    });
-
-    setOptions((prev) => {
-      return { ...prev, sizeOptions: editedOption };
-    });
-  };
-
-  const handleCountChange = (select) => {
-    const [copyStocks] = deepCopy([stocks]);
-    const { item, value } = select;
-
-    const selected = copyStocks.find((stock) => stock.item === item);
-    const targetIdx = copyStocks.findIndex((stock) => stock.item === item);
-
-    selected.count = value;
-
-    copyStocks[targetIdx] = selected;
-    setStocks(copyStocks);
-  };
 
   const addItemStock = () => {
     const newStockId = uuidv4();
@@ -287,45 +220,6 @@ export default function AddItemModalContents() {
     }
   };
 
-  const changeCategory = (e) => {
-    //clearValue 실행으로 인한 트리거 처리
-    if (!e) return;
-
-    const [copyOptionGroup] = deepCopy([options]);
-
-    if (e.name === 'mainCategory') {
-      const newOptions = copyOptionGroup.CategoryOptions.map((category) => {
-        if (category.label === e.label)
-          return { ...category, isdisabled: true };
-        else return { ...category, isdisabled: false };
-      });
-
-      setOptions((prev) => {
-        return { ...prev, CategoryOptions: newOptions };
-      });
-
-      if (subCategoryRef.current) subCategoryRef.current.clearValue();
-    }
-
-    if (e.name === 'subCategory') {
-      const newOptions = copyOptionGroup.CategoryOptions.map((category) => {
-        if (category.label === e.main) {
-          const subCategory = category.subCategory.map((opt) => {
-            return opt.label === e.label
-              ? { ...opt, isdisabled: true }
-              : { ...opt };
-          });
-          return { ...category, subCategory };
-        }
-        return { ...category };
-      });
-
-      setOptions((prev) => {
-        return { ...prev, CategoryOptions: newOptions };
-      });
-    }
-  };
-
   const returnSubCategoryOpts = () => {
     // 선택된 MainCategory options를 통해 이에 할당된 subCategory options를 반환
     const checked = options.CategoryOptions.filter(
@@ -397,117 +291,16 @@ export default function AddItemModalContents() {
               type={'subCategorySelect'}
             />
           </ItemInfo>
-          <S.Body_Container>
-            <S.Body_Left>재고</S.Body_Left>
-            <S.Body_Right>
-              {stocks.map((data) => (
-                <S.Stocks id={data.item} key={data.item}>
-                  <S.Select_Stock>
-                    <S.Stocks_Info>SIZE</S.Stocks_Info>
-                    <S.Size_Select
-                      placeholder={'사이즈 선택'}
-                      styles={{
-                        control: (base) => ({
-                          ...base,
-                          border: '1px solid black',
-                          boxShadow: 'none',
-                          '&:hover': {
-                            border: '1px solid black',
-                          },
-                        }),
-                      }}
-                      classNamePrefix={'SizeSelect'}
-                      options={options.sizeOptions}
-                      isSearchable={false}
-                      onChange={(select) =>
-                        handleSizeChange({
-                          ...(select as IOptionSize),
-                          item: data.item,
-                        })
-                      }
-                      isOptionDisabled={(option) =>
-                        (option as IOptionSize).isdisabled
-                      }
-                    />
-                    <S.Stocks_Info>COLOR</S.Stocks_Info>
-                    <S.Color_PickBox>
-                      <S.Color_PickButton
-                        onClick={() => toggleColorPick(data.item)}
-                      ></S.Color_PickButton>
-                      <S.ColorsList>
-                        {data.selectColor?.map((color) => (
-                          <S.Colors
-                            key={uuidv4()}
-                            onClick={() => removeColor(data.item, color)}
-                            color={color}
-                          ></S.Colors>
-                        ))}
-                      </S.ColorsList>
-                      {data.isPickerOpen && (
-                        <S.Custom_Color_Layout>
-                          <Saturation
-                            height={180}
-                            color={color}
-                            onChange={setColor}
-                          />
-                          <Hue color={color} onChange={setColor} />
-                          <S.ColorBtn_Box>
-                            <S.ColorPickBtn
-                              type='button'
-                              onClick={() => selectColor(data.item)}
-                            >
-                              <FontAwesomeIcon
-                                style={{
-                                  width: '15px',
-                                  height: '15px',
-                                }}
-                                icon={faCheck}
-                              />
-                            </S.ColorPickBtn>
-                            <S.ColorPickBtn type='button' onClick={resetColor}>
-                              <FontAwesomeIcon
-                                style={{
-                                  width: '15px',
-                                  height: '15px',
-                                }}
-                                icon={faRotateLeft}
-                              />
-                            </S.ColorPickBtn>
-                          </S.ColorBtn_Box>
-                        </S.Custom_Color_Layout>
-                      )}
-                    </S.Color_PickBox>
-                    <S.Stocks_Info>COUNT</S.Stocks_Info>
-                    <S.Count_Select
-                      placeholder={'수량 선택'}
-                      classNamePrefix={'CountSelect'}
-                      options={countOptions}
-                      onChange={(select) =>
-                        handleCountChange({ ...select, item: data.item })
-                      }
-                      isSearchable={false}
-                      styles={{
-                        control: (base) => ({
-                          ...base,
-                          border: '1px solid black',
-                          boxShadow: 'none',
-                          '&:hover': {
-                            border: '1px solid black',
-                          },
-                        }),
-                      }}
-                    />
-                  </S.Select_Stock>
-                  <S.Close onClick={removeItemStock} id={data.item}></S.Close>
-                </S.Stocks>
-              ))}
-              {isRemainingSpace() && (
-                <S.AddItem type='button' onClick={addItemStock}>
-                  재고추가
-                </S.AddItem>
-              )}
-            </S.Body_Right>
-          </S.Body_Container>
+          <ItemInfo title={'재고'} isCustom>
+            {stocks.map((data) => (
+              <StocksComponent key={data.item} data={data} />
+            ))}
+            {isRemainingSpace() && (
+              <S.AddItem type='button' onClick={addItemStock}>
+                재고추가
+              </S.AddItem>
+            )}
+          </ItemInfo>
           <ItemInfo title={'상품 디테일'} isCustom>
             <WriteEditor changeContent={changeContent} editorRef={editorRef} />
           </ItemInfo>

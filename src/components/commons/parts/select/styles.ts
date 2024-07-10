@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { GroupBase, Props } from 'react-select';
 import Select from 'react-select';
 
-const returnStyles = (type) => {
+const returnStyles = (type: string) => {
   switch (type) {
     case 'CategorySelect':
       return css`
@@ -53,5 +53,5 @@ interface CustomSelectProps extends Props<unknown, false, GroupBase<unknown>> {
 
 // type에 맞는 styleling 지정
 export const CustomSelector = styled(Select)<CustomSelectProps>`
-  ${(props) => returnStyles(props.type)};
+  ${(props) => props.type && returnStyles(props.type)};
 `;
