@@ -13,37 +13,25 @@ const returnStyles = (type: string) => {
           max-height: 150px;
           overflow: auto;
         }
+
+        & .CategorySelect__menu {
+          border-radius: 2px;
+        }
+
         & .CategorySelect__option {
           background-color: white;
           color: black;
-
           :hover {
             background-color: #969696;
           }
         }
-        & .CountSelect__menu {
-          /* 아래의 editor에 가려짐 방지를 위해 zIndex 값 부여 */
-          z-index: 9999;
-          border-radius: 2px;
-        }
-      `;
-    case 'subCategorySelect':
-      return css`
-        width: 50%;
 
-        & .SubCategorySelect__menu {
-          /* 아래의 editor에 가려짐 방지를 위해 zIndex 값 부여 */
-          z-index: 9999;
-          border-radius: 2px;
-        }
-        & .SubCategorySelect__option {
-          background-color: white;
-          color: black;
-          :hover {
-            background-color: #969696;
-          }
+        // 선택한 옵션 흐림처리
+        & .CategorySelect__option--is-disabled {
+          color: #c8c8c8;
         }
       `;
+
     case 'SizeSelect':
       return css`
         min-width: 100px;

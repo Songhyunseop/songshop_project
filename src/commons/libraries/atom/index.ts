@@ -3,7 +3,7 @@ import {
   CategoryOptions,
   countOptions,
   sizeOptions,
-} from '@/components/commons/constants/constants';
+} from '@/commons/constants/constants';
 
 const OptionsData = { sizeOptions, countOptions, CategoryOptions };
 

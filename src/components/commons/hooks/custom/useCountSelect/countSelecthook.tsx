@@ -29,7 +29,7 @@ export const useCountSelect = () => {
   };
 
   const handleCountChange = ({ select, id }) => {
-    const { value, label } = select;
+    const { value } = select;
 
     // sotck 데이터 갱신
     const selected = copyStocks.find((stock) => stock.item === id);

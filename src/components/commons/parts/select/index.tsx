@@ -1,11 +1,12 @@
+import { forwardRef, useImperativeHandle } from 'react';
 import * as S from './styles';
 
-export default function CustomSelect(props) {
-  // console.log(props, 222);
-
+function CustomSelect(props, ref) {
   return (
     <>
-      <S.CustomSelector {...props} />
+      <S.CustomSelector {...props} ref={ref} />
     </>
   );
 }
+
+export default forwardRef(CustomSelect);

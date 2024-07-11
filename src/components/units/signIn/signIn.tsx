@@ -7,7 +7,7 @@ import {
   loginOption,
   googleLoginOption,
   naverLoginOption,
-} from '@/components/commons/constants/constants';
+} from '@/commons/constants/constants';
 import { AuthApiError } from '@supabase/supabase-js';
 import { useRouter } from 'next/router';
 
