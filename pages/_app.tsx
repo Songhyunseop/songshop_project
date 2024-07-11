@@ -11,6 +11,7 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 
 import Layout from '@/components/commons/layout/layout';
+import { RecoilRoot } from 'recoil';
 
 export default function App({ Component, pageProps }: AppProps) {
   const client = new QueryClient();
@@ -18,10 +19,12 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <QueryClientProvider client={client}>
-        <Global styles={globalStyle} />
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <RecoilRoot>
+          <Global styles={globalStyle} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </RecoilRoot>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </>

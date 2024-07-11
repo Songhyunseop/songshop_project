@@ -3,6 +3,10 @@ import * as S from './styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { useSelect } from '@/components/commons/hooks/custom/useSelect/selecthook';
+import { useRecoilState } from 'recoil';
+import { optionDataState } from '@/commons/libraries/atom';
+import CustomSelect from '@/components/commons/parts/select';
+import { useSizeSelect } from '@/components/commons/hooks/custom/useSizeSelect/selectSizehook';
 
 interface IOptionSize {
   value: string;
@@ -14,13 +18,16 @@ interface IOptionSize {
 }
 
 export default function StocksComponent({ data }) {
-  const SelectProps = useSelect();
+  const [options, setOptions] = useRecoilState(optionDataState);
+  const { sizeOptions, countOptions, CategoryOptions } = options;
+
+  const { renderSizeSelect } = useSizeSelect();
 
   return (
-    <S.Stocks id={data.item} key={data.item}>
+    <S.Stocks id={data.item}>
       <S.Select_Stock>
         <S.Stocks_Info>SIZE</S.Stocks_Info>
-        <S.Size_Select {...selectSizeProps} classNamePrefix='SizeSelect' />
+        {renderSizeSelect('SizeSelect', data.item)}
         <S.Stocks_Info>COLOR</S.Stocks_Info>
         {/* <S.Color_PickBox>
           <S.Color_PickButton
@@ -65,10 +72,12 @@ export default function StocksComponent({ data }) {
             </S.Custom_Color_Layout>
           )}
         </S.Color_PickBox> */}
-        <S.Stocks_Info>COUNT</S.Stocks_Info>
+        // <S.Stocks_Info>COUNT</S.Stocks_Info>
         {/* <S.Count_Select {...selectCountSize} /> */}
+        //{' '}
       </S.Select_Stock>
       {/* <S.Close onClick={removeItemStock} id={data.item}></S.Close> */}
+      //{' '}
     </S.Stocks>
   );
 }

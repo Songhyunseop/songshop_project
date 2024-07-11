@@ -1,9 +1,11 @@
 import * as S from './styles';
 
-export default function CustomSelect({ option, type }) {
+export default function CustomSelect(props) {
+  // console.log(props, 222);
+
   return (
     <>
-      <S.CustomSelector {...option} type={type} />
+      <S.CustomSelector {...props} />
     </>
   );
 }

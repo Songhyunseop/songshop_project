@@ -25,6 +25,8 @@ import {
 import UploadImageComponent from './imageUpload';
 import CustomSelect from '../../../select';
 import StocksComponent from './stocks';
+import { useRecoilState } from 'recoil';
+import { optionDataState, stocksState } from '@/commons/libraries/atom';
 
 // editor 컴포넌트 클라이언트 측에서 렌더링
 const WriteEditor = dynamic(() => import('../../../editor/writeeditor'), {
@@ -54,8 +56,6 @@ export default function AddItemModalContents() {
     isPickerOpen: boolean;
   }
 
-  const OptionsData = { sizeOptions, countOptions, CategoryOptions };
-
   const defaultStockData = {
     value: '',
     label: '',
@@ -66,8 +66,8 @@ export default function AddItemModalContents() {
     isPickerOpen: false,
   };
 
-  const [stocks, setStocks] = useState([]);
-  const [options, setOptions] = useState(OptionsData);
+  const [stocks, setStocks] = useRecoilState(stocksState);
+  const [options, setOptions] = useRecoilState(optionDataState);
 
   const [color, setColor] = useColor('#561ecb');
 
@@ -84,9 +84,9 @@ export default function AddItemModalContents() {
   };
 
   const isRemainingSpace = () => {
-    const copiedOption = structuredClone(options);
+    const [copyOptionGroup] = deepCopy([options]);
 
-    const remainingSpace = copiedOption.sizeOptions.filter(
+    const remainingSpace = copyOptionGroup.sizeOptions.filter(
       (option) => option.item === ''
     );
     if (remainingSpace.length === 0) return false;
@@ -229,42 +229,42 @@ export default function AddItemModalContents() {
     return checked ? checked?.subCategory : [];
   };
 
-  const categoryprops = {
-    classNamePrefix: 'CategorySelect',
-    options: CategoryOptions,
-    placeholder: '카테고리를 선택하세요',
-    isSearchable: false,
-    onChange: changeCategory,
-    styles: {
-      control: (base) => ({
-        ...base,
-        border: '1px solid black',
-        boxShadow: 'none',
-        '&:hover': {
-          border: '1px solid black',
-        },
-      }),
-    },
-  };
+  // const categoryprops = {
+  //   classNamePrefix: 'CategorySelect',
+  //   options: CategoryOptions,
+  //   placeholder: '카테고리를 선택하세요',
+  //   isSearchable: false,
+  //   onChange: changeCategory,
+  //   styles: {
+  //     control: (base) => ({
+  //       ...base,
+  //       border: '1px solid black',
+  //       boxShadow: 'none',
+  //       '&:hover': {
+  //         border: '1px solid black',
+  //       },
+  //     }),
+  //   },
+  // };
 
-  const subCategoryProps = {
-    ref: subCategoryRef,
-    classNamePrefix: 'SubCategorySelect',
-    options: returnSubCategoryOpts(),
-    placeholder: '카테고리를 선택하세요',
-    isSearchable: false,
-    onChange: changeCategory,
-    styles: {
-      control: (base) => ({
-        ...base,
-        border: '1px solid black',
-        boxShadow: 'none',
-        '&:hover': {
-          border: '1px solid black',
-        },
-      }),
-    },
-  };
+  // const subCategoryProps = {
+  //   ref: subCategoryRef,
+  //   classNamePrefix: 'SubCategorySelect',
+  //   options: returnSubCategoryOpts(),
+  //   placeholder: '카테고리를 선택하세요',
+  //   isSearchable: false,
+  //   onChange: changeCategory,
+  //   styles: {
+  //     control: (base) => ({
+  //       ...base,
+  //       border: '1px solid black',
+  //       boxShadow: 'none',
+  //       '&:hover': {
+  //         border: '1px solid black',
+  //       },
+  //     }),
+  //   },
+  // };
 
   return (
     <>
@@ -280,16 +280,16 @@ export default function AddItemModalContents() {
             <UploadImageComponent />
           </ItemInfo>
           <ItemInfo title={'카테고리'} isCustom>
-            <CustomSelect
+            {/* <CustomSelect
               option={{ ...categoryprops }}
               type={'CategorySelect'}
-            />
+            /> */}
           </ItemInfo>
           <ItemInfo title={'상세 카테고리'} isCustom>
-            <CustomSelect
+            {/* <CustomSelect
               option={{ ...subCategoryProps }}
               type={'subCategorySelect'}
-            />
+            /> */}
           </ItemInfo>
           <ItemInfo title={'재고'} isCustom>
             {stocks.map((data) => (

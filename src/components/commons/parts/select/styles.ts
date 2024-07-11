@@ -44,6 +44,33 @@ const returnStyles = (type: string) => {
           }
         }
       `;
+    case 'SizeSelect':
+      return css`
+        min-width: 100px;
+        width: 25%;
+        margin-left: 0.8rem;
+
+        & .SizeSelect__control {
+          border-radius: 2px;
+          box-shadow: none;
+          outline: none;
+          border: 1px solid black;
+          height: 38px;
+          /* min-height: 10px; */
+        }
+
+        & .SizeSelect__menu {
+          border-radius: 2px;
+        }
+
+        & .SizeSelect__option {
+          background-color: white;
+
+          :hover {
+            background-color: #969696;
+          }
+        }
+      `;
   }
 };
 
@@ -53,5 +80,5 @@ interface CustomSelectProps extends Props<unknown, false, GroupBase<unknown>> {
 
 // type에 맞는 styleling 지정
 export const CustomSelector = styled(Select)<CustomSelectProps>`
-  ${(props) => props.type && returnStyles(props.type)};
+  ${(props) => props.classNamePrefix && returnStyles(props.classNamePrefix)};
 `;

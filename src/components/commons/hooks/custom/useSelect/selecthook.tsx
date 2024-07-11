@@ -1,28 +1,13 @@
+import { optionDataState, stocksState } from '@/commons/libraries/atom';
 import { IOptionSize } from '@/commons/types/selectoption_type';
+import { deepCopy } from '@/commons/utils/deepcopy';
+import { useRecoilState } from 'recoil';
+import CustomSelect from '@/components/commons/parts/select';
+import { sizeOptions } from '@/components/commons/constants/constants';
 
-export const useSelect = (optiion) => {
-  // OptionProps 에 change함수 바인딩
-  const bindHandlerToProps = (changeFn) => {
-    const defaultProps = {
-      placeholder: '선택하세요',
-      styles: {
-        control: (base) => ({
-          ...base,
-          border: '1px solid black',
-          boxShadow: 'none',
-          '&:hover': {
-            border: '1px solid black',
-          },
-        }),
-      },
-      options: option,
-      onChange: changeFn,
-      isSearchable: false,
-      isOptionDisabled: (option: IOptionSize) => option.isdisabled,
-    };
-
-    return defaultProps;
-  };
+export const useSelect = () => {
+  const [stocks, setStocks] = useRecoilState(stocksState);
+  const [options, setOptions] = useRecoilState(optionDataState);
 
   // 카운트 변경함수
   const handleCountChange = (select) => {
@@ -38,38 +23,6 @@ export const useSelect = (optiion) => {
     setStocks(copyStocks);
   };
 
-  // 사이즈 변경 함수
-  const handleSizeChange = (select: IOptionSize) => {
-    const { value, label, item } = select;
-    const [copyStock, copyOptionGroup] = deepCopy([stocks, options]);
-
-    // 선택된 항목에 입력값에 맞게 데이터 수정
-    const selected = copyStock.find((stock: ISelected) => stock.item === item);
-    const targetIdx = stocks.findIndex((stock) => stock.item === item);
-
-    const editedData = {
-      ...(selected as ISelected),
-      value,
-      label,
-      isdisabled: true,
-    };
-
-    copyStock[targetIdx] = editedData;
-    setStocks(copyStock);
-
-    // 옵션값(isDisabled) 수정
-    if (selected.label !== '') {
-      const editedOption = copyOptionGroup.sizeOptions.map((opt) => {
-        if (opt.label === selected.label) return { ...opt, isdisabled: false };
-        if (opt.label === label) return { ...opt, isdisabled: true };
-        return { ...opt };
-      });
-
-      setOptions((prev) => {
-        return { ...prev, sizeOptions: editedOption };
-      });
-    }
-  };
   // 카테고리 변경함수
   const handleCategoryChange = (e) => {
     //clearValue 실행으로 인한 트리거 처리
@@ -111,10 +64,24 @@ export const useSelect = (optiion) => {
     }
   };
 
-  return {
-    bindHandlerToProps,
-    handleCategoryChange,
-    handleCountChange,
-    handleSizeChange,
+  const SelectProps = {
+    placeholder: '선택하세요',
+    styles: {
+      control: (base) => ({
+        ...base,
+        border: '1px solid black',
+        boxShadow: 'none',
+        '&:hover': {
+          border: '1px solid black',
+        },
+      }),
+    },
+    classNamePrefix: null,
+    options: null,
+    onchange: null,
+    isSearchable: false,
+    isOptionDisabled: (option: IOptionSize) => option.isdisabled,
   };
+
+  return {};
 };
