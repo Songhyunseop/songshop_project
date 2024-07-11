@@ -7,6 +7,7 @@ import { useRecoilState } from 'recoil';
 import { optionDataState } from '@/commons/libraries/atom';
 import CustomSelect from '@/components/commons/parts/select';
 import { useSizeSelect } from '@/components/commons/hooks/custom/useSizeSelect/selectSizehook';
+import { useCountSelect } from '@/components/commons/hooks/custom/useCountSelect/countSelecthook';
 
 interface IOptionSize {
   value: string;
@@ -22,12 +23,13 @@ export default function StocksComponent({ data }) {
   const { sizeOptions, countOptions, CategoryOptions } = options;
 
   const { renderSizeSelect } = useSizeSelect();
+  const { renderCountSelect } = useCountSelect();
 
   return (
     <S.Stocks id={data.item}>
       <S.Select_Stock>
         <S.Stocks_Info>SIZE</S.Stocks_Info>
-        {renderSizeSelect('SizeSelect', data.item)}
+        {renderSizeSelect(data.item)}
         <S.Stocks_Info>COLOR</S.Stocks_Info>
         {/* <S.Color_PickBox>
           <S.Color_PickButton
@@ -73,11 +75,9 @@ export default function StocksComponent({ data }) {
           )}
         </S.Color_PickBox> */}
         // <S.Stocks_Info>COUNT</S.Stocks_Info>
-        {/* <S.Count_Select {...selectCountSize} /> */}
-        //{' '}
+        {renderCountSelect(data.item)}
       </S.Select_Stock>
       {/* <S.Close onClick={removeItemStock} id={data.item}></S.Close> */}
-      //{' '}
     </S.Stocks>
   );
 }

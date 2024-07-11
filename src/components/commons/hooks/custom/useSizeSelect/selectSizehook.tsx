@@ -8,6 +8,7 @@ export const useSizeSelect = () => {
   const [options, setOptions] = useRecoilState(optionDataState);
 
   const SelectProps = {
+    classNamePrefix: 'SizeSelect',
     placeholder: '선택하세요',
     styles: {
       control: (base) => ({
@@ -29,7 +30,7 @@ export const useSizeSelect = () => {
     const { value, label, item } = select;
     const [copyStock, copyOptionGroup] = deepCopy([stocks, options]);
 
-    // stock 데이터 저장
+    // stock 데이터 갱신
     const prevSelect = copyStock.find((stock: ISelected) => stock.item === id);
     const targetIdx = stocks.findIndex((stock) => stock.item === id);
 
@@ -59,15 +60,11 @@ export const useSizeSelect = () => {
     setOptions(copyOptionGroup);
   };
 
-  //
-  //
-
-  const renderSizeSelect = (type, id) => {
+  const renderSizeSelect = (id: string) => {
     return (
       <CustomSelect
         {...{
           ...SelectProps,
-          classNamePrefix: type,
           onChange: (select) => handleSizeChange({ select, id }),
         }}
       />

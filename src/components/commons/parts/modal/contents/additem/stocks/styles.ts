@@ -68,44 +68,6 @@ export const Close = styled.div`
   }
 `;
 
-export const Count_Select = styled(Select)`
-  min-width: 100px;
-  width: 25%;
-  margin-left: 0.8rem;
-  border: 2px solid blue;
-
-  & .CountSelect__control {
-    border-radius: 2px;
-    box-shadow: none;
-    outline: none;
-    height: 38px;
-    /* min-height: 10px; */
-    border: 1px solid black;
-  }
-
-  & .CountSelect__menu {
-    /* 아래의 editor에 가려짐 방지를 위해 zIndex 값 부여 */
-    z-index: 9999;
-    border-radius: 2px;
-  }
-
-  & .CountSelect__menu-list {
-    z-index: 999;
-    border: 2px solid red;
-    max-height: 200px;
-    overflow-y: auto;
-  }
-
-  & .CountSelect__option {
-    background-color: white;
-    color: black;
-
-    :hover {
-      background-color: #969696;
-    }
-  }
-`;
-
 export const Color_PickBox = styled.div`
   position: relative;
   display: flex;

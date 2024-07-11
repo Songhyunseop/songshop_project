@@ -229,43 +229,6 @@ export default function AddItemModalContents() {
     return checked ? checked?.subCategory : [];
   };
 
-  // const categoryprops = {
-  //   classNamePrefix: 'CategorySelect',
-  //   options: CategoryOptions,
-  //   placeholder: '카테고리를 선택하세요',
-  //   isSearchable: false,
-  //   onChange: changeCategory,
-  //   styles: {
-  //     control: (base) => ({
-  //       ...base,
-  //       border: '1px solid black',
-  //       boxShadow: 'none',
-  //       '&:hover': {
-  //         border: '1px solid black',
-  //       },
-  //     }),
-  //   },
-  // };
-
-  // const subCategoryProps = {
-  //   ref: subCategoryRef,
-  //   classNamePrefix: 'SubCategorySelect',
-  //   options: returnSubCategoryOpts(),
-  //   placeholder: '카테고리를 선택하세요',
-  //   isSearchable: false,
-  //   onChange: changeCategory,
-  //   styles: {
-  //     control: (base) => ({
-  //       ...base,
-  //       border: '1px solid black',
-  //       boxShadow: 'none',
-  //       '&:hover': {
-  //         border: '1px solid black',
-  //       },
-  //     }),
-  //   },
-  // };
-
   return (
     <>
       <S.Modal_Header>상품추가</S.Modal_Header>
