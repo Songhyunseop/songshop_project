@@ -10,7 +10,7 @@ export const useSelect = () => {
   // 카테고리 변경함수
 
   const SelectProps = {
-    placeholder: '선택하세요',
+    placeholder: '선택',
     styles: {
       control: (base) => ({
         ...base,

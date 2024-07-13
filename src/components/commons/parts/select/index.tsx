@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle } from 'react';
+import { forwardRef } from 'react';
 import * as S from './styles';
 
 function CustomSelect(props, ref) {

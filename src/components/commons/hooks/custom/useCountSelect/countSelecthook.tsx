@@ -11,7 +11,7 @@ export const useCountSelect = () => {
 
   const SelectProps = {
     classNamePrefix: 'CountSelect',
-    placeholder: '선택하세요',
+    placeholder: '선택',
     styles: {
       control: (base) => ({
         ...base,

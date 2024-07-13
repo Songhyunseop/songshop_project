@@ -1,13 +1,11 @@
-import { Hue, Saturation } from 'react-color-palette';
 import * as S from './styles';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
-import { useSelect } from '@/components/commons/hooks/custom/useSelect/selecthook';
+
 import { useRecoilState } from 'recoil';
-import { optionDataState } from '@/commons/libraries/atom';
-import CustomSelect from '@/components/commons/parts/select';
+import { optionDataState, stocksState } from '@/commons/libraries/atom';
 import { useSizeSelect } from '@/components/commons/hooks/custom/useSizeSelect/selectSizehook';
 import { useCountSelect } from '@/components/commons/hooks/custom/useCountSelect/countSelecthook';
+import ColorPicker from '@/components/commons/parts/colorpicker/colorpicker';
+import { deepCopy } from '@/commons/utils/deepcopy';
 
 interface IOptionSize {
   value: string;
@@ -19,11 +17,51 @@ interface IOptionSize {
 }
 
 export default function StocksComponent({ data }) {
+  const [stocks, setStocks] = useRecoilState(stocksState);
   const [options, setOptions] = useRecoilState(optionDataState);
-  const { sizeOptions, countOptions, CategoryOptions } = options;
 
   const { renderSizeSelect } = useSizeSelect();
   const { renderCountSelect } = useCountSelect();
+
+  const removeItemStock = (e) => {
+    const [copyStock, copyOptionGroup] = deepCopy([stocks, options]);
+
+    // 제거대상인지 아닌지에 따라 reduce 메서드로 분할처리
+    const { filtered, selected } = copyStock.reduce(
+      (acc, stock) => {
+        if (stock.item === e.target.id) {
+          const a = acc.selected;
+          a.push(stock);
+          return acc;
+        }
+        const b = acc.filtered;
+        b.push(stock);
+
+        return acc;
+      },
+      {
+        filtered: [],
+        selected: [],
+      }
+    );
+
+    const editedOption = copyOptionGroup.sizeOptions.map((opt) => {
+      if (opt.label === selected[0].label)
+        return {
+          ...opt,
+          count: 1,
+          item: '',
+          isPickerOpen: false,
+          isdisabled: false,
+        };
+      return { ...opt };
+    });
+
+    setStocks(filtered);
+    setOptions((prev) => {
+      return { ...prev, sizeOptions: editedOption };
+    });
+  };
 
   return (
     <S.Stocks id={data.item}>
@@ -31,53 +69,11 @@ export default function StocksComponent({ data }) {
         <S.Stocks_Info>SIZE</S.Stocks_Info>
         {renderSizeSelect(data.item)}
         <S.Stocks_Info>COLOR</S.Stocks_Info>
-        {/* <S.Color_PickBox>
-          <S.Color_PickButton
-            onClick={() => toggleColorPick(data.item)}
-          ></S.Color_PickButton>
-          <S.ColorsList>
-            {data.selectColor?.map((color) => (
-              <S.Colors
-                key={uuidv4()}
-                onClick={() => removeColor(data.item, color)}
-                color={color}
-              ></S.Colors>
-            ))}
-          </S.ColorsList>
-          {data.isPickerOpen && (
-            <S.Custom_Color_Layout>
-              <Saturation height={180} color={color} onChange={setColor} />
-              <Hue color={color} onChange={setColor} />
-              <S.ColorBtn_Box>
-                <S.ColorPickBtn
-                  type='button'
-                  onClick={() => selectColor(data.item)}
-                >
-                  <FontAwesomeIcon
-                    style={{
-                      width: '15px',
-                      height: '15px',
-                    }}
-                    icon={faCheck}
-                  />
-                </S.ColorPickBtn>
-                <S.ColorPickBtn type='button' onClick={resetColor}>
-                  <FontAwesomeIcon
-                    style={{
-                      width: '15px',
-                      height: '15px',
-                    }}
-                    icon={faRotateLeft}
-                  />
-                </S.ColorPickBtn>
-              </S.ColorBtn_Box>
-            </S.Custom_Color_Layout>
-          )}
-        </S.Color_PickBox> */}
-        // <S.Stocks_Info>COUNT</S.Stocks_Info>
+        <ColorPicker data={data} />
+        <S.Stocks_Info>COUNT</S.Stocks_Info>
         {renderCountSelect(data.item)}
       </S.Select_Stock>
-      {/* <S.Close onClick={removeItemStock} id={data.item}></S.Close> */}
+      <S.Close onClick={removeItemStock} id={data.item}></S.Close>
     </S.Stocks>
   );
 }

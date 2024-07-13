@@ -9,7 +9,7 @@ export const useSizeSelect = () => {
 
   const SelectProps = {
     classNamePrefix: 'SizeSelect',
-    placeholder: '선택하세요',
+    placeholder: '선택',
     styles: {
       control: (base) => ({
         ...base,
