@@ -1,12 +1,11 @@
 import { PropsWithChildren } from 'react';
 import * as S from './styles';
-import { RegisterOptions } from 'react-hook-form';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface ItemInfoProps {
   title: string;
-  register: RegisterOptions;
-  isCustom: boolean;
-  children: PropsWithChildren;
+  register?: UseFormRegisterReturn;
+  isCustom?: boolean;
 }
 
 export default function ItemInfo({

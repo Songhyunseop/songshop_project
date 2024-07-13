@@ -20,6 +20,7 @@ import { useRecoilState } from 'recoil';
 import { stocksState } from '@/commons/libraries/atom';
 import { useCategorySelect } from '@/components/commons/hooks/custom/useCategorySelect/categorySelecthook';
 import { FormProvider, useForm } from 'react-hook-form';
+import CustomSelect from '../../../select';
 
 // editor 컴포넌트 클라이언트 측에서 렌더링
 const WriteEditor = dynamic(() => import('../../../editor/writeeditor'), {
@@ -52,8 +53,6 @@ export default function AddItemModalContents() {
   const subCategoryRef =
     useRef<Select<unknown, boolean, GroupBase<unknown>>>(null);
 
-  const { renderCategorySelect } = useCategorySelect(subCategoryRef);
-
   const methods = useForm({
     defaultValues: {
       itemName: '',
@@ -66,8 +65,10 @@ export default function AddItemModalContents() {
 
   const { handleSubmit, register } = methods;
 
-  // Functions
+  const { getCategorySelectProps } = useCategorySelect(subCategoryRef);
+  const { categoryProps, subCategoryProps } = getCategorySelectProps(register);
 
+  // Functions
   const addItemStock = () => {
     const newStockId = uuidv4();
     const [copyStocks] = deepCopy([defaultStockData]);
@@ -125,10 +126,10 @@ export default function AddItemModalContents() {
               <UploadImageComponent />
             </ItemInfo>
             <ItemInfo title='카테고리' isCustom>
-              {renderCategorySelect(false, register('category'))}
+              <CustomSelect {...categoryProps} />
             </ItemInfo>
             <ItemInfo title='상세 카테고리' isCustom>
-              {renderCategorySelect(true, register('subCategory'))}
+              <CustomSelect {...subCategoryProps} />
             </ItemInfo>
             <ItemInfo title='재고' isCustom>
               {stocks.map((data) => (

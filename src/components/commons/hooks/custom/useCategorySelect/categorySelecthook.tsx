@@ -1,7 +1,6 @@
 import { optionDataState } from '@/commons/libraries/atom';
 import { IOptionSize } from '@/commons/types/selectoption_type';
 import { deepCopy } from '@/commons/utils/deepcopy';
-import CustomSelect from '@/components/commons/parts/select';
 import { useRecoilState } from 'recoil';
 
 export const useCategorySelect = (subRef) => {
@@ -9,7 +8,7 @@ export const useCategorySelect = (subRef) => {
 
   const [copyOptionGroup] = deepCopy([options]);
 
-  const SelectProps = {
+  const selectProps = {
     placeholder: '선택하세요',
     styles: {
       control: (base) => ({
@@ -23,7 +22,7 @@ export const useCategorySelect = (subRef) => {
     },
     classNamePrefix: 'CategorySelect',
     options: null,
-    onchange: null,
+    onChange: null,
     isSearchable: false,
     isOptionDisabled: (option: IOptionSize) => option.isdisabled,
   };
@@ -74,21 +73,25 @@ export const useCategorySelect = (subRef) => {
     return checked ? checked?.subCategory : [];
   };
 
-  const renderCategorySelect = (isSub: boolean, registerParms) => {
-    return (
-      <CustomSelect
-        registerParms={registerParms}
-        subRef={subRef}
-        {...{
-          ...SelectProps,
-          onChange: handleCategoryChange,
-          options: isSub
-            ? getsubCategoryList()
-            : copyOptionGroup.CategoryOptions,
-        }}
-      />
-    );
+  const getCategorySelectProps = (register) => {
+    const categoryProps = {
+      ...selectProps,
+      register: register('category'),
+      options: copyOptionGroup.CategoryOptions,
+      onChange: handleCategoryChange,
+      subRef: null,
+    };
+
+    const subCategoryProps = {
+      ...selectProps,
+      register: register('subCategory'),
+      options: getsubCategoryList(),
+      onChange: handleCategoryChange,
+      subRef: subRef,
+    };
+
+    return { categoryProps, subCategoryProps };
   };
 
-  return { renderCategorySelect };
+  return { getCategorySelectProps };
 };

@@ -1,17 +1,15 @@
 import * as S from './styles';
 
-function CustomSelect(props) {
+function CustomSelect({ subRef, register, ...rest }) {
   // registerParms = react hook form register 내부 Props
   // subRef = categorySelect 의 참조
-
-  const { subRef, registerParms, ...rest } = props;
 
   return (
     <>
       <S.CustomSelector
         ref={(el) => {
-          registerParms.ref(el);
-          subRef.current = el;
+          register.ref(el);
+          if (subRef) subRef.current = el;
         }}
         {...rest}
       />
