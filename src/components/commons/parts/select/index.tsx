@@ -1,23 +1,22 @@
-import { forwardRef, useRef } from 'react';
 import * as S from './styles';
 
-function CustomSelect(props, ref) {
+function CustomSelect(props) {
   // registerParms = react hook form register 내부 Props
   // subRef = categorySelect 의 참조
 
-  const { registerParms, subRef, ...rest } = props;
+  const { subRef, registerParms, ...rest } = props;
 
   return (
     <>
       <S.CustomSelector
-        {...rest}
         ref={(el) => {
           registerParms.ref(el);
           subRef.current = el;
         }}
+        {...rest}
       />
     </>
   );
 }
 
-export default forwardRef(CustomSelect);
+export default CustomSelect;

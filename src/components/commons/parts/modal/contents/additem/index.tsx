@@ -19,7 +19,7 @@ import StocksComponent from './stocks';
 import { useRecoilState } from 'recoil';
 import { stocksState } from '@/commons/libraries/atom';
 import { useCategorySelect } from '@/components/commons/hooks/custom/useCategorySelect/categorySelecthook';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 // editor 컴포넌트 클라이언트 측에서 렌더링
 const WriteEditor = dynamic(() => import('../../../editor/writeeditor'), {
@@ -52,12 +52,9 @@ export default function AddItemModalContents() {
   const subCategoryRef =
     useRef<Select<unknown, boolean, GroupBase<unknown>>>(null);
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm({
+  const { renderCategorySelect } = useCategorySelect(subCategoryRef);
+
+  const methods = useForm({
     defaultValues: {
       itemName: '',
       itemPrice: '',
@@ -66,6 +63,10 @@ export default function AddItemModalContents() {
       subCategory: '',
     },
   });
+
+  const { handleSubmit, register } = methods;
+
+  // Functions
 
   const addItemStock = () => {
     const newStockId = uuidv4();
@@ -81,8 +82,6 @@ export default function AddItemModalContents() {
     if (copyStocks.length >= 3) return false;
     return true;
   };
-
-  const { renderCategorySelect } = useCategorySelect(subCategoryRef);
 
   const { mutateAsync: uploadFiles } = useUploadToStorage();
   const { mutateAsync: getPublicUrl } = useGetPublicUrl();
@@ -110,42 +109,47 @@ export default function AddItemModalContents() {
   return (
     <>
       <S.Modal_Header>상품추가</S.Modal_Header>
-      <form onSubmit={handleSubmit(submitBoard)}>
-        <S.Modal_Body>
-          <ItemInfo register={register('itemName')} title='상품명' />
-          <ItemInfo register={register('itemPrice')} title='상품가격' />
-          <ItemInfo title='상세내용' isCustom>
-            <S.DetailText
-              {...register('itemDetail')}
-              placeholder='상세내용을 입력하세요'
-              maxLength={300}
-            />
-          </ItemInfo>
-          <ItemInfo title='IMAGE' isCustom>
-            <UploadImageComponent />
-          </ItemInfo>
-          <ItemInfo title='카테고리' isCustom>
-            {renderCategorySelect(false, register('category'))}
-          </ItemInfo>
-          <ItemInfo title='상세 카테고리' isCustom>
-            {renderCategorySelect(true, register('subCategory'))}
-          </ItemInfo>
-          <ItemInfo title='재고' isCustom>
-            {stocks.map((data) => (
-              <StocksComponent key={data.item} data={data} />
-            ))}
-            {isRemainingSpace() && (
-              <S.AddItem type='button' onClick={addItemStock}>
-                재고추가
-              </S.AddItem>
-            )}
-          </ItemInfo>
-          <ItemInfo title={'상품 디테일'} isCustom>
-            <WriteEditor changeContent={changeContent} editorRef={editorRef} />
-          </ItemInfo>
-          <S.Add_Button>상품등록</S.Add_Button>
-        </S.Modal_Body>
-      </form>
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(submitBoard)}>
+          <S.Modal_Body>
+            <ItemInfo register={register('itemName')} title='상품명' />
+            <ItemInfo register={register('itemPrice')} title='상품가격' />
+            <ItemInfo title='상세내용' isCustom>
+              <S.DetailText
+                {...register('itemDetail')}
+                placeholder='상세내용을 입력하세요'
+                maxLength={300}
+              />
+            </ItemInfo>
+            <ItemInfo title='IMAGE' isCustom>
+              <UploadImageComponent />
+            </ItemInfo>
+            <ItemInfo title='카테고리' isCustom>
+              {renderCategorySelect(false, register('category'))}
+            </ItemInfo>
+            <ItemInfo title='상세 카테고리' isCustom>
+              {renderCategorySelect(true, register('subCategory'))}
+            </ItemInfo>
+            <ItemInfo title='재고' isCustom>
+              {stocks.map((data) => (
+                <StocksComponent key={data.item} data={data} />
+              ))}
+              {isRemainingSpace() && (
+                <S.AddItem type='button' onClick={addItemStock}>
+                  재고추가
+                </S.AddItem>
+              )}
+            </ItemInfo>
+            <ItemInfo title={'상품 디테일'} isCustom>
+              <WriteEditor
+                changeContent={changeContent}
+                editorRef={editorRef}
+              />
+            </ItemInfo>
+            <S.Add_Button>상품등록</S.Add_Button>
+          </S.Modal_Body>
+        </form>
+      </FormProvider>
     </>
   );
 }

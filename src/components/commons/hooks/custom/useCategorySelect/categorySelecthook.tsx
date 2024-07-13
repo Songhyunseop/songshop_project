@@ -33,16 +33,21 @@ export const useCategorySelect = (subRef) => {
     if (!select) return;
 
     if (select.name === 'mainCategory') {
-      copyOptionGroup.CategoryOptions.forEach((opt) =>
-        opt.label === select.label
-          ? (opt.isdisabled = true)
-          : (opt.isdisabled = false)
-      );
+      copyOptionGroup.CategoryOptions.forEach((opt) => {
+        if (opt.label === select.label && !opt.isdisabled) {
+          opt.isdisabled = true;
 
-      setOptions(copyOptionGroup);
+          return;
+        }
+        opt.isdisabled = false;
+        opt.subCategory.forEach((o) => (o.isdisabled = false));
+      });
 
       // 현재 서브카테고리에 담긴 선택값을 초기화
-      if (subRef.current) subRef.current.clearValue();
+      if (subRef.current) {
+        subRef.current.clearValue();
+      }
+      setOptions(copyOptionGroup);
 
       return;
     }
@@ -52,11 +57,9 @@ export const useCategorySelect = (subRef) => {
         (opt) => opt.label === select.main
       );
 
-      selectMain.subCategory.forEach((opt) =>
-        opt.label === select.label
-          ? (opt.isdisabled = true)
-          : (opt.isdisabled = false)
-      );
+      selectMain.subCategory.forEach((opt) => {
+        opt.isdisabled = opt.label === select.label;
+      });
 
       setOptions(copyOptionGroup);
     }
@@ -68,14 +71,10 @@ export const useCategorySelect = (subRef) => {
       (opt) => opt.isdisabled === true
     )[0];
 
-    console.log(checked);
-
     return checked ? checked?.subCategory : [];
   };
 
-  const renderCategorySelect = (isSub, registerParms) => {
-    // const { ref, ...rest } = registerParms;
-
+  const renderCategorySelect = (isSub: boolean, registerParms) => {
     return (
       <CustomSelect
         registerParms={registerParms}
@@ -83,7 +82,6 @@ export const useCategorySelect = (subRef) => {
         {...{
           ...SelectProps,
           onChange: handleCategoryChange,
-          // ref: isSub ? subRef : null,
           options: isSub
             ? getsubCategoryList()
             : copyOptionGroup.CategoryOptions,

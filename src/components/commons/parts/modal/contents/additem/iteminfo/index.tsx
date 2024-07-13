@@ -1,6 +1,20 @@
+import { PropsWithChildren } from 'react';
 import * as S from './styles';
+import { RegisterOptions } from 'react-hook-form';
 
-export default function ItemInfo({ title, register, isCustom, children }) {
+interface ItemInfoProps {
+  title: string;
+  register: RegisterOptions;
+  isCustom: boolean;
+  children: PropsWithChildren;
+}
+
+export default function ItemInfo({
+  title,
+  register,
+  isCustom,
+  children,
+}: PropsWithChildren<ItemInfoProps>) {
   return (
     <S.Body_Container>
       <S.Body_Left>{title}</S.Body_Left>
