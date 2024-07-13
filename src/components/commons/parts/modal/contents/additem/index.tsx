@@ -17,8 +17,9 @@ import ItemInfo from './iteminfo';
 import UploadImageComponent from './imageUpload';
 import StocksComponent from './stocks';
 import { useRecoilState } from 'recoil';
-import { optionDataState, stocksState } from '@/commons/libraries/atom';
+import { stocksState } from '@/commons/libraries/atom';
 import { useCategorySelect } from '@/components/commons/hooks/custom/useCategorySelect/categorySelecthook';
+import { useForm } from 'react-hook-form';
 
 // editor 컴포넌트 클라이언트 측에서 렌더링
 const WriteEditor = dynamic(() => import('../../../editor/writeeditor'), {
@@ -46,11 +47,25 @@ export default function AddItemModalContents() {
   };
 
   const [stocks, setStocks] = useRecoilState(stocksState);
-  const [options, setOptions] = useRecoilState(optionDataState);
 
   const editorRef = useRef<editorType>();
   const subCategoryRef =
     useRef<Select<unknown, boolean, GroupBase<unknown>>>(null);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      itemName: '',
+      itemPrice: '',
+      itemDetail: '',
+      category: '',
+      subCategory: '',
+    },
+  });
 
   const addItemStock = () => {
     const newStockId = uuidv4();
@@ -67,52 +82,55 @@ export default function AddItemModalContents() {
     return true;
   };
 
-  // editor 입력값 핸들링
-  const changeContent = () => {
-    if (editorRef.current) {
-      const textData = editorRef.current.getInstance().getHTML();
-      console.log(textData);
-    }
-  };
+  const { renderCategorySelect } = useCategorySelect(subCategoryRef);
 
   const { mutateAsync: uploadFiles } = useUploadToStorage();
   const { mutateAsync: getPublicUrl } = useGetPublicUrl();
 
-  const submitBoard = async (file) => {
-    // console.log(fileList[0].name);
-    try {
-      const uploadResult = await uploadFiles(file);
-      const { url } = await getPublicUrl(uploadResult.data.path);
-
-      // setUploadImgUrl((prev) => [url, ...prev]);
-      // setFilesList((filesList) => [file, ...filesList]);
-    } catch (e) {
-      console.log(e);
+  // editor 입력값 핸들링
+  const changeContent = () => {
+    if (editorRef.current) {
+      const textData = editorRef.current.getInstance().getHTML();
     }
   };
 
-  const { renderCategorySelect } = useCategorySelect(subCategoryRef);
+  const submitBoard = async (file) => {
+    console.log(file);
+    // console.log(fileList[0].name);
+    // try {
+    //   const uploadResult = await uploadFiles(file);
+    //   const { url } = await getPublicUrl(uploadResult.data.path);
+    //   // setUploadImgUrl((prev) => [url, ...prev]);
+    //   // setFilesList((filesList) => [file, ...filesList]);
+    // } catch (e) {
+    //   console.log(e);
+    // }
+  };
 
   return (
     <>
       <S.Modal_Header>상품추가</S.Modal_Header>
-      <form>
+      <form onSubmit={handleSubmit(submitBoard)}>
         <S.Modal_Body>
-          <ItemInfo title={'상품명'} />
-          <ItemInfo title={'상품가격'} />
-          <ItemInfo title={'상세내용'} isCustom>
-            <S.DetailText placeholder='상세내용을 입력하세요' maxLength={300} />
+          <ItemInfo register={register('itemName')} title='상품명' />
+          <ItemInfo register={register('itemPrice')} title='상품가격' />
+          <ItemInfo title='상세내용' isCustom>
+            <S.DetailText
+              {...register('itemDetail')}
+              placeholder='상세내용을 입력하세요'
+              maxLength={300}
+            />
           </ItemInfo>
-          <ItemInfo title={'IMAGE'} isCustom>
+          <ItemInfo title='IMAGE' isCustom>
             <UploadImageComponent />
           </ItemInfo>
-          <ItemInfo title={'카테고리'} isCustom>
-            {renderCategorySelect(false)}
+          <ItemInfo title='카테고리' isCustom>
+            {renderCategorySelect(false, register('category'))}
           </ItemInfo>
-          <ItemInfo title={'상세 카테고리'} isCustom>
-            {renderCategorySelect(true)}
+          <ItemInfo title='상세 카테고리' isCustom>
+            {renderCategorySelect(true, register('subCategory'))}
           </ItemInfo>
-          <ItemInfo title={'재고'} isCustom>
+          <ItemInfo title='재고' isCustom>
             {stocks.map((data) => (
               <StocksComponent key={data.item} data={data} />
             ))}

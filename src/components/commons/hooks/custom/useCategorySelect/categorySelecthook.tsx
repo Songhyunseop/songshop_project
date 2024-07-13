@@ -1,4 +1,4 @@
-import { optionDataState, stocksState } from '@/commons/libraries/atom';
+import { optionDataState } from '@/commons/libraries/atom';
 import { IOptionSize } from '@/commons/types/selectoption_type';
 import { deepCopy } from '@/commons/utils/deepcopy';
 import CustomSelect from '@/components/commons/parts/select';
@@ -10,7 +10,6 @@ export const useCategorySelect = (subRef) => {
   const [copyOptionGroup] = deepCopy([options]);
 
   const SelectProps = {
-    // menuIsOpen: true,
     placeholder: '선택하세요',
     styles: {
       control: (base) => ({
@@ -68,16 +67,23 @@ export const useCategorySelect = (subRef) => {
     const checked = copyOptionGroup.CategoryOptions.filter(
       (opt) => opt.isdisabled === true
     )[0];
+
+    console.log(checked);
+
     return checked ? checked?.subCategory : [];
   };
 
-  const renderCategorySelect = (isSub: boolean) => {
+  const renderCategorySelect = (isSub, registerParms) => {
+    // const { ref, ...rest } = registerParms;
+
     return (
       <CustomSelect
+        registerParms={registerParms}
+        subRef={subRef}
         {...{
           ...SelectProps,
           onChange: handleCategoryChange,
-          ref: isSub ? subRef : null,
+          // ref: isSub ? subRef : null,
           options: isSub
             ? getsubCategoryList()
             : copyOptionGroup.CategoryOptions,
