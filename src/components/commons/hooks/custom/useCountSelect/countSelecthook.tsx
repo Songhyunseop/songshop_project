@@ -43,9 +43,9 @@ export const useCountSelect = (stockIndex) => {
 
     // select Option 값 갱신
     setOptions((prev) => {
-      const newState = [...prev];
-      newState[stockIndex] = selectOptions;
-      return newState;
+      const newOption = [...prev];
+      newOption[stockIndex] = selectOptions;
+      return newOption;
     });
 
     // 이전 값 최근 값으로 갱신

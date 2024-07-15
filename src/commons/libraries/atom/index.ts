@@ -16,11 +16,13 @@ export const optionDataState = atom({
   default: OptionsData,
 });
 
+// Count Option
 export const countOptionState = atom({
   key: 'countOptionState',
   default: Array.from({ length: 3 }, () => deepCopy([countOptions])[0]),
 });
 
+// Stocks
 export const stocksState = atom({
   key: 'stocksState',
   default: [],

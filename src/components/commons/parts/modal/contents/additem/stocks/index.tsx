@@ -58,7 +58,6 @@ export default function StocksComponent({ stock }) {
     <S.Stocks id={stock.item}>
       <S.Select_Stock>
         <S.Stocks_Info>SIZE</S.Stocks_Info>
-        {/* 에러 때문에 잠시막아둠 */}
         <CustomSelect {...sizeSelectProps} stockId={stock.item} />
         <S.Stocks_Info>COLOR</S.Stocks_Info>
         <ColorPicker stock={stock} />

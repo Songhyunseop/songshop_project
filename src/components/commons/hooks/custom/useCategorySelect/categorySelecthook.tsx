@@ -64,15 +64,12 @@ export const useCategorySelect = (subRef) => {
       (opt) => opt.isdisabled === true
     )[0];
 
-    console.log(checked, 13213);
-
     return checked ? checked?.subCategory : [];
   };
 
   const getCategorySelectProps = () => {
     const categoryProps = {
       ...selectProps,
-      // register: register('category'),
       selectType: 'category',
       options: copyOptionGroup.CategoryOptions,
       onChange: handleCategoryChange,
@@ -81,7 +78,6 @@ export const useCategorySelect = (subRef) => {
 
     const subCategoryProps = {
       ...selectProps,
-      // register: register('subCategory'),
       selectType: 'subCategory',
       options: getsubCategoryList(),
       onChange: handleCategoryChange,

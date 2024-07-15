@@ -20,7 +20,7 @@ export const ColorsList = styled.div`
     display: none;
   }
   -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  /* scrollbar-width: 200px; Firefox */
 `;
 
 export const Colors = styled.div<{ color: string }>`
