@@ -21,6 +21,7 @@ import { stocksState } from '@/commons/libraries/atom';
 import { useCategorySelect } from '@/components/commons/hooks/custom/useCategorySelect/categorySelecthook';
 import { FormProvider, useForm } from 'react-hook-form';
 import CustomSelect from '../../../select';
+import { countOptions } from '@/commons/constants/constants';
 
 // editor 컴포넌트 클라이언트 측에서 렌더링
 const WriteEditor = dynamic(() => import('../../../editor/writeeditor'), {
@@ -66,15 +67,18 @@ export default function AddItemModalContents() {
   const { handleSubmit, register } = methods;
 
   const { getCategorySelectProps } = useCategorySelect(subCategoryRef);
-  const { categoryProps, subCategoryProps } = getCategorySelectProps(register);
+  const { categoryProps, subCategoryProps } = getCategorySelectProps();
 
   // Functions
   const addItemStock = () => {
     const newStockId = uuidv4();
-    const [copyStocks] = deepCopy([defaultStockData]);
+    const [copyStock] = deepCopy([defaultStockData]);
 
-    copyStocks.item = newStockId;
-    setStocks((prev) => [...prev, copyStocks]);
+    copyStock.item = newStockId;
+    copyStock.index = stocks.length;
+
+    // 사이즈, 카운트 수 옵션기본값을 stock에 담아둠
+    setStocks((prev) => [...prev, copyStock]);
   };
 
   const isRemainingSpace = () => {
@@ -94,7 +98,7 @@ export default function AddItemModalContents() {
     }
   };
 
-  const submitBoard = async (file) => {
+  const submitBoard = (file) => {
     console.log(file);
     // console.log(fileList[0].name);
     // try {
@@ -106,6 +110,8 @@ export default function AddItemModalContents() {
     //   console.log(e);
     // }
   };
+
+  console.log('리렌더');
 
   return (
     <>
@@ -132,8 +138,8 @@ export default function AddItemModalContents() {
               <CustomSelect {...subCategoryProps} />
             </ItemInfo>
             <ItemInfo title='재고' isCustom>
-              {stocks.map((data) => (
-                <StocksComponent key={data.item} data={data} />
+              {stocks.map((stock) => (
+                <StocksComponent key={stock.item} stock={stock} />
               ))}
               {isRemainingSpace() && (
                 <S.AddItem type='button' onClick={addItemStock}>

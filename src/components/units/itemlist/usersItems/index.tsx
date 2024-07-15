@@ -3,6 +3,7 @@ import { useSearchParams } from 'next/navigation';
 import { IItemInfoList } from '@/commons/types/list_type';
 import { useCustomModal } from '@/components/commons/hooks/custom/useCustomModal/modalhook';
 import AddItemModalContents from '@/components/commons/parts/modal/contents/additem';
+import { useEffect } from 'react';
 
 export default function ItemList(props) {
   const itemInfoList: IItemInfoList = {

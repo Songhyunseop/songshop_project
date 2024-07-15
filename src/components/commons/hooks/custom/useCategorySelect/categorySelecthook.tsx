@@ -5,11 +5,9 @@ import { useRecoilState } from 'recoil';
 
 export const useCategorySelect = (subRef) => {
   const [options, setOptions] = useRecoilState(optionDataState);
-
   const [copyOptionGroup] = deepCopy([options]);
 
   const selectProps = {
-    placeholder: '선택하세요',
     styles: {
       control: (base) => ({
         ...base,
@@ -21,45 +19,39 @@ export const useCategorySelect = (subRef) => {
       }),
     },
     classNamePrefix: 'CategorySelect',
+    placeholder: '선택하세요',
     options: null,
     onChange: null,
     isSearchable: false,
     isOptionDisabled: (option: IOptionSize) => option.isdisabled,
   };
 
-  const handleCategoryChange = (select) => {
-    //clearValue 실행으로 인한 트리거 처리
+  const handleCategoryChange = ({ select }) => {
+    // //clearValue 실행으로 인한 트리거 처리
     if (!select) return;
-
     if (select.name === 'mainCategory') {
       copyOptionGroup.CategoryOptions.forEach((opt) => {
         if (opt.label === select.label && !opt.isdisabled) {
           opt.isdisabled = true;
-
           return;
         }
         opt.isdisabled = false;
         opt.subCategory.forEach((o) => (o.isdisabled = false));
       });
-
-      // 현재 서브카테고리에 담긴 선택값을 초기화
+      //   // 현재 서브카테고리에 담긴 선택값을 초기화
       if (subRef.current) {
         subRef.current.clearValue();
       }
       setOptions(copyOptionGroup);
-
       return;
     }
-
     if (select.name === 'subCategory') {
       const selectMain = copyOptionGroup.CategoryOptions.find(
         (opt) => opt.label === select.main
       );
-
       selectMain.subCategory.forEach((opt) => {
         opt.isdisabled = opt.label === select.label;
       });
-
       setOptions(copyOptionGroup);
     }
   };
@@ -70,13 +62,16 @@ export const useCategorySelect = (subRef) => {
       (opt) => opt.isdisabled === true
     )[0];
 
+    console.log(checked, 13213);
+
     return checked ? checked?.subCategory : [];
   };
 
-  const getCategorySelectProps = (register) => {
+  const getCategorySelectProps = () => {
     const categoryProps = {
       ...selectProps,
-      register: register('category'),
+      // register: register('category'),
+      selectType: 'category',
       options: copyOptionGroup.CategoryOptions,
       onChange: handleCategoryChange,
       subRef: null,
@@ -84,7 +79,8 @@ export const useCategorySelect = (subRef) => {
 
     const subCategoryProps = {
       ...selectProps,
-      register: register('subCategory'),
+      // register: register('subCategory'),
+      selectType: 'subCategory',
       options: getsubCategoryList(),
       onChange: handleCategoryChange,
       subRef: subRef,

@@ -5,7 +5,7 @@ import { stocksState } from '@/commons/libraries/atom';
 import { v4 as uuidv4 } from 'uuid';
 import ColorSelector from './colorSelector/colorSelector';
 
-export default function ColorPicker({ data }) {
+export default function ColorPicker({ stock }) {
   const [stocks, setStocks] = useRecoilState(stocksState);
 
   const toggleColorPick = (item) => {
@@ -44,18 +44,18 @@ export default function ColorPicker({ data }) {
   return (
     <S.Color_PickBox>
       <S.Color_PickButton
-        onClick={() => toggleColorPick(data.item)}
+        onClick={() => toggleColorPick(stock.item)}
       ></S.Color_PickButton>
       <S.ColorsList>
-        {data.selectColor?.map((color) => (
+        {stock.selectColor?.map((color) => (
           <S.Colors
             key={uuidv4()}
-            onClick={() => removeColor(data.item, color)}
+            onClick={() => removeColor(stock.item, color)}
             color={color}
           ></S.Colors>
         ))}
       </S.ColorsList>
-      {data.isPickerOpen && <ColorSelector data={data} />}
+      {stock.isPickerOpen && <ColorSelector data={stock} />}
     </S.Color_PickBox>
   );
 }

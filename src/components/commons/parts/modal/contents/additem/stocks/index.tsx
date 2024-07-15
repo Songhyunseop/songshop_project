@@ -6,22 +6,14 @@ import { useSizeSelect } from '@/components/commons/hooks/custom/useSizeSelect/s
 import { useCountSelect } from '@/components/commons/hooks/custom/useCountSelect/countSelecthook';
 import ColorPicker from '@/components/commons/parts/colorpicker/colorpicker';
 import { deepCopy } from '@/commons/utils/deepcopy';
+import CustomSelect from '@/components/commons/parts/select';
 
-interface IOptionSize {
-  value: string;
-  label: string;
-  item: string;
-  count: number;
-  isdisabled: boolean;
-  isPickerOpen: boolean;
-}
-
-export default function StocksComponent({ data }) {
+export default function StocksComponent({ stock }) {
   const [stocks, setStocks] = useRecoilState(stocksState);
   const [options, setOptions] = useRecoilState(optionDataState);
 
-  const { renderSizeSelect } = useSizeSelect();
-  const { renderCountSelect } = useCountSelect();
+  const { sizeSelectProps } = useSizeSelect();
+  const { countSelectProps } = useCountSelect(stock.index);
 
   const removeItemStock = (e) => {
     const [copyStock, copyOptionGroup] = deepCopy([stocks, options]);
@@ -49,7 +41,6 @@ export default function StocksComponent({ data }) {
       if (opt.label === selected[0].label)
         return {
           ...opt,
-          count: 1,
           item: '',
           isPickerOpen: false,
           isdisabled: false,
@@ -64,16 +55,17 @@ export default function StocksComponent({ data }) {
   };
 
   return (
-    <S.Stocks id={data.item}>
+    <S.Stocks id={stock.item}>
       <S.Select_Stock>
         <S.Stocks_Info>SIZE</S.Stocks_Info>
-        {renderSizeSelect(data.item)}
+        {/* 에러 때문에 잠시막아둠 */}
+        <CustomSelect {...sizeSelectProps} stockId={stock.item} />
         <S.Stocks_Info>COLOR</S.Stocks_Info>
-        <ColorPicker data={data} />
+        <ColorPicker stock={stock} />
         <S.Stocks_Info>COUNT</S.Stocks_Info>
-        {renderCountSelect(data.item)}
+        <CustomSelect {...countSelectProps} stockId={stock.item} />
       </S.Select_Stock>
-      <S.Close onClick={removeItemStock} id={data.item}></S.Close>
+      <S.Close onClick={removeItemStock} id={stock.item}></S.Close>
     </S.Stocks>
   );
 }

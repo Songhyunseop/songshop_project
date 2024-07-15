@@ -1,17 +1,14 @@
-import { optionDataState, stocksState } from '@/commons/libraries/atom';
+import { countOptionState, stocksState } from '@/commons/libraries/atom';
 import { deepCopy } from '@/commons/utils/deepcopy';
-import CustomSelect from '@/components/commons/parts/select';
 import { useRecoilState } from 'recoil';
 
-export const useCountSelect = () => {
+export const useCountSelect = (stockIndex) => {
   const [stocks, setStocks] = useRecoilState(stocksState);
-  const [options, setOptions] = useRecoilState(optionDataState);
+  const [options, setOptions] = useRecoilState(countOptionState);
 
-  const [copyStocks, copyOptionGroup] = deepCopy([stocks, options]);
+  const [copyStocks] = deepCopy([stocks]);
 
   const SelectProps = {
-    classNamePrefix: 'CountSelect',
-    placeholder: '선택',
     styles: {
       control: (base) => ({
         ...base,
@@ -22,42 +19,46 @@ export const useCountSelect = () => {
         },
       }),
     },
+    classNamePrefix: 'CountSelect',
+    placeholder: '선택',
+    options: options[stockIndex],
     isSearchable: false,
-    options: options.countOptions,
     onChange: null,
     isOptionDisabled: (option) => option.isdisabled,
   };
 
-  const handleCountChange = ({ select, id }) => {
-    const { value } = select;
+  const handleCountChange = ({ select, stockId }) => {
+    const { value: newCount } = select;
 
-    // sotck 데이터 갱신
-    const selected = copyStocks.find((stock) => stock.item === id);
-    const targetIdx = copyStocks.findIndex((stock) => stock.item === id);
+    // stock 데이터 갱신
+    const prevSelect = copyStocks.find((stock) => stock.item === stockId);
+    const targetIdx = copyStocks.findIndex((stock) => stock.item === stockId);
 
-    selected.count = value;
-    copyStocks[targetIdx] = selected;
+    const selectOptions = deepCopy([options[stockIndex]])[0];
+
+    selectOptions.forEach((opt) => {
+      if (opt.value === newCount) opt.isdisabled = true;
+      if (opt.value === prevSelect.count) opt.isdisabled = false;
+    });
+
+    setOptions((prev) => {
+      const newState = [...prev];
+      newState[stockIndex] = selectOptions;
+      return newState;
+    });
+
+    prevSelect.count = newCount;
+    copyStocks[targetIdx] = prevSelect;
 
     setStocks(copyStocks);
-
-    // option 상태 변경
-    copyOptionGroup.countOptions.forEach((opt) =>
-      opt.value === value ? (opt.isdisabled = true) : (opt.isdisabled = false)
-    );
-
-    setOptions(copyOptionGroup);
   };
 
-  const renderCountSelect = (id) => {
-    return (
-      <CustomSelect
-        {...{
-          ...SelectProps,
-          onChange: (select) => handleCountChange({ select, id }),
-        }}
-      />
-    );
+  const countSelectProps = {
+    ...SelectProps,
+    selectType: 'count',
+    subRef: null,
+    onChange: handleCountChange,
   };
 
-  return { renderCountSelect };
+  return { countSelectProps };
 };

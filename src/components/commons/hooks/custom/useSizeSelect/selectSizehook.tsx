@@ -1,6 +1,5 @@
 import { optionDataState, stocksState } from '@/commons/libraries/atom';
 import { deepCopy } from '@/commons/utils/deepcopy';
-import CustomSelect from '@/components/commons/parts/select';
 import { useRecoilState } from 'recoil';
 
 export const useSizeSelect = () => {
@@ -8,8 +7,6 @@ export const useSizeSelect = () => {
   const [options, setOptions] = useRecoilState(optionDataState);
 
   const SelectProps = {
-    classNamePrefix: 'SizeSelect',
-    placeholder: '선택',
     styles: {
       control: (base) => ({
         ...base,
@@ -20,19 +17,22 @@ export const useSizeSelect = () => {
         },
       }),
     },
-    isSearchable: false,
+    classNamePrefix: 'SizeSelect',
+    placeholder: '선택',
     options: options.sizeOptions,
-    onChange: null,
+    isSearchable: false,
     isOptionDisabled: (option) => option.isdisabled,
   };
 
-  const handleSizeChange = ({ select, id }) => {
+  const handleSizeChange = ({ select, stockId }) => {
     const { value, label, item } = select;
     const [copyStock, copyOptionGroup] = deepCopy([stocks, options]);
 
     // stock 데이터 갱신
-    const prevSelect = copyStock.find((stock: ISelected) => stock.item === id);
-    const targetIdx = stocks.findIndex((stock) => stock.item === id);
+    const prevSelect = copyStock.find(
+      (stock: ISelected) => stock.item === stockId
+    );
+    const targetIdx = stocks.findIndex((stock) => stock.item === stockId);
 
     const editedData = {
       ...(prevSelect as ISelected),
@@ -60,16 +60,12 @@ export const useSizeSelect = () => {
     setOptions(copyOptionGroup);
   };
 
-  const renderSizeSelect = (id: string) => {
-    return (
-      <CustomSelect
-        {...{
-          ...SelectProps,
-          onChange: (select) => handleSizeChange({ select, id }),
-        }}
-      />
-    );
+  const sizeSelectProps = {
+    ...SelectProps,
+    selectType: 'size',
+    subRef: null,
+    onChange: handleSizeChange,
   };
 
-  return { renderSizeSelect };
+  return { sizeSelectProps };
 };
