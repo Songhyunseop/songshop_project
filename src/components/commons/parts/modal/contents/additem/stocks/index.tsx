@@ -12,7 +12,7 @@ export default function StocksComponent({ stock }) {
   const [stocks, setStocks] = useRecoilState(stocksState);
   const [options, setOptions] = useRecoilState(optionDataState);
 
-  const { sizeSelectProps } = useSizeSelect();
+  const { sizeSelectProps } = useSizeSelect(stock.index);
   const { countSelectProps } = useCountSelect(stock.index);
 
   const removeItemStock = (e) => {

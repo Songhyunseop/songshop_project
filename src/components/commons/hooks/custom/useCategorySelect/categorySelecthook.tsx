@@ -29,6 +29,7 @@ export const useCategorySelect = (subRef) => {
   const handleCategoryChange = ({ select }) => {
     // //clearValue 실행으로 인한 트리거 처리
     if (!select) return;
+
     if (select.name === 'mainCategory') {
       copyOptionGroup.CategoryOptions.forEach((opt) => {
         if (opt.label === select.label && !opt.isdisabled) {
@@ -38,6 +39,7 @@ export const useCategorySelect = (subRef) => {
         opt.isdisabled = false;
         opt.subCategory.forEach((o) => (o.isdisabled = false));
       });
+
       //   // 현재 서브카테고리에 담긴 선택값을 초기화
       if (subRef.current) {
         subRef.current.clearValue();

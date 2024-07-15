@@ -66,30 +66,35 @@ export const countOptions = [
 export const CategoryOptions = [
   {
     label: 'OUTERWEAR',
+    value: 'OUTERWEAR',
     isdisabled: false,
     name: 'mainCategory',
     subCategory: [
       {
         main: 'OUTERWEAR',
         label: 'COAT',
+        value: 'COAT',
         name: 'subCategory',
         isdisabled: false,
       },
       {
         main: 'OUTERWEAR',
         label: 'JACKET',
+        value: 'JACKET',
         name: 'subCategory',
         isdisabled: false,
       },
       {
         main: 'OUTERWEAR',
         label: 'JUMPER',
+        value: 'JUMPER',
         name: 'subCategory',
         isdisabled: false,
       },
       {
         main: 'OUTERWEAR',
         label: 'BLAZER',
+        value: 'BLAZER',
         name: 'subCategory',
         isdisabled: false,
       },
@@ -97,13 +102,21 @@ export const CategoryOptions = [
   },
   {
     label: 'TOP',
+    value: 'TOP',
     isdisabled: false,
     name: 'mainCategory',
     subCategory: [
-      { main: 'TOP', label: 'SHIRT', name: 'subCategory', isdisabled: false },
+      {
+        main: 'TOP',
+        label: 'SHIRT',
+        value: 'SHIRT',
+        name: 'subCategory',
+        isdisabled: false,
+      },
       {
         main: 'TOP',
         label: 'HOODIE',
+        value: 'HOODIE',
         name: 'subCategory',
         isdisabled: false,
       },
@@ -111,24 +124,28 @@ export const CategoryOptions = [
   },
   {
     label: 'BOTTOM',
+    value: 'BOTTOM',
     isdisabled: false,
     name: 'mainCategory',
     subCategory: [
       {
         main: 'BOTTOM',
         label: 'SHORTS',
+        value: 'SHORTS',
         name: 'subCategory',
         isdisabled: false,
       },
       {
         main: 'BOTTOM',
         label: 'JEANS',
+        value: 'JEANS',
         name: 'subCategory',
         isdisabled: false,
       },
       {
         main: 'BOTTOM',
         label: 'SLACKS',
+        value: 'SLACKS',
         name: 'subCategory',
         isdisabled: false,
       },
@@ -136,24 +153,28 @@ export const CategoryOptions = [
   },
   {
     label: 'SHOES',
+    value: 'SHOES',
     isdisabled: false,
     name: 'mainCategory',
     subCategory: [
       {
         main: 'SHOES',
         label: 'SLIPPER',
+        value: 'SLIPPER',
         name: 'subCategory',
         isdisabled: false,
       },
       {
         main: 'SHOES',
         label: 'SNEAKERS',
+        value: 'SNEAKERS',
         name: 'subCategory',
         isdisabled: false,
       },
       {
         main: 'SHOES',
         label: 'DRESSSHOES',
+        value: 'DRESSSHOES',
         name: 'subCategory',
         isdisabled: false,
       },
@@ -161,18 +182,21 @@ export const CategoryOptions = [
   },
   {
     label: 'BAG',
+    value: 'BAG',
     isdisabled: false,
     name: 'mainCategory',
     subCategory: [
       {
         main: 'BAG',
         label: 'HANDBAG',
+        value: 'HANDBAG',
         name: 'subCategory',
         isdisabled: false,
       },
       {
         main: 'BAG',
         label: 'BAGPACK',
+        value: 'BAGPACK',
         name: 'subCategory',
         isdisabled: false,
       },
@@ -180,17 +204,31 @@ export const CategoryOptions = [
   },
   {
     label: 'ACC',
+    value: 'ACC',
     isdisabled: false,
     name: 'mainCategory',
     subCategory: [
-      { main: 'ACC', label: 'GLASSES', name: 'subCategory', isdisabled: false },
       {
         main: 'ACC',
-        label: 'HAT',
+        label: 'GLASSES',
+        value: 'GLASSES',
         name: 'subCategory',
         isdisabled: false,
       },
-      { main: 'ACC', label: 'RING', name: 'subCategory', isdisabled: false },
+      {
+        main: 'ACC',
+        label: 'HAT',
+        value: 'HAT',
+        name: 'subCategory',
+        isdisabled: false,
+      },
+      {
+        main: 'ACC',
+        label: 'RING',
+        value: 'RING',
+        name: 'subCategory',
+        isdisabled: false,
+      },
     ],
   },
 ];

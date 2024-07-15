@@ -21,7 +21,6 @@ import { stocksState } from '@/commons/libraries/atom';
 import { useCategorySelect } from '@/components/commons/hooks/custom/useCategorySelect/categorySelecthook';
 import { FormProvider, useForm } from 'react-hook-form';
 import CustomSelect from '../../../select';
-import { countOptions } from '@/commons/constants/constants';
 
 // editor 컴포넌트 클라이언트 측에서 렌더링
 const WriteEditor = dynamic(() => import('../../../editor/writeeditor'), {

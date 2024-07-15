@@ -2,7 +2,7 @@ import { optionDataState, stocksState } from '@/commons/libraries/atom';
 import { deepCopy } from '@/commons/utils/deepcopy';
 import { useRecoilState } from 'recoil';
 
-export const useSizeSelect = () => {
+export const useSizeSelect = (stockIndex) => {
   const [stocks, setStocks] = useRecoilState(stocksState);
   const [options, setOptions] = useRecoilState(optionDataState);
 
@@ -62,7 +62,7 @@ export const useSizeSelect = () => {
 
   const sizeSelectProps = {
     ...SelectProps,
-    selectType: 'size',
+    selectType: `stocks[${stockIndex}].size`,
     subRef: null,
     onChange: handleSizeChange,
   };

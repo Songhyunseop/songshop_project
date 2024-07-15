@@ -18,7 +18,7 @@ function CustomSelect({ selectType, subRef, onChange, stockId, ...rest }) {
               if (subRef) subRef.current = el;
             }}
             onChange={(select) => {
-              field.onChange(select);
+              if (select) field.onChange(select.value);
               onChange({ select, stockId });
             }}
             {...rest}

@@ -41,12 +41,14 @@ export const useCountSelect = (stockIndex) => {
       if (opt.value === prevSelect.count) opt.isdisabled = false;
     });
 
+    // select Option 값 갱신
     setOptions((prev) => {
       const newState = [...prev];
       newState[stockIndex] = selectOptions;
       return newState;
     });
 
+    // 이전 값 최근 값으로 갱신
     prevSelect.count = newCount;
     copyStocks[targetIdx] = prevSelect;
 
@@ -55,7 +57,7 @@ export const useCountSelect = (stockIndex) => {
 
   const countSelectProps = {
     ...SelectProps,
-    selectType: 'count',
+    selectType: `stocks[${stockIndex}].count`,
     subRef: null,
     onChange: handleCountChange,
   };
