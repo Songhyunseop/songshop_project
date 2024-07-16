@@ -60,6 +60,8 @@ export default function AddItemModalContents() {
       itemDetail: '',
       category: '',
       subCategory: '',
+      stocks: [],
+      description: '',
     },
   });
 
@@ -91,14 +93,21 @@ export default function AddItemModalContents() {
   const { mutateAsync: getPublicUrl } = useGetPublicUrl();
 
   // editor 입력값 핸들링
-  const changeContent = () => {
-    if (editorRef.current) {
-      const textData = editorRef.current.getInstance().getHTML();
-    }
-  };
+  // const changeContent = () => {
+  //   if (editorRef.current) {
+  //     const textData = editorRef.current.getInstance().getHTML();
+  //     console.log(textData);
+  //   }
+  // };
 
   const submitBoard = (file) => {
     console.log(file);
+    if (editorRef.current) {
+      const textData = editorRef.current.getInstance().getHTML();
+      console.log(textData);
+      console.log(typeof textData);
+    }
+
     // console.log(fileList[0].name);
     // try {
     //   const uploadResult = await uploadFiles(file);
@@ -109,8 +118,6 @@ export default function AddItemModalContents() {
     //   console.log(e);
     // }
   };
-
-  console.log('리렌더');
 
   return (
     <>
@@ -148,7 +155,7 @@ export default function AddItemModalContents() {
             </ItemInfo>
             <ItemInfo title={'상품 디테일'} isCustom>
               <WriteEditor
-                changeContent={changeContent}
+                // changeContent={changeContent}
                 editorRef={editorRef}
               />
             </ItemInfo>

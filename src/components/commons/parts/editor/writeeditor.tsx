@@ -14,7 +14,7 @@ import * as S from './styles';
 import supabase from '@/commons/utils/supabase/client';
 import { v4 as uuidv4 } from 'uuid';
 
-export default function WriteEditor({ changeContent, editorRef }) {
+export default function WriteEditor({ editorRef }) {
   type HookCallback = (url: string, text?: string) => void;
   const supabaseClient = supabase();
 
@@ -38,10 +38,29 @@ export default function WriteEditor({ changeContent, editorRef }) {
     }
   };
 
+  const customHtmlRender = {
+    text(node, context) {
+      const textElement = document.createElement('span');
+      textElement.textContent = node.literal; // Set the text content
+
+      const target = document.querySelectorAll('.toastui-editor-contents');
+      const realTarget = Array.from(target);
+
+      // Apply default font size of 15px
+      textElement.style.fontSize = '60px';
+
+      return {
+        type: 'html',
+        content: textElement.outerHTML,
+      };
+    },
+  };
+
   return (
     <S.EditorWrapper id='editor'>
       <Editor
         ref={editorRef}
+        customHTMLRenderer={customHtmlRender}
         toolbarItems={[
           ['heading', 'bold', 'italic'],
           [
@@ -57,7 +76,6 @@ export default function WriteEditor({ changeContent, editorRef }) {
             'link',
           ],
         ]}
-        onChange={changeContent}
         language='ko-KR'
         initialValue=' '
         autofocus={false}

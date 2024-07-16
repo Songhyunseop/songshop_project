@@ -11,22 +11,10 @@ export default function ColorSelector({ stockId }) {
       {renderColorUI()}
       <S.ColorBtn_Box>
         <S.ColorPickBtn type='button' onClick={() => selectColor(stockId)}>
-          <FontAwesomeIcon
-            style={{
-              width: '15px',
-              height: '15px',
-            }}
-            icon={faCheck}
-          />
+          <FontAwesomeIcon icon={faCheck} />
         </S.ColorPickBtn>
         <S.ColorPickBtn type='button' onClick={resetColor}>
-          <FontAwesomeIcon
-            style={{
-              width: '15px',
-              height: '15px',
-            }}
-            icon={faRotateLeft}
-          />
+          <FontAwesomeIcon icon={faRotateLeft} />
         </S.ColorPickBtn>
       </S.ColorBtn_Box>
     </S.Custom_Color_Layout>

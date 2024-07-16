@@ -7,7 +7,7 @@ export const EditorWrapper = styled.div`
   :focus:none
 
   // 매김번호(ul, ol) vertical 중앙정렬
-  .toastui-editor-contents ul li,
+  /* .toastui-editor-contents ul li,
   .toastui-editor-contents ol li {
     ::before {
       margin-top: 0;
@@ -15,7 +15,7 @@ export const EditorWrapper = styled.div`
       transform: translateY(-50%);
       text-align: center;
     }
-  }
+  } */
 
   .toastui-editor-tooltip,
   .toastui-editor-tooltip .arrow {
@@ -30,5 +30,13 @@ export const EditorWrapper = styled.div`
     :nth-of-type(2) {
       flex-wrap: wrap;
     }
+  }
+
+  .toastui-editor-contents {
+    /* font-size: 50px; */
+  }
+
+  .ProseMirror {
+    /* font-size: 60px; */
   }
 `;
