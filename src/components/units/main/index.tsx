@@ -12,6 +12,7 @@ import { getDataList } from '@/components/commons/hooks/query/useQueryGetAllProd
 export default function Main() {
   const [count, setCount] = useState(8);
 
+  // 추후 리팩토링 시 관련 폴더로 옮길코드
   const { data, isLoading, isError } = useQuery({
     queryKey: ['product'],
     queryFn: getDataList,

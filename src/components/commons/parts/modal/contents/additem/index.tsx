@@ -16,11 +16,12 @@ import ItemInfo from './iteminfo';
 
 import UploadImageComponent from './imageUpload';
 import StocksComponent from './stocks';
-import { useRecoilState } from 'recoil';
-import { stocksState } from '@/commons/libraries/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { fileListState, stocksState } from '@/commons/libraries/atom';
 import { useCategorySelect } from '@/components/commons/hooks/custom/useCategorySelect/categorySelecthook';
 import { FormProvider, useForm } from 'react-hook-form';
 import CustomSelect from '../../../select';
+import { useMutationCreateProduct } from '@/components/commons/hooks/mutation/useMutationCreateProduct';
 
 // editor 컴포넌트 클라이언트 측에서 렌더링
 const WriteEditor = dynamic(() => import('../../../editor/writeeditor'), {
@@ -48,6 +49,7 @@ export default function AddItemModalContents() {
   };
 
   const [stocks, setStocks] = useRecoilState(stocksState);
+  const fileList = useRecoilValue(fileListState);
 
   const editorRef = useRef<editorType>();
   const subCategoryRef =
@@ -58,6 +60,7 @@ export default function AddItemModalContents() {
       itemName: '',
       itemPrice: '',
       itemDetail: '',
+      previewImages: [],
       category: '',
       subCategory: '',
       stocks: [],
@@ -89,34 +92,42 @@ export default function AddItemModalContents() {
     return true;
   };
 
+  // editor 입력값 핸들링
+  const changeContent = (e) => {
+    // const kkk = editorRef.current.getInstance().getSelection();
+    // console.log(kkk);
+  };
+
   const { mutateAsync: uploadFiles } = useUploadToStorage();
   const { mutateAsync: getPublicUrl } = useGetPublicUrl();
+  const { mutateAsync: createProduct } = useMutationCreateProduct();
 
-  // editor 입력값 핸들링
-  // const changeContent = () => {
-  //   if (editorRef.current) {
-  //     const textData = editorRef.current.getInstance().getHTML();
-  //     console.log(textData);
-  //   }
-  // };
+  const submitBoard = async (formData) => {
+    console.log(formData);
 
-  const submitBoard = (file) => {
-    console.log(file);
     if (editorRef.current) {
       const textData = editorRef.current.getInstance().getHTML();
-      console.log(textData);
-      console.log(typeof textData);
+      formData.description = textData;
     }
 
-    // console.log(fileList[0].name);
-    // try {
-    //   const uploadResult = await uploadFiles(file);
-    //   const { url } = await getPublicUrl(uploadResult.data.path);
-    //   // setUploadImgUrl((prev) => [url, ...prev]);
-    //   // setFilesList((filesList) => [file, ...filesList]);
-    // } catch (e) {
-    //   console.log(e);
-    // }
+    const uploadedList = await Promise.all(
+      fileList.map(async (file) => getPublicUrl(await uploadFiles(file)))
+    );
+    formData.previewImages = uploadedList.map((data) => data.url);
+
+    const userInputData = {
+      product_name: formData.itemName,
+      product_category: formData.category,
+      product_subcategory: formData.subCategory,
+      product_price: formData.itemPrice,
+      product_summary: formData.itemDetail,
+      product_description: formData.description,
+      product_img: formData.previewImages,
+      stock: formData.stocks,
+    };
+
+    const rr = await createProduct(userInputData);
+    console.log(123, rr);
   };
 
   return (
@@ -155,7 +166,7 @@ export default function AddItemModalContents() {
             </ItemInfo>
             <ItemInfo title={'상품 디테일'} isCustom>
               <WriteEditor
-                // changeContent={changeContent}
+                changeContent={changeContent}
                 editorRef={editorRef}
               />
             </ItemInfo>

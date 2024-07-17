@@ -13,8 +13,9 @@ import 'tui-editor-plugin-font-size/dist/tui-editor-plugin-font-size.css';
 import * as S from './styles';
 import supabase from '@/commons/utils/supabase/client';
 import { v4 as uuidv4 } from 'uuid';
+import { useEffect } from 'react';
 
-export default function WriteEditor({ editorRef }) {
+export default function WriteEditor({ editorRef, changeContent }) {
   type HookCallback = (url: string, text?: string) => void;
   const supabaseClient = supabase();
 
@@ -41,13 +42,8 @@ export default function WriteEditor({ editorRef }) {
   const customHtmlRender = {
     text(node, context) {
       const textElement = document.createElement('span');
-      textElement.textContent = node.literal; // Set the text content
-
-      const target = document.querySelectorAll('.toastui-editor-contents');
-      const realTarget = Array.from(target);
-
-      // Apply default font size of 15px
-      textElement.style.fontSize = '60px';
+      textElement.textContent = node.literal;
+      // textElement.style.fontSize = '35px';
 
       return {
         type: 'html',
@@ -56,10 +52,48 @@ export default function WriteEditor({ editorRef }) {
     },
   };
 
+  useEffect(() => {
+    const wysiswyg = document.querySelector(
+      '.ProseMirror.toastui-editor-contents'
+    );
+
+    // const checkKeydown = (e) => {
+    //   // if (e.code !== 'Enter') return;
+    //   // const aa = wysiswyg.querySelectorAll('p');
+    //   // aa[aa.length - 1].style.fontSize = '45px';
+    //   // console.log(aa[aa.length - 1], 333);
+    //   // const rr = editorRef.current.getInstance().getRangeInfoOfNode();
+    // };
+    // wysiswyg?.addEventListener('keydown', checkKeydown);
+
+    // const observer = new MutationObserver((mutations) => {
+    //   for (const mutation of mutations) {
+    //     console.log(mutations);
+    //     if (mutation.type === 'childList') {
+    //       mutation.addedNodes.forEach((node) => {
+    //         if (node.tagName === 'P') {
+    //           // const newSpan = document.createElement('span');
+    //           // newSpan.textContent = node.textContent;
+    //           // newSpan.style.fontSize = '50px';
+    //           // node.appendChild(newSpan);
+    //         }
+    //       });
+    //     }
+    //   }
+    // });
+
+    // observer.observe(wysiswyg, { childList: true, subtree: true });
+
+    // return () => {
+    //   observer.disconnect();
+    // };
+  }, []);
+
   return (
     <S.EditorWrapper id='editor'>
       <Editor
         ref={editorRef}
+        onChange={changeContent}
         customHTMLRenderer={customHtmlRender}
         toolbarItems={[
           ['heading', 'bold', 'italic'],
@@ -84,6 +118,7 @@ export default function WriteEditor({ editorRef }) {
         height='100%'
         initialEditType='wysiwyg'
         useCommandShortcut={false}
+        // events={{ keyup: checks }}
         hooks={{
           addImageBlobHook: convertBlob,
         }}

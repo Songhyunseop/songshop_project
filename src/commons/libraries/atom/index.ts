@@ -27,3 +27,15 @@ export const stocksState = atom({
   key: 'stocksState',
   default: [],
 });
+
+// image, files
+
+export const imageUrlState = atom({
+  key: 'imageUrlState',
+  default: [],
+});
+
+export const fileListState = atom({
+  key: 'fileListState',
+  default: [],
+});

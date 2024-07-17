@@ -33,10 +33,10 @@ export const EditorWrapper = styled.div`
   }
 
   .toastui-editor-contents {
-    /* font-size: 50px; */
+    font-size: 18px;
   }
 
   .ProseMirror {
-    /* font-size: 60px; */
+    font-size: 18px;
   }
 `;

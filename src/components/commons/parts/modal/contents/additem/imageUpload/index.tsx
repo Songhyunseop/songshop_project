@@ -1,20 +1,20 @@
 import Image from 'next/image';
 import * as S from './styles';
 
-import supabaseLoader from 'pages/api/faviconLoader';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { fileListState, imageUrlState } from '@/commons/libraries/atom';
 
 export default function UploadImageComponent() {
-  const [fileList, setFilesList] = useState<File[]>([]);
-  const [uploadImgUrl, setUploadImgUrl] = useState<string[]>([]);
+  const [fileList, setFilesList] = useRecoilState(fileListState);
+  const [uploadImgUrl, setUploadImgUrl] = useRecoilState(imageUrlState);
 
   const createPreviewImg = (fileArray: File[]) => {
     // 이미지 미리보기 로직
     fileArray.forEach((file) => {
       const blobUrl = URL.createObjectURL(file);
 
-      setUploadImgUrl((prev) => [blobUrl, ...prev]);
+      setUploadImgUrl((prev) => [...prev, blobUrl]);
       setFilesList((fileList) => [file, ...fileList]);
     });
   };
@@ -24,6 +24,9 @@ export default function UploadImageComponent() {
     const fileArray: File[] = Array.from(files);
 
     createPreviewImg(fileArray);
+
+    // console.log(uploadImgUrl);
+    // console.log(fileList);
   };
 
   const removeImg = (imgIndex: number) => {
@@ -66,7 +69,7 @@ export default function UploadImageComponent() {
                 fill
                 sizes='100%'
                 unoptimized
-                loader={supabaseLoader}
+                // loader={supabaseLoader}
               />
             </S.PreviewImg>
           </S.Upload_Stock_Container>

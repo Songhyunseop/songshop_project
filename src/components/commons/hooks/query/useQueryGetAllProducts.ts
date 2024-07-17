@@ -12,6 +12,11 @@ export const getDataList = async () => {
 
   return { productData, error };
 };
+//
+//
+//
+//
+//
 
 // 이미지 Storage에 업로드 API
 const uploadImgFileToStorage = async (file: File) => {
