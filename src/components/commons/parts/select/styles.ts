@@ -49,6 +49,7 @@ const returnStyles = (type: string) => {
 
         & .SizeSelect__menu {
           border-radius: 2px;
+          z-index: 99999;
         }
 
         & .SizeSelect__option {

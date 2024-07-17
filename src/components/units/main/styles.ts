@@ -1,10 +1,8 @@
 import styled from '@emotion/styled';
 
 export const Main = styled.main`
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 0px 2.5rem;
-  border: 2px solid blue;
+  border: 2px solid green;
 `;
 
 export const BestItem_Section = styled.section`

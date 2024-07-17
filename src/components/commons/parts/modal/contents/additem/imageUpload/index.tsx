@@ -24,9 +24,6 @@ export default function UploadImageComponent() {
     const fileArray: File[] = Array.from(files);
 
     createPreviewImg(fileArray);
-
-    // console.log(uploadImgUrl);
-    // console.log(fileList);
   };
 
   const removeImg = (imgIndex: number) => {
@@ -69,7 +66,6 @@ export default function UploadImageComponent() {
                 fill
                 sizes='100%'
                 unoptimized
-                // loader={supabaseLoader}
               />
             </S.PreviewImg>
           </S.Upload_Stock_Container>

@@ -12,7 +12,7 @@ const globalStyle = css`
   // main 캐러셀
   .main_swiper {
     width: 100%;
-    height: 500px;
+    height: 700px;
     border: 5px solid red;
   }
 
@@ -67,21 +67,6 @@ const globalStyle = css`
 
   .toastui-editor-contents {
     /* font-size: 1rem; */
-  }
-  // 색깔 입힌 글꼴 굵게 적용
-  p strong span,
-  em,
-  del {
-    font-weight: inherit;
-  }
-
-  // font-size에 맞춰 취소선 중앙 정렬
-  del {
-    text-decoration-line: none;
-  }
-  p del span {
-    color: black;
-    text-decoration-line: line-through;
   }
 
   @font-face {

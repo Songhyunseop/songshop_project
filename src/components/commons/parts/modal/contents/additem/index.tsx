@@ -94,6 +94,8 @@ export default function AddItemModalContents() {
 
   // editor 입력값 핸들링
   const changeContent = (e) => {
+    const rrr = editorRef.current.getInstance().getSelectedText();
+    console.log(rrr);
     // const kkk = editorRef.current.getInstance().getSelection();
     // console.log(kkk);
   };

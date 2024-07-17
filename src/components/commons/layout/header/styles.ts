@@ -2,56 +2,80 @@ import Link from 'next/link';
 import styled from 'node_modules/@emotion/styled';
 
 export const Header_Wrapper = styled.header`
-  width: 100%;
-  background-color: white;
+  /* background-color: white; */
 `;
 
 export const Header_Main = styled.section`
-  height: 240px;
+  width: 100%;
+  min-height: 70px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #d2d2d2;
+  padding: 0 3%;
+  border: 3px solid red;
 `;
 
 export const Main_Left = styled.div`
-  width: 35%;
+  width: 40%;
+  display: flex;
+  align-items: center;
+  min-width: 550px;
 `;
 
 export const User_SelectNav = styled.nav`
   height: 100%;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
 `;
 
 export const Nav_List = styled.ul`
+  width: 100%;
+  height: 100%;
   list-style-type: none;
   display: flex;
-  justify-content: space-between;
-  max-width: 300px;
-  width: 100%;
-  width: 100%;
+  /* justify-content: center; */
+`;
+
+export const NavLi = styled.li`
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  cursor: pointer;
+  padding: 0 3%;
 `;
 
 export const Styled_Link = styled(Link)`
-  position: relative;
-  font-size: 2rem;
-  font-weight: 200;
   text-decoration-line: none;
   color: black;
-  cursor: pointer;
   transition: all 0.3s ease-out;
+  font-size: 1.3rem;
+  font-weight: 300;
 
   &:hover {
     color: #e2c2b3;
   }
+  /* position: relative; */
+  /* width: 200px;
+  font-size: 1.65rem;
+  font-weight: 300;
+  text-decoration-line: none;
+  color: black;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+  border: 2px solid red;
+
+  &:hover {
+    color: #e2c2b3;
+  } */
 `;
 
 export const Main_Right = styled.div`
-  width: 35%;
   display: flex;
   align-items: center;
+  border: 3px solid green;
 `;
 
 export const Main_Title = styled.p``;
@@ -59,10 +83,11 @@ export const Main_Title = styled.p``;
 export const Styled_TitleLink = styled(Link)`
   text-decoration-line: none;
   color: #544d4e;
-  font-size: 4.5rem;
+  font-size: 2rem;
   font-weight: 500;
   letter-spacing: 0.3rem;
   padding-top: 0.3rem;
+  margin-right: 1.5rem;
 `;
 
 export const Search_Box = styled.input`

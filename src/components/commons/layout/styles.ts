@@ -10,7 +10,7 @@ export const Nav_Sticky_Container = styled.div`
   position: sticky;
   z-index: 99;
   top: 0;
-  margin-bottom: clamp(0.1rem, 8vw, 20vw);
+  /* margin-bottom: clamp(0.1rem, 8vw, 20vw); */
 `;
 
 export const Layout_Child = styled.div``;

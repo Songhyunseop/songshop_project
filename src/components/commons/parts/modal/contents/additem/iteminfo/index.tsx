@@ -9,6 +9,7 @@ interface ItemInfoProps {
 }
 
 export default function ItemInfo({
+  type,
   title,
   register,
   isCustom,
@@ -18,7 +19,7 @@ export default function ItemInfo({
     <S.Body_Container>
       <S.Body_Left>{title}</S.Body_Left>
       <S.Body_Right>
-        {isCustom ? children : <S.AddInput {...register} />}
+        {isCustom ? children : <S.AddInput type={type} {...register} />}
       </S.Body_Right>
     </S.Body_Container>
   );

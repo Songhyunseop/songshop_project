@@ -30,6 +30,7 @@ export default function Main() {
 
   return (
     <S.Main>
+      <div>hello</div>
       <MainSWiper />
       <S.BestItem_Section>
         <S.Section_Title>BEST ITEM</S.Section_Title>
