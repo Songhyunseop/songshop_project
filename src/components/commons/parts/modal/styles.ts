@@ -7,7 +7,7 @@ export const StyledModal = styled(ReactModal)`
   background-color: white;
   position: absolute;
   z-index: 9999;
-  height: 50vw;
+  height: 60vh;
   width: 80%;
   left: 50%;
   top: 50%;

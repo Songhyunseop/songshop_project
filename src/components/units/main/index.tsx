@@ -2,6 +2,7 @@ import * as S from './styles';
 
 import MainSWiper from '@/components/commons/parts/swiper/mainSwiper/mainSwiper';
 import ItemSwiper from '@/components/commons/parts/swiper/itemSwiper/itemSwiper';
+
 import ItemBox from '@/components/commons/parts/itembox/itembox';
 
 import { useState } from 'react';
@@ -28,9 +29,21 @@ export default function Main() {
     setCount((prev) => prev + 4);
   };
 
+  const videoUrls = ['/videos/shopvid1.mp4', '/videos/shopvid2.mp4'];
+
   return (
     <S.Main>
-      <div>hello</div>
+      <S.VideoWrapper>
+        <S.Main_Theme>{'새로운 시작은 캐쥬얼한 선택과 함께'}</S.Main_Theme>
+        <S.Styled_ReactPlayer
+          url={videoUrls}
+          playing
+          muted
+          loop
+          width={'100%'}
+          height={'100vh'}
+        />
+      </S.VideoWrapper>
       <MainSWiper />
       <S.BestItem_Section>
         <S.Section_Title>BEST ITEM</S.Section_Title>

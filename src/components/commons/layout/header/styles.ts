@@ -2,7 +2,14 @@ import Link from 'next/link';
 import styled from 'node_modules/@emotion/styled';
 
 export const Header_Wrapper = styled.header`
-  /* background-color: white; */
+  width: 100%;
+  z-index: 999;
+  transition: all 0.9s ease;
+  position: ${(props) => (props.isScrolled ? 'fixed' : 'absolute')};
+  top: 0;
+  left: 0;
+  background-color: ${(props) => (props.isScrolled ? 'white' : 'none')};
+  transform: ${(props) => (props.isScrolled ? 'translateY(px)' : 'auto')};
 `;
 
 export const Header_Main = styled.section`
@@ -13,7 +20,6 @@ export const Header_Main = styled.section`
   align-items: center;
   border-bottom: 1px solid #d2d2d2;
   padding: 0 3%;
-  border: 3px solid red;
 `;
 
 export const Main_Left = styled.div`
@@ -34,7 +40,6 @@ export const Nav_List = styled.ul`
   height: 100%;
   list-style-type: none;
   display: flex;
-  /* justify-content: center; */
 `;
 
 export const NavLi = styled.li`

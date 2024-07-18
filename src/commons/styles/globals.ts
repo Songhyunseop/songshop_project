@@ -13,18 +13,16 @@ const globalStyle = css`
   .main_swiper {
     width: 100%;
     height: 700px;
-    border: 5px solid red;
   }
 
   .main_swiper .swiper-slide {
-    border: 2px solid blue;
+    /* border: 2px solid blue; */
     position: relative;
     overflow: hidden;
-    transition: filter 0.8s ease;
+  }
 
-    &:hover {
-      filter: brightness(0.8);
-    }
+  .swiper-pagination {
+    display: none;
   }
 
   // item 캐러셀

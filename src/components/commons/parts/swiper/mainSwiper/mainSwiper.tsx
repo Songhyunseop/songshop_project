@@ -8,27 +8,41 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faAngleDoubleLeft,
+  faAngleDoubleRight,
+  faAngleLeft,
+} from '@fortawesome/free-solid-svg-icons';
 
 export default function MainSWiper() {
   const [itemswiper, setItemSwiper] = useState<SwiperCore>();
 
   // swiper에 할당될 이미지 및 타이틀
   const imgList = [
-    { name: 'carousel1', title: 'SEASON OFF DISCOUNT' },
-    { name: 'carousel2', title: 'SUMMER SALE ITEMS' },
-    { name: 'carousel3', title: 'SPRING SEASON ITEM' },
-    { name: 'carousel4', title: 'NEW OUTERWEAR' },
+    { name: 'carousel1', title: 'TRENDSETTERS CHOICE ' },
+    { name: 'carousel2', title: 'PURE & SIMPLE STYLES' },
+    { name: 'carousel3', title: 'NATURAL & ELGANCE' },
+    { name: 'carousel4', title: 'YOUNG & BEAUTY STYLES' },
   ];
 
   return (
     <S.Wrapper>
-      <S.Arrow
+      {/* <S.Arrow
         onClick={() => itemswiper?.slidePrev()}
         className='swipers-prev'
         direction='next'
-      >
-        <S.Arrow_Direction src='/arrow.png' direction='next' />
-      </S.Arrow>
+      > */}
+      {/* <S.Arrow_Direction src='/arrow.png' direction='next' /> */}
+      <S.Styled_Arrow
+        onClick={() => itemswiper?.slidePrev()}
+        className='swipers-prev'
+        direction='next'
+        icon={faAngleDoubleLeft}
+        fontSize={100}
+        color={'white'}
+      />
+      {/* </S.Arrow> */}
       <Swiper
         className='main_swiper'
         modules={[Pagination, Autoplay]}
@@ -50,13 +64,21 @@ export default function MainSWiper() {
           </SwiperSlide>
         ))}
       </Swiper>
-      <S.Arrow
+      {/* <S.Arrow
         onClick={() => itemswiper?.slideNext()}
         className='swipers-next'
         direction='prev'
-      >
-        <S.Arrow_Direction src='/arrow.png' direction='prev' />
-      </S.Arrow>
+      > */}
+      <S.Styled_Arrow
+        onClick={() => itemswiper?.slideNext()}
+        className='swipers-next'
+        direction='prev'
+        icon={faAngleDoubleRight}
+        fontSize={100}
+        color={'white'}
+      />
+      {/* <S.Arrow_Direction src='/arrow.png' direction='prev' /> */}
+      {/* </S.Arrow> */}
     </S.Wrapper>
   );
 }

@@ -1,5 +1,15 @@
 import styled from '@emotion/styled';
-import { ArrowProps } from '@/commons/types/arrow_type';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+export const Styled_Arrow = styled(FontAwesomeIcon)`
+  position: absolute;
+  z-index: 9999;
+  left: ${(props) =>
+    props.direction === 'next'
+      ? 0
+      : 'calc(100% - 100px)'}; // fontawesome icon 너비크기와 동일
+  opacity: 0.6;
+`;
 
 export const Wrapper = styled.div`
   position: relative;
@@ -7,32 +17,10 @@ export const Wrapper = styled.div`
   align-items: center;
 
   &:hover {
-    .swipers-prev,
-    .swipers-next {
-      opacity: 0.6;
+    ${Styled_Arrow} {
+      opacity: 1;
     }
   }
-`;
-
-export const Arrow = styled.div<ArrowProps>`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.5s ease;
-  width: 70px;
-  height: 220px;
-  z-index: 5;
-  left: ${(props) => (props.direction === 'next' ? 0 : 'calc(100% - 70px)')};
-  background-color: lightgray;
-  opacity: 0;
-`;
-
-export const Arrow_Direction = styled.img<ArrowProps>`
-  width: 50px;
-  height: 50px;
-  opacity: 1;
-  transform: ${(props) => (props.direction === 'prev' ? 'scaleX(-1)' : 'none')};
 `;
 
 export const Main_Carousel_Img = styled.img`
@@ -41,10 +29,12 @@ export const Main_Carousel_Img = styled.img`
   height: 100%;
   object-fit: cover;
   z-index: 1;
-  transition: all 0.7s ease-out;
+  filter: brightness(0.7);
+  transition: all 0.3s ease-out;
 
   :hover {
     scale: 1.1;
+    filter: brightness(1);
   }
 `;
 
@@ -55,5 +45,5 @@ export const Main_Title = styled.p`
   color: #f7f3f5;
   font-size: 4.5rem;
   font-weight: 500;
-  z-index: 2;
+  z-index: 999;
 `;

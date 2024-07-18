@@ -1,8 +1,65 @@
 import styled from '@emotion/styled';
+import dynamic from 'next/dynamic';
+const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
 
 export const Main = styled.main`
   margin: 0 auto;
-  border: 2px solid green;
+`;
+
+export const Main_Theme = styled.p`
+  position: absolute;
+  top: 55%;
+  z-index: 99;
+  width: 100%;
+  font-size: 3.5rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.8);
+  text-align: center;
+  transition: all 0.5s ease;
+  opacity: 0;
+`;
+
+export const VideoWrapper = styled.div`
+  position: relative;
+  transition: all 0.5 ease;
+
+  ::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+    opacity: 0;
+    transition: all 0.5s ease;
+    display: flex;
+    justify-content: center;
+  }
+
+  :hover::before {
+    background-color: gray;
+    opacity: 0.5;
+  }
+
+  :hover ${Main_Theme} {
+    opacity: 1;
+  }
+`;
+
+export const Styled_ReactPlayer = styled(ReactPlayer)`
+  position: relative;
+  ::after {
+    content: '';
+    display: block;
+    padding-bottom: 50%;
+  }
+  video {
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    object-fit: fill;
+  }
 `;
 
 export const BestItem_Section = styled.section`

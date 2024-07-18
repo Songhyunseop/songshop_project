@@ -1,15 +1,16 @@
+import { useRouter } from 'next/router';
 import Header from './header/header';
-import NavBar from './navigation/navBar/navBar';
 import * as S from './styles';
 
 export default function Layout({ children }) {
+  const router = useRouter();
+
   return (
     <S.Layout_Wrapper>
       <Header />
-      {/* <S.Nav_Sticky_Container>
-        <NavBar />
-      </S.Nav_Sticky_Container> */}
-      <S.Layout_Child>{children}</S.Layout_Child>
+      <S.Layout_Child isHeader={router.asPath === '/'}>
+        {children}
+      </S.Layout_Child>
     </S.Layout_Wrapper>
   );
 }
