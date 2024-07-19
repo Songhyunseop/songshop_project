@@ -82,7 +82,8 @@ export const Item_Section = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 20%;
+  align-items: center;
+  margin-bottom: 15%;
 `;
 
 export const Item = styled.div`
@@ -149,15 +150,16 @@ export const NewItem_Section = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 2px solid red;
 `;
 
 export const Item_List = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, minmax(50px, 1fr));
-  grid-gap: 1.5rem;
-  border: 2px solid yellowgreen;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  justify-items: center;
+  grid-gap: 30px;
+  overflow-y: auto;
+  border: 5px solid yellowgreen;
 `;
 
 export const Button = styled.button`
@@ -172,10 +174,34 @@ export const Button = styled.button`
   letter-spacing: 3px;
 `;
 
-export const Banner = styled.div`
-  height: 280px;
-  margin-top: 300px;
-  margin-bottom: 200px;
+export const Banner_Ad = styled.div`
+  transition: all 0.8s ease-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: ${(props) => (props.prev ? 2 : 1)};
+  background-color: ${(props) => (props.prev ? 'blue' : 'pink')};
+`;
+
+export const Banner = styled.article`
+  height: 450px;
+  background-color: gray;
+  margin-top: 200px;
+  margin-bottom: 15%;
+  position: relative;
+
+  ::hover {
+    ${Banner_Ad} {
+      width: ${(props) => (props.prev ? '100%' : '100%')};
+    }
+  }
+`;
+
+export const RandomPick = styled.article`
+  height: 480px;
+  margin-bottom: 15%;
   background-color: gray;
 `;
 

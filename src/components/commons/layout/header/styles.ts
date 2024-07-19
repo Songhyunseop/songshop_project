@@ -18,7 +18,6 @@ export const Header_Main = styled.section`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #d2d2d2;
   padding: 0 3%;
 `;
 
@@ -27,31 +26,6 @@ export const Main_Left = styled.div`
   display: flex;
   align-items: center;
   min-width: 300px;
-`;
-
-export const Styled_Link = styled(Link)`
-  text-decoration-line: none;
-  color: black;
-  transition: all 0.3s ease-out;
-  font-size: 1.3rem;
-  font-weight: 300;
-
-  &:hover {
-    color: #e2c2b3;
-  }
-  /* position: relative; */
-  /* width: 200px;
-  font-size: 1.65rem;
-  font-weight: 300;
-  text-decoration-line: none;
-  color: black;
-  cursor: pointer;
-  transition: all 0.3s ease-out;
-  border: 2px solid red;
-
-  &:hover {
-    color: #e2c2b3;
-  } */
 `;
 
 export const Main_Right = styled.div`
@@ -65,11 +39,10 @@ export const Main_Title = styled.p``;
 
 export const Styled_TitleLink = styled(Link)`
   text-decoration-line: none;
-  color: #544d4e;
   font-size: 2rem;
   font-weight: 500;
   letter-spacing: 0.3rem;
-  /* margin-right: 1px; */
+  color: ${(props) => (props.isScrolled ? 'black' : 'white')};
 `;
 
 export const Search_Box = styled.input`
