@@ -96,8 +96,6 @@ export default function AddItemModalContents() {
   const changeContent = (e) => {
     const rrr = editorRef.current.getInstance().getSelectedText();
     console.log(rrr);
-    // const kkk = editorRef.current.getInstance().getSelection();
-    // console.log(kkk);
   };
 
   const { mutateAsync: uploadFiles } = useUploadToStorage();
@@ -105,8 +103,6 @@ export default function AddItemModalContents() {
   const { mutateAsync: createProduct } = useMutationCreateProduct();
 
   const submitBoard = async (formData) => {
-    console.log(formData);
-
     if (editorRef.current) {
       const textData = editorRef.current.getInstance().getHTML();
       formData.description = textData;
@@ -127,13 +123,11 @@ export default function AddItemModalContents() {
       product_img: formData.previewImages,
       stock: formData.stocks,
     };
-
-    const rr = await createProduct(userInputData);
-    console.log(123, rr);
+    await createProduct(userInputData);
   };
 
   return (
-    <>
+    <S.AddItem_Content_Wrapper>
       <S.Modal_Header>상품추가</S.Modal_Header>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(submitBoard)}>
@@ -176,6 +170,6 @@ export default function AddItemModalContents() {
           </S.Modal_Body>
         </form>
       </FormProvider>
-    </>
+    </S.AddItem_Content_Wrapper>
   );
 }

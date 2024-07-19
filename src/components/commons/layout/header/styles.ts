@@ -26,30 +26,7 @@ export const Main_Left = styled.div`
   width: 40%;
   display: flex;
   align-items: center;
-  min-width: 550px;
-`;
-
-export const User_SelectNav = styled.nav`
-  height: 100%;
-  display: flex;
-  align-items: center;
-`;
-
-export const Nav_List = styled.ul`
-  width: 100%;
-  height: 100%;
-  list-style-type: none;
-  display: flex;
-`;
-
-export const NavLi = styled.li`
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: black;
-  cursor: pointer;
-  padding: 0 3%;
+  min-width: 300px;
 `;
 
 export const Styled_Link = styled(Link)`
@@ -78,9 +55,10 @@ export const Styled_Link = styled(Link)`
 `;
 
 export const Main_Right = styled.div`
+  width: 45%;
+  /* min-width: 680px; */
   display: flex;
   align-items: center;
-  border: 3px solid green;
 `;
 
 export const Main_Title = styled.p``;
@@ -91,14 +69,14 @@ export const Styled_TitleLink = styled(Link)`
   font-size: 2rem;
   font-weight: 500;
   letter-spacing: 0.3rem;
-  padding-top: 0.3rem;
-  margin-right: 1.5rem;
+  /* margin-right: 1px; */
 `;
 
 export const Search_Box = styled.input`
-  max-width: 260px;
+  /* width: 17vw; */
   width: 100%;
-  height: 30px;
+  height: 100%;
+  flex: 1;
 `;
 
 export const Basket = styled.img`
@@ -108,4 +86,26 @@ export const Basket = styled.img`
   margin-left: 1rem;
 `;
 
-export const Nav_Bar = styled.nav``;
+export const Nav_Bar = styled.nav`
+  width: 100%;
+  ul {
+    width: 100%;
+    min-height: 40px;
+    list-style-type: none;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    cursor: pointer;
+    padding: 0 2%;
+
+    :nth-of-type(5) {
+      flex: 1;
+    }
+  }
+`;

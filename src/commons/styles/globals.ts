@@ -11,31 +11,28 @@ const globalStyle = css`
 
   // main 캐러셀
   .main_swiper {
+    position: relative;
     width: 100%;
-    height: 700px;
   }
 
   .main_swiper .swiper-slide {
-    /* border: 2px solid blue; */
-    position: relative;
-    overflow: hidden;
+    padding-bottom: 50%;
+    min-height: 400px;
   }
 
   .swiper-pagination {
     display: none;
   }
 
-  // item 캐러셀
+  // item 캐러셀 (상품정보)
   .item_swiper {
+    position: relative;
     width: 100%;
   }
 
   .item_swiper .swiper-slide {
-    max-width: 320px;
-    max-height: 320px;
-    display: flex;
-    justify-content: center;
-    overflow: hidden;
+    height: 450px;
+    /* padding-bottom: 25%; */
   }
 
   // detail 캐러셀
@@ -67,6 +64,7 @@ const globalStyle = css`
     /* font-size: 1rem; */
   }
 
+  // 폰트
   @font-face {
     font-family: 'NanumSquareNeo';
     font-style: normal;

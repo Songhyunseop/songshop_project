@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dynamic from 'next/dynamic';
 const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
 
@@ -17,6 +18,15 @@ export const Main_Theme = styled.p`
   text-align: center;
   transition: all 0.5s ease;
   opacity: 0;
+
+  ::after {
+    content: 'WELCOME TO SONGSHOP';
+    position: absolute;
+    top: 100%;
+    right: 50%;
+    transform: translateX(50%);
+    font-size: 1.5rem;
+  }
 `;
 
 export const VideoWrapper = styled.div`
@@ -62,12 +72,17 @@ export const Styled_ReactPlayer = styled(ReactPlayer)`
   }
 `;
 
-export const BestItem_Section = styled.section`
+export const Main_Body = styled.section`
+  margin-top: 10%;
+  padding: 0 8%;
+`;
+
+export const Item_Section = styled.section`
+  position: relative; // 카테고리 nav 표시용 포지셔닝
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  margin-top: 200px;
+  margin-bottom: 20%;
 `;
 
 export const Item = styled.div`
@@ -77,10 +92,50 @@ export const Item = styled.div`
   background-color: gray;
 `;
 
-export const Section_Title = styled.span`
+export const ToggleItemBtn = styled(FontAwesomeIcon)`
+  cursor: pointer;
+  position: absolute;
+  font-size: 2rem;
+  margin-left: 10px;
+`;
+
+export const Section_Title = styled.div`
+  width: 100%;
   font-size: 2.6rem;
-  font-weight: 300;
-  margin-bottom: 40px;
+  font-weight: 400;
+  margin-bottom: 55px;
+  position: relative;
+  z-index: 30;
+  background-color: white;
+  border-bottom: 1px solid #000000;
+  transition: all 0.5s ease-in; // DOM 접근으로 margin 값 변경에 대한 트랜지션
+`;
+
+export const Category_Bar = styled.nav`
+  width: 30%;
+  min-width: 450px;
+  padding: 5px 5px;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  transition: all 0.5s ease-in;
+  transform: ${(props) => (props.isNav ? 'translateY(100%)' : 'auto')};
+
+  ul {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    list-style: none;
+    padding-top: 10px;
+    font-size: 1.5rem;
+
+    li {
+      font-weight: 400;
+    }
+  }
 `;
 
 export const Item_Carousel = styled.div`

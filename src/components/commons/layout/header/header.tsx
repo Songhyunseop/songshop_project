@@ -32,26 +32,6 @@ export default function Header() {
         <S.Header_Main>
           <S.Main_Left>
             <S.Styled_TitleLink href={'/'}>SONGSHOP</S.Styled_TitleLink>
-            {/* <S.User_SelectNav> */}
-            <S.Nav_List>
-              <S.NavLi>
-                <S.Styled_Link href={'/signIn'}>LOGIN</S.Styled_Link>
-              </S.NavLi>
-              <S.NavLi>
-                <S.Styled_Link href={'/signUp'}>JOIN</S.Styled_Link>
-              </S.NavLi>
-              <S.NavLi>
-                <S.Styled_Link href={'/'}>REVIEWS</S.Styled_Link>
-              </S.NavLi>
-              <S.NavLi>
-                <S.Styled_Link href={'/'}>MYPAGE</S.Styled_Link>
-              </S.NavLi>
-            </S.Nav_List>
-            {/* </S.User_SelectNav> */}
-          </S.Main_Left>
-
-          <S.Main_Right>
-            <S.Search_Box></S.Search_Box>
             <Link
               href={{
                 pathname: '/items',
@@ -62,6 +42,27 @@ export default function Header() {
             >
               <S.Basket src='/bag.png' />
             </Link>
+          </S.Main_Left>
+          <S.Main_Right>
+            <S.Nav_Bar>
+              <ul>
+                <li>
+                  <S.Styled_Link href={'/signIn'}>LOGIN</S.Styled_Link>
+                </li>
+                <li>
+                  <S.Styled_Link href={'/signUp'}>JOIN</S.Styled_Link>
+                </li>
+                <li>
+                  <S.Styled_Link href={'/'}>REVIEWS</S.Styled_Link>
+                </li>
+                <li>
+                  <S.Styled_Link href={'/'}>MYPAGE</S.Styled_Link>
+                </li>
+                <li>
+                  <S.Search_Box></S.Search_Box>
+                </li>
+              </ul>
+            </S.Nav_Bar>
           </S.Main_Right>
         </S.Header_Main>
       </S.Header_Wrapper>

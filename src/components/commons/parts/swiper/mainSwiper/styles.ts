@@ -12,7 +12,6 @@ export const Styled_Arrow = styled(FontAwesomeIcon)`
 `;
 
 export const Wrapper = styled.div`
-  position: relative;
   display: flex;
   align-items: center;
 
@@ -23,22 +22,7 @@ export const Wrapper = styled.div`
   }
 `;
 
-export const Main_Carousel_Img = styled.img`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
-  filter: brightness(0.7);
-  transition: all 0.3s ease-out;
-
-  :hover {
-    scale: 1.1;
-    filter: brightness(1);
-  }
-`;
-
-export const Main_Title = styled.p`
+export const Main_Carousel_Title = styled.p`
   position: absolute;
   bottom: 10px;
   padding-left: 10px;
@@ -46,4 +30,22 @@ export const Main_Title = styled.p`
   font-size: 4.5rem;
   font-weight: 500;
   z-index: 999;
+  transition: all 0.3s ease-out;
+`;
+
+export const Main_Carousel_Img = styled.img`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /* object-fit: cover; */
+  filter: brightness(0.7);
+  transition: all 0.3s ease-out;
+
+  :hover {
+    + ${Main_Carousel_Title} {
+      scale: 1.1;
+    }
+    scale: 1.1;
+    filter: brightness(1);
+  }
 `;

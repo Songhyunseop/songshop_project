@@ -1,6 +1,11 @@
 import styled from '@emotion/styled';
 import { ColorPicker } from 'react-color-palette';
 
+export const AddItem_Content_Wrapper = styled.main`
+  width: 55vw;
+  height: 65vh;
+`;
+
 export const Modal_Header = styled.header`
   position: sticky;
   z-index: 9999;

@@ -7,8 +7,6 @@ export const StyledModal = styled(ReactModal)`
   background-color: white;
   position: absolute;
   z-index: 9999;
-  height: 60vh;
-  width: 80%;
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
