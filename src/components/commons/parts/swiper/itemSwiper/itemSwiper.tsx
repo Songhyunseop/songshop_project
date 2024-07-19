@@ -8,7 +8,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { useState } from 'react';
 import {
-  faAngleDoubleLeft,
   faCircleChevronLeft,
   faCircleChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
@@ -18,13 +17,6 @@ export default function ItemSwiper() {
 
   return (
     <S.Wrapper>
-      {/* <S.Arrow
-        onClick={() => swiper?.slidePrev()}
-        className='swiper-prev'
-        direction='next'
-      >
-        <S.Arrow_Direction src='/arrow.png' direction='next' />
-      </S.Arrow> */}
       <S.Styled_Arrow
         onClick={() => swiper?.slidePrev()}
         className='swipers-prev'
@@ -73,13 +65,6 @@ export default function ItemSwiper() {
         fontSize={100}
         color={'white'}
       ></S.Styled_Arrow>
-      {/* <S.Arrow
-        onClick={() => swiper?.slideNext()}
-        className='swiper-next'
-        direction='prev'
-      >
-        <S.Arrow_Direction src='/arrow.png' direction='prev' />
-      </S.Arrow> */}
     </S.Wrapper>
   );
 }

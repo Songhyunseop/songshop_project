@@ -145,44 +145,6 @@ export const Item_Carousel = styled.div`
   border: 2px solid blue;
 `;
 
-export const Board_Section = styled.section`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 30px;
-  margin-bottom: 200px;
-  border: 2px solid red;
-`;
-
-export const Board_Box = styled.div`
-  height: 400px;
-  position: relative;
-  z-index: 0;
-  transition: all 0.5s ease-in-out;
-  opacity: 1;
-
-  &.hovered {
-    opacity: 0;
-  }
-
-  &:nth-of-type(1):hover {
-    margin-right: -60%;
-    background-color: black;
-    color: white;
-    z-index: 1;
-  }
-
-  &:nth-of-type(1):hover ~ :nth-of-type(2) {
-    opacity: 0;
-  }
-
-  &:nth-of-type(2):hover {
-    margin-left: -60%;
-    background-color: black;
-    color: white;
-    z-index: 1;
-  }
-`;
-
 export const NewItem_Section = styled.section`
   display: flex;
   flex-direction: column;

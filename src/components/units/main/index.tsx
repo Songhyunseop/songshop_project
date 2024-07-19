@@ -9,8 +9,8 @@ import { useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { getDataList } from '@/components/commons/hooks/query/useQueryGetAllProducts';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
+import ToggleNav from '@/components/commons/layout/navigation/toggleCategorynav/toggleCategorynav';
 
 export default function Main() {
   const videoUrls = ['/videos/shopvid1.mp4', '/videos/shopvid2.mp4'];
@@ -24,7 +24,7 @@ export default function Main() {
 
   const [count, setCount] = useState(8);
   const [phrase, setPhrase] = useState(randomPhrases[0]);
-  const [isNav, setIsNav] = useState(false);
+  const [isNav, setIsNav] = useState({ best: false, new: false });
 
   // 추후 리팩토링 시 관련 폴더로 옮길코드
   const { data, isLoading, isError } = useQuery({
@@ -47,36 +47,51 @@ export default function Main() {
     setPhrase(randomPhrases[index]);
   };
 
-  const delayChagePhrase = () => {
+  const delaytoTrigger = () => {
     check = setTimeout(() => {
       isThrottle.current = false;
     }, 1000);
   };
 
-  const clickToggle = (e) => {
-    console.log(e.target);
-    const nav = document.querySelector('.nav');
-    const parent = nav?.previousSibling as HTMLElement;
+  const clickToggle = (className: string) => {
+    type navTypeProps = { best: boolean; new: boolean };
 
-    if (nav && parent) {
-      const margin = getComputedStyle(parent).marginBottom;
-      console.log(margin, isNav);
-      const result = isNav
-        ? parseInt(margin) - parseInt(nav.offsetHeight)
-        : parseInt(margin) + parseInt(nav.offsetHeight);
+    const navType = className as keyof navTypeProps;
 
-      if (parent) parent.style.marginBottom = `${result}px`;
+    const changeStyle = () => {
+      if (isThrottle.current) {
+        clearTimeout(check);
+        return;
+      }
+      isThrottle.current = true;
 
-      setIsNav((prev) => !prev);
-    }
+      const nav = document.querySelector(`.${navType}`) as HTMLElement;
+      const parent = nav?.previousSibling as HTMLElement;
+
+      if (nav && parent) {
+        const margin = getComputedStyle(parent).marginBottom;
+
+        const result = isNav[navType]
+          ? parseInt(margin) - nav.offsetHeight
+          : parseInt(margin) + nav.offsetHeight;
+
+        parent.style.marginBottom = `${result}px`;
+        nav.style.transform = isNav[navType] ? 'none' : 'translateY(100%)';
+
+        setIsNav((prev) => {
+          return { ...prev, [navType]: !prev[navType] };
+        });
+
+        delaytoTrigger();
+      }
+    };
+
+    return changeStyle;
   };
 
   return (
     <S.Main>
-      <S.VideoWrapper
-        onMouseEnter={changePhrase}
-        onMouseLeave={delayChagePhrase}
-      >
+      <S.VideoWrapper onMouseEnter={changePhrase} onMouseLeave={delaytoTrigger}>
         <S.Main_Theme>{phrase}</S.Main_Theme>
         <S.Styled_ReactPlayer
           url={videoUrls}
@@ -92,27 +107,25 @@ export default function Main() {
         <S.Item_Section>
           <S.Section_Title>
             {' BEST ITEM '}
-            <S.ToggleItemBtn icon={faSortDown} onClick={clickToggle} />
+            <S.ToggleItemBtn icon={faSortDown} onClick={clickToggle('best')} />
           </S.Section_Title>
-          <S.Category_Bar className='nav' isNav={isNav}>
-            <ul>
-              <li>{'OUTWEAR'}</li>
-              <li>{'TOP'}</li>
-              <li>{'BOTTOM'}</li>
-              <li>{'SHOES'}</li>
-              <li>{'BAG'}</li>
-              <li>{'ACC'}</li>
-            </ul>
-          </S.Category_Bar>
+          <ToggleNav
+            className={'best'}
+            list={['OUTWEAR', 'TOP', 'BOTTOM', 'SHOES', 'BAG', 'ACC']}
+            isOpen={isNav.best}
+          />
           <ItemSwiper />
         </S.Item_Section>
-        {/* <S.Board_Section>
-          <S.Board_Box>광고용 네비게이션자리 폰트</S.Board_Box>
-          <S.Board_Box>광고용 네비게이션자리 폰트</S.Board_Box>
-        </S.Board_Section> */}
         <S.Item_Section>
-          <S.Section_Title>NEW ITEM</S.Section_Title>
-          <S.Category_Bar className='nav' isNav={isNav}></S.Category_Bar>
+          <S.Section_Title>
+            {'NEW ITEM'}
+            <S.ToggleItemBtn icon={faSortDown} onClick={clickToggle('new')} />
+          </S.Section_Title>
+          <ToggleNav
+            className={'new'}
+            list={['OUTWEAR', 'TOP', 'BOTTOM', 'SHOES', 'BAG', 'ACC']}
+            isOpen={isNav.new}
+          />
           <S.Item_List>
             {new Array(count).fill(1).map((el, idx) => (
               <ItemBox key={idx} />

@@ -32,5 +32,5 @@ export const Styled_Arrow = styled(FontAwesomeIcon)`
     props.direction === 'next'
       ? '10px'
       : 'calc(100% - 74px)'}; // fontawesome icon 너비크기와 + 왼쪽 간격 10px
-  opacity: 0.6;
+  opacity: 0.3;
 `;
