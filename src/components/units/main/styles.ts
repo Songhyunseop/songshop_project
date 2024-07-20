@@ -92,6 +92,10 @@ export const ToggleItemBtn = styled(FontAwesomeIcon)`
   position: absolute;
   font-size: 2rem;
   margin-left: 10px;
+
+  path {
+    pointer-events: none;
+  }
 `;
 
 export const Section_Title = styled.div`
@@ -151,7 +155,7 @@ export const Item_List = styled.div<{ minWidth: number }>`
   grid-template-columns: ${({ minWidth }) =>
     `repeat(auto-fit, minmax(${minWidth}px, 1fr))`};
 
-  gap: 20px;
+  gap: 50px 20px;
   overflow-y: auto;
   border: 10px solid yellowgreen;
 `;
@@ -169,29 +173,17 @@ export const Button = styled.button`
 `;
 
 export const Recommend = styled.article`
-  border: 3px solid orange;
   margin-bottom: 15%;
-  padding: 0 5% 5% 5%;
+  padding: 0 7% 5% 7%;
   background-color: rgba(64, 50, 52, 0.1);
-  /* position: relative; */
   display: flex;
-
-  /* 
-  ::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-  } */
+  position: relative;
 `;
 
 export const Recommend_Left = styled.article`
   width: 60%;
   display: flex;
   flex-direction: column;
-  border: 2px solid red;
 `;
 
 export const Recommend_Top = styled.div`
@@ -219,11 +211,12 @@ export const Recommend_Title = styled.span`
   transform: translateX(-50%);
 `;
 
-export const Select_Tag = styled.span`
+export const Select_Tag = styled.span<{ selected: number }>`
   cursor: pointer;
   font-size: 1.4rem;
   font-weight: 400;
   padding: 0 3%;
+  color: ${({ selected }) => (selected ? 'black' : 'lightgray')};
 `;
 
 export const Recommend_Bottom = styled.div`
@@ -237,15 +230,15 @@ export const Recommend_Bottom = styled.div`
 
 export const Recommend_Right = styled.article`
   width: 40%;
-  object-fit: cover;
-  /* margin-left: 70px; */
-  border: 2px solid green;
+  margin-left: 50px;
+  position: relative;
 `;
 
 export const StyledImage = styled(Image)`
   width: 100%;
-  height: 100%;
-  /* object-fit: cover; */
+  /* height: 100%; */
+  height: auto;
+  object-fit: cover;
 `;
 
 export const Review_Section = styled.section`

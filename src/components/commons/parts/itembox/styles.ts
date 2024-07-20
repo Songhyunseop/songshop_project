@@ -3,15 +3,13 @@ import styled from '@emotion/styled';
 export const ItemBox = styled.div<{ height: number }>`
   position: relative;
   width: 100%;
-  min-width: 300px;
+  min-width: 280px;
   max-height: 700px;
   font-size: 2rem;
   background-color: gray;
-  border: 3px solid blue;
 
   // width값에 따라 padding으로 비율 유지
   &:before {
-    /* width: 100%; */
     content: '';
     display: block;
     padding-bottom: ${({ height }) => `${height}%`};

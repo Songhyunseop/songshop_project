@@ -5,13 +5,13 @@ import ItemSwiper from '@/components/commons/parts/swiper/itemSwiper/itemSwiper'
 
 import ItemBox from '@/components/commons/parts/itembox/itembox';
 
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { throttle } from '@/commons/utils/throttle';
 
 import { getDataList } from '@/components/commons/hooks/query/useQueryGetAllProducts';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import ToggleNav from '@/components/commons/layout/navigation/toggleCategorynav/toggleCategorynav';
-import Image from 'next/image';
 
 export default function Main() {
   const videoUrls = ['/videos/shopvid1.mp4', '/videos/shopvid2.mp4'];
@@ -39,65 +39,69 @@ export default function Main() {
     queryFn: getDataList,
   });
 
-  // throttle 설정
-  const isThrottle = useRef(false);
-  let check: ReturnType<typeof setTimeout>;
+  // 화면 문구 변환 함수
+  const usePhraseChanger = () => {
+    let isRunning = false;
+    let timer: ReturnType<typeof setTimeout>;
 
-  const changePhrase = () => {
-    if (isThrottle.current) {
-      clearTimeout(check);
-      return;
-    }
-    isThrottle.current = true;
+    const changePhrase = () => {
+      const index = Math.floor(Math.random() * 5);
 
-    const index = Math.floor(Math.random() * 5);
-    setPhrase(randomPhrases[index]);
-  };
-
-  const delaytoTrigger = () => {
-    check = setTimeout(() => {
-      isThrottle.current = false;
-    }, 1000);
-  };
-
-  const clickToggle = (className: string) => {
-    type navTypeProps = { best: boolean; new: boolean };
-    const navType = className as keyof navTypeProps;
-
-    const changeStyle = () => {
-      if (isThrottle.current) {
-        clearTimeout(check);
-        return;
-      }
-      isThrottle.current = true;
-
-      const nav = document.querySelector(`.${navType}`) as HTMLElement;
-      const parent = nav?.previousSibling as HTMLElement;
-
-      if (nav && parent) {
-        const margin = getComputedStyle(parent).marginBottom;
-
-        const result = isNav[navType]
-          ? parseInt(margin) - nav.offsetHeight
-          : parseInt(margin) + nav.offsetHeight;
-
-        parent.style.marginBottom = `${result}px`;
-        nav.style.transform = isNav[navType] ? 'none' : 'translateY(100%)';
-
-        setIsNav((prev) => {
-          return { ...prev, [navType]: !prev[navType] };
-        });
-
-        delaytoTrigger();
-      }
+      return randomPhrases[index];
     };
 
-    return changeStyle;
+    const delaytoTrigger = () => {
+      if (isRunning) clearTimeout(timer);
+
+      isRunning = true;
+      timer = setTimeout(() => {
+        const phrase = changePhrase();
+        setPhrase(phrase);
+        isRunning = false;
+      }, 2000);
+    };
+
+    return { delaytoTrigger };
+  };
+
+  const { delaytoTrigger } = usePhraseChanger();
+
+  //토글 인자 타입
+  type navTypeProps = { best: boolean; new: boolean };
+
+  const showCategory = (e) => {
+    const navType = e.target.id as keyof navTypeProps;
+    const nav = document.querySelector(`.${navType}Item`) as HTMLElement;
+    const parent = nav?.previousSibling as HTMLElement;
+
+    if (nav && parent) {
+      const margin = getComputedStyle(parent).marginBottom;
+
+      const result = isNav[navType]
+        ? parseInt(margin) - nav.offsetHeight
+        : parseInt(margin) + nav.offsetHeight;
+
+      parent.style.marginBottom = `${result}px`;
+      nav.style.transform = isNav[navType] ? 'none' : 'translateY(100%)';
+
+      setIsNav((prev) => {
+        return { ...prev, [navType]: !prev[navType] };
+      });
+    }
+  };
+
+  // select 클릭
+  const [selected, setSelected] = useState(0);
+
+  const clickRecommend = (e) => {
+    const selectOne = Number(e.target.id);
+
+    setSelected(selectOne);
   };
 
   return (
     <S.Main>
-      <S.VideoWrapper onMouseEnter={changePhrase} onMouseLeave={delaytoTrigger}>
+      <S.VideoWrapper onMouseLeave={delaytoTrigger}>
         <S.Main_Theme>{phrase}</S.Main_Theme>
         <S.Styled_ReactPlayer
           url={videoUrls}
@@ -113,10 +117,15 @@ export default function Main() {
         <S.Item_Section>
           <S.Section_Title>
             {' BEST ITEM '}
-            <S.ToggleItemBtn icon={faSortDown} onClick={clickToggle('best')} />
+
+            <S.ToggleItemBtn
+              onClick={throttle(showCategory, 600)}
+              icon={faSortDown}
+              id='best'
+            />
           </S.Section_Title>
           <ToggleNav
-            className={'best'}
+            className={'bestItem'}
             list={['OUTWEAR', 'TOP', 'BOTTOM', 'SHOES', 'BAG', 'ACC']}
             isOpen={isNav.best}
           />
@@ -125,14 +134,18 @@ export default function Main() {
         <S.Item_Section>
           <S.Section_Title>
             {'NEW ITEM'}
-            <S.ToggleItemBtn icon={faSortDown} onClick={clickToggle('new')} />
+            <S.ToggleItemBtn
+              icon={faSortDown}
+              id='new'
+              onClick={throttle(showCategory, 600)}
+            />
           </S.Section_Title>
           <ToggleNav
-            className={'new'}
+            className={'newItem'}
             list={['OUTWEAR', 'TOP', 'BOTTOM', 'SHOES', 'BAG', 'ACC']}
             isOpen={isNav.new}
           />
-          <S.Item_List minWidth={350}>
+          <S.Item_List minWidth={280}>
             {new Array(15).fill(1).map((el, idx) => (
               <ItemBox key={idx} height={130} />
             ))}
@@ -146,8 +159,15 @@ export default function Main() {
             <S.Recommend_Title>SELECT</S.Recommend_Title>
           </S.Recommend_Top>
           <S.Select_Bar>
-            {selectTag.map((tag) => (
-              <S.Select_Tag key={tag}>{tag}</S.Select_Tag>
+            {selectTag.map((tag, idx) => (
+              <S.Select_Tag
+                key={tag}
+                id={String(idx)}
+                selected={idx === selected}
+                onClick={clickRecommend}
+              >
+                {tag}
+              </S.Select_Tag>
             ))}
           </S.Select_Bar>
           <S.Recommend_Bottom>
@@ -162,19 +182,18 @@ export default function Main() {
           <S.StyledImage
             src={'/carousel2.jpeg'}
             alt='selectProfiles'
-            width={0}
-            height={0}
-            // layout='responsive'
-            sizes={`(max-width: 1200px) 80vw,
-              (max-width: 828px)  50vw,
-              (max-width: 640px) 30vw`}
+            priority
+            fill
+            sizes={`(min-width: 1200px) 70vw,
+              (min-width: 828px)  50vw,
+              (min-width: 640px) 30vw`}
           />
         </S.Recommend_Right>
       </S.Recommend>
       <S.Review_Section>
         <S.Section_Title>REVIEWS</S.Section_Title>
-        <S.Item_List minWidth={150}>
-          {new Array(4).fill(1).map((el, idx) => (
+        <S.Item_List minWidth={250}>
+          {new Array(4).fill(1).map((_, idx) => (
             <ItemBox key={idx} height={100} />
           ))}
         </S.Item_List>
