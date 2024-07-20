@@ -28,11 +28,12 @@ const globalStyle = css`
   .item_swiper {
     position: relative;
     width: 100%;
+    max-height: 450px;
   }
 
   .item_swiper .swiper-slide {
-    height: 450px;
-    /* padding-bottom: 25%; */
+    min-height: 400px;
+    padding-bottom: 50%;
   }
 
   // detail 캐러셀

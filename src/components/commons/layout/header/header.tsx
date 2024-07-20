@@ -1,8 +1,6 @@
-import Link from 'next/link';
 import * as S from './styles';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { css } from '@emotion/react';
 import CustomLink from '../../parts/link/link';
 
 export default function Header() {

@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
 
 export const Main = styled.main`
@@ -74,7 +75,7 @@ export const Styled_ReactPlayer = styled(ReactPlayer)`
 
 export const Main_Body = styled.section`
   margin-top: 10%;
-  padding: 0 8%;
+  padding: 0 5%;
 `;
 
 export const Item_Section = styled.section`
@@ -83,14 +84,7 @@ export const Item_Section = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 15%;
-`;
-
-export const Item = styled.div`
-  width: 300px;
-  height: 350px;
-  border: 1px solid black;
-  background-color: gray;
+  margin-bottom: 10%;
 `;
 
 export const ToggleItemBtn = styled(FontAwesomeIcon)`
@@ -143,7 +137,6 @@ export const Item_Carousel = styled.div`
   width: 100%;
   height: 250px;
   margin-bottom: 200px;
-  border: 2px solid blue;
 `;
 
 export const NewItem_Section = styled.section`
@@ -152,14 +145,15 @@ export const NewItem_Section = styled.section`
   align-items: center;
 `;
 
-export const Item_List = styled.div`
+export const Item_List = styled.div<{ minWidth: number }>`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  justify-items: center;
-  grid-gap: 30px;
+  grid-template-columns: ${({ minWidth }) =>
+    `repeat(auto-fit, minmax(${minWidth}px, 1fr))`};
+
+  gap: 20px;
   overflow-y: auto;
-  border: 5px solid yellowgreen;
+  border: 10px solid yellowgreen;
 `;
 
 export const Button = styled.button`
@@ -174,41 +168,91 @@ export const Button = styled.button`
   letter-spacing: 3px;
 `;
 
-export const Banner_Ad = styled.div`
-  transition: all 0.8s ease-out;
+export const Recommend = styled.article`
+  border: 3px solid orange;
+  margin-bottom: 15%;
+  padding: 0 5% 5% 5%;
+  background-color: rgba(64, 50, 52, 0.1);
+  /* position: relative; */
+  display: flex;
+
+  /* 
+  ::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+  } */
+`;
+
+export const Recommend_Left = styled.article`
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid red;
+`;
+
+export const Recommend_Top = styled.div`
+  min-height: 150px;
+  border: 2px solid red;
+  position: relative;
+  padding-bottom: 15%;
+`;
+
+export const Select_Bar = styled.div`
+  border: 5px solid green;
+  padding: 0 50px;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  padding: 1.5% 0 1.5% 0;
+`;
+
+export const Recommend_Title = styled.span`
   position: absolute;
-  top: 0;
-  left: 0;
+  font-size: 3rem;
+  font-weight: 400;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+`;
+
+export const Select_Tag = styled.span`
+  cursor: pointer;
+  font-size: 1.4rem;
+  font-weight: 400;
+  padding: 0 3%;
+`;
+
+export const Recommend_Bottom = styled.div`
+  width: 100%;
+  border: 7px solid red;
+  display: flex;
+  gap: 20px;
+  margin-top: 8%;
+  overflow-x: auto;
+`;
+
+export const Recommend_Right = styled.article`
+  width: 40%;
+  object-fit: cover;
+  /* margin-left: 70px; */
+  border: 2px solid green;
+`;
+
+export const StyledImage = styled(Image)`
   width: 100%;
   height: 100%;
-  z-index: ${(props) => (props.prev ? 2 : 1)};
-  background-color: ${(props) => (props.prev ? 'blue' : 'pink')};
-`;
-
-export const Banner = styled.article`
-  height: 450px;
-  background-color: gray;
-  margin-top: 200px;
-  margin-bottom: 15%;
-  position: relative;
-
-  ::hover {
-    ${Banner_Ad} {
-      width: ${(props) => (props.prev ? '100%' : '100%')};
-    }
-  }
-`;
-
-export const RandomPick = styled.article`
-  height: 480px;
-  margin-bottom: 15%;
-  background-color: gray;
+  /* object-fit: cover; */
 `;
 
 export const Review_Section = styled.section`
-  height: 600px;
+  /* height: 600px; */
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0 5%;
   border: 2px solid red;
 `;
