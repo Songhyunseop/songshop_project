@@ -7,6 +7,7 @@ export const ItemBox = styled.div<{ height: number }>`
   max-height: 700px;
   font-size: 2rem;
   background-color: gray;
+  border: 2px solid red;
 
   // width값에 따라 padding으로 비율 유지
   &:before {

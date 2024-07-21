@@ -43,7 +43,7 @@ export const StyledLink = styled(Link)`
 
 export const Link_Wrapper = styled.div<{ type: keyof typeof linkStyles }>`
   ${StyledLink} {
-    color: ${(props) => getPropsResult(props)};
     ${({ type }) => linkStyles[type]}
+    color: ${(props) => getPropsResult(props)};
   }
 `;

@@ -220,12 +220,15 @@ export const Select_Tag = styled.span<{ selected: number }>`
 `;
 
 export const Recommend_Bottom = styled.div`
+  cursor: pointer;
   width: 100%;
-  border: 7px solid red;
+  border: 5px solid red;
   display: flex;
   gap: 20px;
   margin-top: 8%;
   overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 `;
 
 export const Recommend_Right = styled.article`
@@ -236,8 +239,6 @@ export const Recommend_Right = styled.article`
 
 export const StyledImage = styled(Image)`
   width: 100%;
-  /* height: 100%; */
-  height: auto;
   object-fit: cover;
 `;
 

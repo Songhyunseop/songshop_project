@@ -5,7 +5,7 @@ import ItemSwiper from '@/components/commons/parts/swiper/itemSwiper/itemSwiper'
 
 import ItemBox from '@/components/commons/parts/itembox/itembox';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { throttle } from '@/commons/utils/throttle';
 
@@ -29,7 +29,6 @@ export default function Main() {
     '캐쥬얼한 느낌 그대로 Casual',
   ];
 
-  const [count, setCount] = useState(8);
   const [phrase, setPhrase] = useState(randomPhrases[0]);
   const [isNav, setIsNav] = useState({ best: false, new: false });
 
@@ -50,13 +49,13 @@ export default function Main() {
       return randomPhrases[index];
     };
 
-    const delaytoTrigger = () => {
+    const delaytoTrigger = (e) => {
       if (isRunning) clearTimeout(timer);
 
       isRunning = true;
       timer = setTimeout(() => {
         const phrase = changePhrase();
-        setPhrase(phrase);
+        if (e._reactName === 'onMouseLeave') setPhrase(phrase);
         isRunning = false;
       }, 2000);
     };
@@ -99,9 +98,92 @@ export default function Main() {
     setSelected(selectOne);
   };
 
+  // mouseScroll
+  const [startX, setStartX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const mouseScrollRef = useRef(null);
+
+  const onMove = (e) => {
+    const leftMargin = mouseScrollRef.current.offsetLeft;
+    const viewPortX = e.clientX;
+
+    const xPosition = viewPortX - leftMargin;
+    const scrolledX = mouseScrollRef.current.scrollLeft;
+
+    setIsDragging(true);
+    setStartX(xPosition + scrolledX);
+  };
+
+  const onDrag = (e) => {
+    if (!isDragging) return;
+
+    const leftMargin = mouseScrollRef.current.offsetLeft;
+    const viewPortX = e.clientX;
+
+    const xPosition = viewPortX - leftMargin;
+
+    mouseScrollRef.current.scrollLeft = startX - xPosition;
+
+    //
+    //
+    //
+  };
+
+  const dragEnd = () => {
+    if (!isDragging) return;
+
+    const items = mouseScrollRef.current.children;
+    const containerLeft = mouseScrollRef.current.getBoundingClientRect().left;
+
+    let closestItem = items[0];
+
+    Array.from(items).forEach((item, idx) => {
+      const itemLeft = items[idx].getBoundingClientRect().left;
+
+      if (
+        Math.abs(itemLeft - containerLeft) <
+        Math.abs(closestItem.getBoundingClientRect().left)
+      ) {
+        // console.log('찾았당', Math.abs(itemLeft - containerLeft), idx);
+        closestItem = item;
+
+        console.log('타켓', closestItem.offsetLeft);
+        console.log('컨테이너', mouseScrollRef.current.scrollLeft);
+      }
+    });
+
+    smoothScrollTo(closestItem.offsetLeft, 200);
+
+    setIsDragging(false);
+  };
+
+  const smoothScrollTo = (targetX, duration) => {
+    const container = mouseScrollRef.current;
+    const startX = container.scrollLeft;
+    const startTime = performance.now();
+
+    const animateScroll = (currentTime) => {
+      const elapsedTime = currentTime - startTime;
+      const progress = Math.min(elapsedTime / duration, 1); // Progress 0~1
+      const easing = 0.5 - Math.cos(progress * Math.PI) / 2; // Ease-in-out
+
+      container.scrollLeft = startX + (targetX - startX) * easing;
+
+      if (progress < 1) {
+        requestAnimationFrame(animateScroll);
+      }
+    };
+
+    requestAnimationFrame(animateScroll);
+  };
+
   return (
     <S.Main>
-      <S.VideoWrapper onMouseLeave={delaytoTrigger}>
+      <S.VideoWrapper
+        onMouseEnter={delaytoTrigger}
+        onMouseLeave={delaytoTrigger}
+      >
         <S.Main_Theme>{phrase}</S.Main_Theme>
         <S.Styled_ReactPlayer
           url={videoUrls}
@@ -153,7 +235,7 @@ export default function Main() {
           <S.Button>MORE</S.Button>
         </S.Item_Section>
       </S.Main_Body>
-      <S.Recommend>
+      <S.Recommend className='recommend'>
         <S.Recommend_Left>
           <S.Recommend_Top>
             <S.Recommend_Title>SELECT</S.Recommend_Title>
@@ -170,7 +252,16 @@ export default function Main() {
               </S.Select_Tag>
             ))}
           </S.Select_Bar>
-          <S.Recommend_Bottom>
+          <S.Recommend_Bottom
+            ref={mouseScrollRef}
+            onMouseDown={onMove}
+            onMouseMove={throttle(onDrag, 30)}
+            onMouseUp={dragEnd}
+            onMouseLeave={dragEnd}
+          >
+            <ItemBox height={130} />
+            <ItemBox height={130} />
+            <ItemBox height={130} />
             <ItemBox height={130} />
             <ItemBox height={130} />
             <ItemBox height={130} />
@@ -182,11 +273,11 @@ export default function Main() {
           <S.StyledImage
             src={'/carousel2.jpeg'}
             alt='selectProfiles'
-            priority
             fill
             sizes={`(min-width: 1200px) 70vw,
               (min-width: 828px)  50vw,
               (min-width: 640px) 30vw`}
+            priority={true}
           />
         </S.Recommend_Right>
       </S.Recommend>
