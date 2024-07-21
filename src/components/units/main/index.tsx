@@ -134,27 +134,38 @@ export default function Main() {
     if (!isDragging) return;
 
     const items = mouseScrollRef.current.children;
+    const currentScrollX = mouseScrollRef.current.scrollLeft;
+
     const containerLeft = mouseScrollRef.current.getBoundingClientRect().left;
 
+    // 가장 근거리에 있는 아이템, 스크롤 상 타겟 위치 초기화
     let closestItem = items[0];
+    let targetPosition = 0;
 
     Array.from(items).forEach((item, idx) => {
       const itemLeft = items[idx].getBoundingClientRect().left;
 
-      if (
-        Math.abs(itemLeft - containerLeft) <
-        Math.abs(closestItem.getBoundingClientRect().left)
-      ) {
-        // console.log('찾았당', Math.abs(itemLeft - containerLeft), idx);
-        closestItem = item;
+      // distance 거리와 이전까지 가장가까운 item(clossest) 비교
+      const distance = Math.abs(itemLeft - containerLeft);
+      const currentClosest = Math.abs(closestItem.getBoundingClientRect().left);
 
-        console.log('타켓', closestItem.offsetLeft);
-        console.log('컨테이너', mouseScrollRef.current.scrollLeft);
+      if (distance < currentClosest) {
+        closestItem = item;
+        targetPosition = item.offsetLeft;
       }
     });
 
-    smoothScrollTo(closestItem.offsetLeft, 200);
+    const scrollWidth = mouseScrollRef.current.scrollWidth;
+    const clientWidth = mouseScrollRef.current.clientWidth;
 
+    const usuableScrollRange = scrollWidth - clientWidth;
+
+    // 좌, 우 끝에 도달 시 아이템 해당방향 밀착
+    if (currentScrollX === 0) targetPosition = 0;
+    if (currentScrollX === usuableScrollRange)
+      targetPosition = usuableScrollRange;
+
+    smoothScrollTo(targetPosition, 200);
     setIsDragging(false);
   };
 
@@ -165,7 +176,7 @@ export default function Main() {
 
     const animateScroll = (currentTime) => {
       const elapsedTime = currentTime - startTime;
-      const progress = Math.min(elapsedTime / duration, 1); // Progress 0~1
+      const progress = Math.min(elapsedTime / duration, 1);
       const easing = 0.5 - Math.cos(progress * Math.PI) / 2; // Ease-in-out
 
       container.scrollLeft = startX + (targetX - startX) * easing;
