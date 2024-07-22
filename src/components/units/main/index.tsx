@@ -1,4 +1,5 @@
 import * as S from './styles';
+import { Transition } from 'react-transition-group';
 
 import MainSWiper from '@/components/commons/parts/swiper/mainSwiper/mainSwiper';
 import ItemSwiper from '@/components/commons/parts/swiper/itemSwiper/itemSwiper';
@@ -24,9 +25,15 @@ export default function Main() {
   ];
 
   const selectTag = [
-    '다가오는 여름에 알맞은 Choice',
-    '집에서 입기 편한 데일리 룩',
-    '캐쥬얼한 느낌 그대로 Casual',
+    '#다가오는 여름에 알맞은 Choice',
+    '#집에서 입기 편한 데일리 룩',
+    '#캐쥬얼한 느낌 그대로 Casual',
+  ];
+
+  const selectMockDataImage = [
+    '/carousel1.jpeg',
+    '/carousel2.jpeg',
+    '/carousel3.jpeg',
   ];
 
   const [phrase, setPhrase] = useState(randomPhrases[0]);
@@ -94,11 +101,13 @@ export default function Main() {
 
   // select 클릭
   const [selected, setSelected] = useState(0);
+  const [selectData, setSelectedData] = useState(selectMockDataImage[0]);
 
   const clickRecommend = (e) => {
     const selectOne = Number(e.target.id);
 
     setSelected(selectOne);
+    setSelectedData(selectMockDataImage[selectOne]);
   };
 
   // mouseScroll
@@ -116,8 +125,6 @@ export default function Main() {
 
     setIsDragging(true);
     setStartX(xPosition + scrolledX);
-
-    console.log('이전', startX);
   };
 
   const onDrag = (e) => {
@@ -133,11 +140,10 @@ export default function Main() {
     }
   };
 
-  const [progress, setPropgress] = useState(0);
-
   const dragEnd = () => {
     if (!isDragging) return;
 
+    const container = mouseScrollRef.current;
     const items = mouseScrollRef.current.children;
     const currentScrollX = mouseScrollRef.current.scrollLeft;
 
@@ -156,15 +162,14 @@ export default function Main() {
 
       if (distance < currentClosest) {
         closestItem = item;
-        targetPosition = item.offsetLeft;
+        targetPosition = item.offsetLeft - container.offsetLeft;
       }
     });
 
-    const scrollWidth = mouseScrollRef.current.scrollWidth;
-    const clientWidth = mouseScrollRef.current.clientWidth;
+    const scrollWidth = container.scrollWidth;
+    const clientWidth = container.clientWidth;
 
     const ERROR_RANGE = 20;
-
     const usuableScrollRange = scrollWidth - clientWidth - ERROR_RANGE;
 
     // 좌, 우 끝에 도달 시 아이템 해당방향 밀착
@@ -172,28 +177,60 @@ export default function Main() {
     if (currentScrollX >= usuableScrollRange)
       targetPosition = usuableScrollRange;
 
-    const itemWidth = items[0].offsetWidth;
-    const gap = 20;
-
-    console.log('한 번 이동값', itemWidth + gap);
-    console.log('비례값', (itemWidth + gap) / usuableScrollRange);
-
     // 현재 스크롤 진행도 계산
     setTimeout(() => {
+      const scrollDistance = items[0].offsetWidth;
+
       const usuableScrollTimes = Math.round(
-        usuableScrollRange / (itemWidth + gap)
+        usuableScrollRange / scrollDistance
       );
       const curretnScrollTime = Math.round(
-        mouseScrollRef.current.scrollLeft / (itemWidth + gap)
+        container.scrollLeft / scrollDistance
       );
 
-      const progressState = (curretnScrollTime / usuableScrollTimes) * 100;
+      const percentage = (curretnScrollTime / usuableScrollTimes) * 100;
 
-      setPropgress(progressState);
+      smoothScrollBar(percentage, 200);
     }, 200);
 
     smoothScrollTo(targetPosition, 200);
     setIsDragging(false);
+  };
+
+  const smoothScrollBar = (targetX, duration) => {
+    const progressBar = document.querySelector('.progressState');
+    const container = mouseScrollRef.current;
+
+    const containerWidth = container.offsetWidth;
+    const currentwidth = Math.ceil(
+      (progressBar.offsetWidth / containerWidth) * 100
+    );
+
+    // 애니메이션 시작시간, 최초 상태바 width 값
+    const startTime = performance.now();
+
+    const animateScrollTo = (currentTime) => {
+      const elapsedTime = currentTime - startTime;
+      const progress = Math.min(elapsedTime / duration, 1);
+
+      const items = container.children;
+      const itemArr = [items[0].offsetLeft, items[1].offsetLeft];
+
+      const isFirstOrSecond = itemArr.every(
+        (_, idx) => items[idx].offsetLeft >= container.scrollLeft
+      );
+
+      const updatedWidth = isFirstOrSecond
+        ? currentwidth
+        : currentwidth + (targetX - currentwidth) * progress;
+
+      progressBar.style.width = `${updatedWidth}%`;
+
+      const rafId = requestAnimationFrame(animateScrollTo);
+      if (progress === 1) cancelAnimationFrame(rafId);
+    };
+
+    requestAnimationFrame(animateScrollTo);
   };
 
   const smoothScrollTo = (targetX, duration) => {
@@ -208,9 +245,8 @@ export default function Main() {
 
       container.scrollLeft = startX + (targetX - startX) * easing;
 
-      if (progress < 1) {
-        requestAnimationFrame(animateScroll);
-      }
+      const rafId = requestAnimationFrame(animateScroll);
+      if (progress >= 1) cancelAnimationFrame(rafId);
     };
 
     requestAnimationFrame(animateScroll);
@@ -237,7 +273,6 @@ export default function Main() {
         <S.Item_Section>
           <S.Section_Title>
             {' BEST ITEM '}
-
             <S.ToggleItemBtn
               onClick={throttle(showCategory, 600)}
               icon={faSortDown}
@@ -265,19 +300,19 @@ export default function Main() {
             list={['OUTWEAR', 'TOP', 'BOTTOM', 'SHOES', 'BAG', 'ACC']}
             isOpen={isNav.new}
           />
-          <S.Item_List minWidth={400}>
+          <S.Main_ItemsList>
             {new Array(15).fill(1).map((el, idx) => (
               <ItemBox key={idx} height={130} />
             ))}
-          </S.Item_List>
+          </S.Main_ItemsList>
           <S.Button>MORE</S.Button>
         </S.Item_Section>
       </S.Main_Body>
       <S.Recommend className='recommend'>
         <S.Recommend_Left>
-          <S.Recommend_Top>
+          <S.Rcmd_Left_Top>
             <S.Recommend_Title>SELECT</S.Recommend_Title>
-          </S.Recommend_Top>
+          </S.Rcmd_Left_Top>
           <S.Select_Bar>
             {selectTag.map((tag, idx) => (
               <S.Select_Tag
@@ -290,27 +325,33 @@ export default function Main() {
               </S.Select_Tag>
             ))}
           </S.Select_Bar>
-          <S.Progress_Bar>
-            <S.Progress_State progress={progress}></S.Progress_State>
-          </S.Progress_Bar>
-          <S.Recommend_Bottom
-            ref={mouseScrollRef}
-            onMouseDown={onMove}
-            onMouseMove={throttle(onDrag, 30)}
-            onMouseUp={dragEnd}
-            onMouseLeave={dragEnd}
-          >
-            <ItemBox height={130} />
-            <ItemBox height={130} />
-            <ItemBox height={130} />
-            <ItemBox height={130} />
-            <ItemBox height={130} />
-            <ItemBox height={130} />
-          </S.Recommend_Bottom>
+          <S.Rcmd_Left_Bottom>
+            <S.Scroll_Container
+              key={selected}
+              ref={mouseScrollRef}
+              onMouseDown={onMove}
+              onMouseMove={throttle(onDrag, 30)}
+              onMouseUp={dragEnd}
+              onMouseLeave={dragEnd}
+            >
+              <ItemBox height={130} minWidth={360} />
+              <ItemBox height={130} minWidth={360} />
+              <ItemBox height={130} minWidth={360} />
+              <ItemBox height={130} minWidth={360} />
+              <ItemBox height={130} minWidth={360} />
+              <ItemBox height={130} minWidth={360} />
+            </S.Scroll_Container>
+            <S.Progress_Bar>
+              <S.Progress_State
+                key={selected}
+                className='progressState'
+              ></S.Progress_State>
+            </S.Progress_Bar>
+          </S.Rcmd_Left_Bottom>
         </S.Recommend_Left>
-        <S.Recommend_Right>
+        <S.Recommend_Right key={selected}>
           <S.StyledImage
-            src={'/carousel2.jpeg'}
+            src={selectData}
             alt='selectProfiles'
             fill
             sizes={`(min-width: 1200px) 70vw,
@@ -322,11 +363,11 @@ export default function Main() {
       </S.Recommend>
       <S.Review_Section>
         <S.Section_Title>REVIEWS</S.Section_Title>
-        <S.Item_List minWidth={250}>
+        <S.Review_List minWidth={250}>
           {new Array(4).fill(1).map((_, idx) => (
             <ItemBox key={idx} height={100} />
           ))}
-        </S.Item_List>
+        </S.Review_List>
         <S.Button>ALL REVIEWS</S.Button>
       </S.Review_Section>
     </S.Main>

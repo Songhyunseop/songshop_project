@@ -37,7 +37,7 @@ export const Main_Carousel_Img = styled.img`
   position: absolute;
   width: 100%;
   height: 100%;
-  /* object-fit: cover; */
+  object-fit: cover;
   filter: brightness(0.7);
   transition: all 0.3s ease-out;
 

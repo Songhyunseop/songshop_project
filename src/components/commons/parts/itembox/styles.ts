@@ -1,13 +1,11 @@
 import styled from '@emotion/styled';
 
-export const ItemBox = styled.div<{ height: number }>`
+export const ItemBox = styled.div<{ height: number; minWidth: number }>`
   position: relative;
-  width: 100%;
-  min-width: 280px;
-  max-height: 700px;
+  min-width: ${({ minWidth }) => (minWidth ? `${minWidth}px` : 0)};
   font-size: 2rem;
   background-color: gray;
-  border: 2px solid red;
+  height: 100%;
 
   // width값에 따라 padding으로 비율 유지
   &:before {

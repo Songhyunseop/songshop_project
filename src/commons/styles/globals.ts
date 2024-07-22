@@ -28,11 +28,11 @@ const globalStyle = css`
   .item_swiper {
     position: relative;
     width: 100%;
-    max-height: 450px;
   }
 
   .item_swiper .swiper-slide {
-    min-height: 400px;
+    /* width: 100%; */
+    /* min-width: 280px; */
     padding-bottom: 50%;
   }
 

@@ -149,14 +149,21 @@ export const NewItem_Section = styled.section`
   align-items: center;
 `;
 
-export const Item_List = styled.div<{ minWidth: number }>`
+export const Main_ItemsList = styled.section`
   width: 100%;
   display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 80px 30px;
+`;
+
+export const Review_List = styled.div<{ minWidth: number }>`
+  width: 100%;
+  display: grid;
+  position: relative;
   grid-template-columns: ${({ minWidth }) =>
     `repeat(auto-fit, minmax(${minWidth}px, 1fr))`};
-
-  gap: 50px 30px;
-  overflow-y: auto;
+  grid-gap: 50px 20px;
+  overflow: hidden;
   border: 10px solid yellowgreen;
 `;
 
@@ -186,43 +193,17 @@ export const Recommend_Left = styled.article`
   flex-direction: column;
 `;
 
-export const Recommend_Top = styled.div`
+export const Rcmd_Left_Top = styled.div`
   min-height: 150px;
-  border: 2px solid red;
   position: relative;
-  padding-bottom: 15%;
+  /* padding-bottom: 15%; */
 `;
 
 export const Select_Bar = styled.div`
-  border: 5px solid green;
-  padding: 0 50px;
   display: flex;
   justify-content: space-around;
-  align-items: flex-end;
+  /* align-items: flex-end; */
   padding: 1.5% 0 1.5% 0;
-`;
-
-export const Progress_Bar = styled.div`
-  border: 2px solid black;
-  padding: 10px 0;
-  /* padding-bottom: 50px; */
-`;
-
-export const Progress_State = styled.div<{ progress: number }>`
-  padding: 3px 0;
-  position: relative;
-  overflow: hidden;
-  background-color: lightgray;
-
-  ::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: ${(props) => (props.progress > 25 ? `${props.progress}%` : '15%')};
-    height: 100%;
-    background-color: black;
-  }
 `;
 
 export const Recommend_Title = styled.span`
@@ -237,36 +218,83 @@ export const Recommend_Title = styled.span`
 export const Select_Tag = styled.span<{ selected: number }>`
   cursor: pointer;
   font-size: 1.4rem;
-  font-weight: 400;
-  padding: 0 3%;
+  font-weight: 500;
+  padding: clamp(5px, 10px, 5%);
   color: ${({ selected }) => (selected ? 'black' : 'lightgray')};
+  text-decoration-line: ${({ selected }) => (selected ? 'underline' : 'none')};
 `;
 
-export const Recommend_Bottom = styled.div`
-  cursor: pointer;
+export const Rcmd_Left_Bottom = styled.div`
   width: 100%;
-  border: 5px solid red;
+`;
+
+export const Progress_Bar = styled.div`
+  padding: 10px 0;
+  position: relative;
+
+  ::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 7px;
+    background-color: lightgray;
+  }
+`;
+
+export const Progress_State = styled.div`
+  padding: 3px 0;
+  position: relative;
+  z-index: 1;
+  width: 25%;
+  overflow: hidden;
+  background-color: black;
+`;
+
+export const Scroll_Container = styled.div`
+  cursor: pointer;
   display: flex;
   gap: 20px;
-  margin-top: 8%;
+  margin-top: 5%;
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  animation: appear 0.5s ease-out;
 `;
 
 export const Recommend_Right = styled.article`
   width: 45%;
   margin-left: 50px;
   position: relative;
+  animation: appear 0.5s ease-out;
 `;
 
 export const StyledImage = styled(Image)`
   width: 100%;
   object-fit: cover;
+
+  @keyframes appear {
+    0% {
+      opacity: 0;
+    }
+
+    50% {
+      opacity: 50%;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .animate {
+    border: 2px solid red;
+  }
 `;
 
 export const Review_Section = styled.section`
-  /* height: 600px; */
   display: flex;
   flex-direction: column;
   align-items: center;

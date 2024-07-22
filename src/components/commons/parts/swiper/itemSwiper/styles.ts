@@ -6,6 +6,7 @@ export const Wrapper = styled.div`
   width: 100%;
   margin-bottom: 130px;
   display: flex;
+
   align-items: center;
 
   &:hover {
@@ -19,7 +20,7 @@ export const Wrapper = styled.div`
 export const ItemImg = styled.img`
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 70%;
   object-fit: cover;
 `;
 
