@@ -155,7 +155,7 @@ export const Item_List = styled.div<{ minWidth: number }>`
   grid-template-columns: ${({ minWidth }) =>
     `repeat(auto-fit, minmax(${minWidth}px, 1fr))`};
 
-  gap: 50px 20px;
+  gap: 50px 30px;
   overflow-y: auto;
   border: 10px solid yellowgreen;
 `;
@@ -174,14 +174,14 @@ export const Button = styled.button`
 
 export const Recommend = styled.article`
   margin-bottom: 15%;
-  padding: 0 7% 5% 7%;
+  padding: 0 5% 5% 5%;
   background-color: rgba(64, 50, 52, 0.1);
   display: flex;
   position: relative;
 `;
 
 export const Recommend_Left = styled.article`
-  width: 60%;
+  width: 55%;
   display: flex;
   flex-direction: column;
 `;
@@ -200,6 +200,29 @@ export const Select_Bar = styled.div`
   justify-content: space-around;
   align-items: flex-end;
   padding: 1.5% 0 1.5% 0;
+`;
+
+export const Progress_Bar = styled.div`
+  border: 2px solid black;
+  padding: 10px 0;
+  /* padding-bottom: 50px; */
+`;
+
+export const Progress_State = styled.div<{ progress: number }>`
+  padding: 3px 0;
+  position: relative;
+  overflow: hidden;
+  background-color: lightgray;
+
+  ::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: ${(props) => (props.progress > 25 ? `${props.progress}%` : '15%')};
+    height: 100%;
+    background-color: black;
+  }
 `;
 
 export const Recommend_Title = styled.span`
@@ -232,7 +255,7 @@ export const Recommend_Bottom = styled.div`
 `;
 
 export const Recommend_Right = styled.article`
-  width: 40%;
+  width: 45%;
   margin-left: 50px;
   position: relative;
 `;

@@ -39,15 +39,18 @@ export default function Main() {
   });
 
   // 화면 문구 변환 함수
+
+  const changePhrase = () => {
+    const index = Math.floor(Math.random() * 5);
+
+    return randomPhrases[index];
+  };
+
   const usePhraseChanger = () => {
     let isRunning = false;
     let timer: ReturnType<typeof setTimeout>;
 
-    const changePhrase = () => {
-      const index = Math.floor(Math.random() * 5);
-
-      return randomPhrases[index];
-    };
+    changePhrase();
 
     const delaytoTrigger = (e) => {
       if (isRunning) clearTimeout(timer);
@@ -113,22 +116,24 @@ export default function Main() {
 
     setIsDragging(true);
     setStartX(xPosition + scrolledX);
+
+    console.log('이전', startX);
   };
 
   const onDrag = (e) => {
     if (!isDragging) return;
 
-    const leftMargin = mouseScrollRef.current.offsetLeft;
-    const viewPortX = e.clientX;
+    if (mouseScrollRef.current) {
+      // 스크롤 범위 계산
+      const leftMargin = mouseScrollRef.current.offsetLeft;
+      const viewPortX = e.clientX;
 
-    const xPosition = viewPortX - leftMargin;
-
-    mouseScrollRef.current.scrollLeft = startX - xPosition;
-
-    //
-    //
-    //
+      const xPosition = viewPortX - leftMargin;
+      mouseScrollRef.current.scrollLeft = startX - xPosition;
+    }
   };
+
+  const [progress, setPropgress] = useState(0);
 
   const dragEnd = () => {
     if (!isDragging) return;
@@ -158,12 +163,34 @@ export default function Main() {
     const scrollWidth = mouseScrollRef.current.scrollWidth;
     const clientWidth = mouseScrollRef.current.clientWidth;
 
-    const usuableScrollRange = scrollWidth - clientWidth;
+    const ERROR_RANGE = 20;
+
+    const usuableScrollRange = scrollWidth - clientWidth - ERROR_RANGE;
 
     // 좌, 우 끝에 도달 시 아이템 해당방향 밀착
-    if (currentScrollX === 0) targetPosition = 0;
-    if (currentScrollX === usuableScrollRange)
+    if (currentScrollX === 0) targetPosition = ERROR_RANGE;
+    if (currentScrollX >= usuableScrollRange)
       targetPosition = usuableScrollRange;
+
+    const itemWidth = items[0].offsetWidth;
+    const gap = 20;
+
+    console.log('한 번 이동값', itemWidth + gap);
+    console.log('비례값', (itemWidth + gap) / usuableScrollRange);
+
+    // 현재 스크롤 진행도 계산
+    setTimeout(() => {
+      const usuableScrollTimes = Math.round(
+        usuableScrollRange / (itemWidth + gap)
+      );
+      const curretnScrollTime = Math.round(
+        mouseScrollRef.current.scrollLeft / (itemWidth + gap)
+      );
+
+      const progressState = (curretnScrollTime / usuableScrollTimes) * 100;
+
+      setPropgress(progressState);
+    }, 200);
 
     smoothScrollTo(targetPosition, 200);
     setIsDragging(false);
@@ -238,7 +265,7 @@ export default function Main() {
             list={['OUTWEAR', 'TOP', 'BOTTOM', 'SHOES', 'BAG', 'ACC']}
             isOpen={isNav.new}
           />
-          <S.Item_List minWidth={280}>
+          <S.Item_List minWidth={400}>
             {new Array(15).fill(1).map((el, idx) => (
               <ItemBox key={idx} height={130} />
             ))}
@@ -263,6 +290,9 @@ export default function Main() {
               </S.Select_Tag>
             ))}
           </S.Select_Bar>
+          <S.Progress_Bar>
+            <S.Progress_State progress={progress}></S.Progress_State>
+          </S.Progress_Bar>
           <S.Recommend_Bottom
             ref={mouseScrollRef}
             onMouseDown={onMove}
@@ -270,8 +300,6 @@ export default function Main() {
             onMouseUp={dragEnd}
             onMouseLeave={dragEnd}
           >
-            <ItemBox height={130} />
-            <ItemBox height={130} />
             <ItemBox height={130} />
             <ItemBox height={130} />
             <ItemBox height={130} />
