@@ -27,12 +27,12 @@ export const linkStyles = {
 };
 
 // 기타 props 조건부 로직 처리
-const getPropsResult = (props) => {
-  if (props.isScrolled !== undefined) {
-    return props.isScrolled ? 'black' : 'white';
-  }
+const getPropsResult = ({ isScrolled, isChangeStylePath }) => {
+  if (isScrolled) return 'black';
+  if (isChangeStylePath === false) return 'black';
+  console.log(isChangeStylePath);
 
-  return 'black';
+  return 'white';
 };
 
 // default

@@ -1,15 +1,28 @@
-import Link from 'next/link';
 import styled from 'node_modules/@emotion/styled';
+
+const getPositon = ({ isScrolled, isChangeStylePath }) => {
+  if (isScrolled) return 'fixed';
+  if (isChangeStylePath) return 'fixed';
+  return 'absolute';
+};
+
+const getBackgroudColor = ({ isScrolled, isChangeStylePath }) => {
+  if (isScrolled) return 'white';
+  if (isChangeStylePath) return 'none';
+  return 'white';
+};
 
 export const Header_Wrapper = styled.header`
   width: 100%;
   z-index: 999;
   transition: all 0.9s ease;
-  position: ${(props) => (props.isScrolled ? 'fixed' : 'absolute')};
+  position: ${(props) => getPositon(props)};
   top: 0;
   left: 0;
-  background-color: ${(props) => (props.isScrolled ? 'white' : 'none')};
+  background-color: ${(props) => getBackgroudColor(props)};
   transform: ${(props) => (props.isScrolled ? 'translateY(px)' : 'auto')};
+
+  border-bottom: 1px solid #d8d8d8;
 `;
 
 export const Header_Main = styled.section`
@@ -36,14 +49,6 @@ export const Main_Right = styled.div`
 `;
 
 export const Main_Title = styled.p``;
-
-export const Styled_TitleLink = styled(Link)`
-  text-decoration-line: none;
-  font-size: 2rem;
-  font-weight: 500;
-  letter-spacing: 0.3rem;
-  color: ${(props) => (props.isScrolled ? 'black' : 'white')};
-`;
 
 export const Search_Box = styled.input`
   /* width: 17vw; */

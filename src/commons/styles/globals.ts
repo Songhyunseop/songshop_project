@@ -31,9 +31,7 @@ const globalStyle = css`
   }
 
   .item_swiper .swiper-slide {
-    /* width: 100%; */
-    /* min-width: 280px; */
-    padding-bottom: 50%;
+    padding-bottom: 30%;
   }
 
   // detail 캐러셀

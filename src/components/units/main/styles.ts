@@ -182,7 +182,7 @@ export const Button = styled.button`
 export const Recommend = styled.article`
   margin-bottom: 15%;
   padding: 0 5% 5% 5%;
-  background-color: rgba(64, 50, 52, 0.1);
+  background-color: rgba(245, 245, 245, 1);
   display: flex;
   position: relative;
 `;
@@ -234,20 +234,23 @@ export const Progress_Bar = styled.div`
 
   ::after {
     content: '';
+    border-radius: 15px;
     position: absolute;
     top: 50%;
     left: 0;
     transform: translateY(-50%);
     width: 100%;
-    height: 7px;
-    background-color: lightgray;
+    height: 5px;
+    background-color: #dbdbdb;
   }
 `;
 
 export const Progress_State = styled.div`
   padding: 3px 0;
+  border-radius: 15px;
   position: relative;
   z-index: 1;
+  height: 5px;
   width: 25%;
   overflow: hidden;
   background-color: black;
@@ -299,5 +302,6 @@ export const Review_Section = styled.section`
   flex-direction: column;
   align-items: center;
   padding: 0 5%;
+  margin-bottom: 15%;
   border: 2px solid red;
 `;

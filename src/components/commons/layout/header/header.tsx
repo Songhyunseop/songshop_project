@@ -19,26 +19,31 @@ export default function Header() {
   useEffect(() => {
     const handleScroll = (e) => {
       if (headerRef.current) {
-        if (window.scrollY > headerRef.current.offsetHeight)
-          setIsScrolled(true);
-        if (window.scrollY < headerRef.current.offsetHeight)
-          setIsScrolled(false);
+        const isPageScrolled = window.scrollY > headerRef.current.offsetHeight;
+
+        setIsScrolled(isPageScrolled);
       }
     };
 
     window.addEventListener('scroll', handleScroll);
-  }, []);
+  }, [router.asPath]);
 
   return (
     <>
       <S.Header_Wrapper
         ref={headerRef}
         isScrolled={isScrolled}
+        isChangeStylePath={router.asPath === '/'}
         isMain={router.asPath === '/'}
       >
         <S.Header_Main>
           <S.Main_Left>
-            <CustomLink type={'headerTitle'} isScrolled={isScrolled} href={'/'}>
+            <CustomLink
+              type={'headerTitle'}
+              isScrolled={isScrolled}
+              isChangeStylePath={router.asPath === '/'}
+              href={'/'}
+            >
               {'SONGSHOP'}
             </CustomLink>
           </S.Main_Left>
@@ -51,6 +56,7 @@ export default function Header() {
                       type={'headerMenu'}
                       href={route}
                       isScrolled={isScrolled}
+                      isChangeStylePath={router.asPath === '/'}
                     >
                       {name}
                     </CustomLink>
