@@ -27,11 +27,13 @@ const uploadImgFileToStorage = async (file: File) => {
 
   if (error) throw error;
 
-  return { data };
+  const { path } = data;
+
+  return { path };
 };
 
 // 이미지 업로드 후 storage에서 PublicUrl 반환
-const getPublicUrl = async (path) => {
+const getPublicUrl = async ({ path }) => {
   const { data } = await supabaseClient.storage
     .from('images')
     .getPublicUrl(path);

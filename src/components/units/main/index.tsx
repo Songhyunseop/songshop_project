@@ -1,5 +1,4 @@
 import * as S from './styles';
-import { Transition } from 'react-transition-group';
 
 import MainSWiper from '@/components/commons/parts/swiper/mainSwiper/mainSwiper';
 import ItemSwiper from '@/components/commons/parts/swiper/itemSwiper/itemSwiper';
@@ -13,6 +12,7 @@ import { throttle } from '@/commons/utils/throttle';
 import { getDataList } from '@/components/commons/hooks/query/useQueryGetAllProducts';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import ToggleNav from '@/components/commons/layout/navigation/toggleCategorynav/toggleCategorynav';
+import About from './about/about';
 
 export default function Main() {
   const videoUrls = ['/videos/shopvid1.mp4', '/videos/shopvid2.mp4'];
@@ -301,8 +301,8 @@ export default function Main() {
             isOpen={isNav.new}
           />
           <S.Main_ItemsList>
-            {new Array(15).fill(1).map((el, idx) => (
-              <ItemBox key={idx} height={130} />
+            {data?.productData.map((el, idx) => (
+              <ItemBox key={idx} el={el} height={150} />
             ))}
           </S.Main_ItemsList>
           <S.Button>MORE</S.Button>
@@ -334,12 +334,12 @@ export default function Main() {
               onMouseUp={dragEnd}
               onMouseLeave={dragEnd}
             >
-              <ItemBox height={130} minWidth={360} />
-              <ItemBox height={130} minWidth={360} />
-              <ItemBox height={130} minWidth={360} />
-              <ItemBox height={130} minWidth={360} />
-              <ItemBox height={130} minWidth={360} />
-              <ItemBox height={130} minWidth={360} />
+              <ItemBox height={50} minWidth={360} />
+              <ItemBox height={50} minWidth={360} />
+              <ItemBox height={50} minWidth={360} />
+              <ItemBox height={50} minWidth={360} />
+              <ItemBox height={50} minWidth={360} />
+              <ItemBox height={50} minWidth={360} />
             </S.Scroll_Container>
             <S.Progress_Bar>
               <S.Progress_State
@@ -370,6 +370,7 @@ export default function Main() {
         </S.Review_List>
         <S.Button>ALL REVIEWS</S.Button>
       </S.Review_Section>
+      <About />
     </S.Main>
   );
 }

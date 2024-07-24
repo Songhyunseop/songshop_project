@@ -1,8 +1,83 @@
 import { ItemBoxProps } from '@/commons/types/itemBox_type';
 import * as S from './styles';
+import { faHeart, faMessage } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { useEffect, useState } from 'react';
 
 export default function ItemBox(props: ItemBoxProps) {
+  const [isLiked, setIsLiked] = useState(false);
+
+  const { el, ...rest } = props;
+
+  const productColors = el?.stock
+    ? JSON.parse(el?.stock).map((data) => data.selectColor)[0]
+    : [];
+
+  console.log(productColors, el?.product_name);
+
+  const toggleLikeIt = () => {
+    setIsLiked((prev) => !prev);
+  };
+
   return (
-    <S.ItemBox {...props}>{props.isBest && <S.Label>BEST</S.Label>}</S.ItemBox>
+    <S.ItemBox {...rest}>
+      {props.isBest && <S.Label>BEST</S.Label>}
+      <S.Item_Contents>
+        <S.Image_Section>
+          <S.Item_Img
+            src={el?.product_img ? JSON.parse(el?.product_img)[0] : 'fallback'}
+          />
+        </S.Image_Section>
+        <S.ItemInfo>
+          <S.Info_Left>
+            <S.Info_Left_Top>
+              <S.Category>
+                <S.Par color={'#bdbdb3'} weight={400} size={0.9}>
+                  [{el?.product_category}]
+                </S.Par>
+                <S.Par color={'#bdbdb3'} weight={400} size={0.9}>
+                  [{el?.product_subcategory}]
+                </S.Par>
+              </S.Category>
+            </S.Info_Left_Top>
+            <S.Summary_Setcion>
+              <S.Bracket>{'['}</S.Bracket>
+              <S.Summary>{el?.product_summary}</S.Summary>
+              <S.Bracket>{']'}</S.Bracket>
+            </S.Summary_Setcion>
+            <S.Item_Name>{el?.product_name}</S.Item_Name>
+            <S.Info_Left_Bottom>
+              <S.PricePar line>{String(el?.product_price)}</S.PricePar>
+              <S.PricePar size={1.1} weight={400}>
+                38,900
+              </S.PricePar>
+              <S.PricePar size={1.1} weight={400} color={'red'}>
+                8%
+              </S.PricePar>
+            </S.Info_Left_Bottom>
+          </S.Info_Left>
+          <S.Info_Right>
+            <S.Colors_Wrapper>
+              {productColors.map((color, idx) => (
+                <S.Color color={color} key={idx}></S.Color>
+              ))}
+            </S.Colors_Wrapper>
+            <S.CountsInfo>
+              <S.Liked onClick={toggleLikeIt} isLiked={isLiked}>
+                {isLiked ? (
+                  <S.CountIcon icon={solidHeart as IconProp}></S.CountIcon>
+                ) : (
+                  <S.CountIcon icon={faHeart}></S.CountIcon>
+                )}
+              </S.Liked>
+              <S.Review>
+                <S.CountIcon icon={faMessage}></S.CountIcon>
+              </S.Review>
+            </S.CountsInfo>
+          </S.Info_Right>
+        </S.ItemInfo>
+      </S.Item_Contents>
+    </S.ItemBox>
   );
 }

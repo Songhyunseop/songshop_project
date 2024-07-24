@@ -75,7 +75,7 @@ export const Styled_ReactPlayer = styled(ReactPlayer)`
 
 export const Main_Body = styled.section`
   margin-top: 10%;
-  padding: 0 5%;
+  padding: 0 10%;
 `;
 
 export const Item_Section = styled.section`
@@ -84,7 +84,7 @@ export const Item_Section = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10%;
+  margin-bottom: 15%;
 `;
 
 export const ToggleItemBtn = styled(FontAwesomeIcon)`
@@ -100,8 +100,8 @@ export const ToggleItemBtn = styled(FontAwesomeIcon)`
 
 export const Section_Title = styled.div`
   width: 100%;
-  font-size: 2.6rem;
-  font-weight: 400;
+  font-size: 2.5rem;
+  font-weight: 300;
   margin-bottom: 55px;
   position: relative;
   z-index: 30;
@@ -153,7 +153,7 @@ export const Main_ItemsList = styled.section`
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 80px 30px;
+  grid-gap: 5vw 1.5vw;
 `;
 
 export const Review_List = styled.div<{ minWidth: number }>`
@@ -174,7 +174,7 @@ export const Button = styled.button`
   width: 170px;
   height: 60px;
   color: #f7f3f5;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 500;
   letter-spacing: 3px;
 `;
@@ -185,6 +185,7 @@ export const Recommend = styled.article`
   background-color: rgba(245, 245, 245, 1);
   display: flex;
   position: relative;
+  border: 3px solid blue;
 `;
 
 export const Recommend_Left = styled.article`
@@ -196,7 +197,6 @@ export const Recommend_Left = styled.article`
 export const Rcmd_Left_Top = styled.div`
   min-height: 150px;
   position: relative;
-  /* padding-bottom: 15%; */
 `;
 
 export const Select_Bar = styled.div`
@@ -218,7 +218,7 @@ export const Recommend_Title = styled.span`
 export const Select_Tag = styled.span<{ selected: number }>`
   cursor: pointer;
   font-size: 1.4rem;
-  font-weight: 500;
+  font-weight: 400;
   padding: clamp(5px, 10px, 5%);
   color: ${({ selected }) => (selected ? 'black' : 'lightgray')};
   text-decoration-line: ${({ selected }) => (selected ? 'underline' : 'none')};
@@ -257,6 +257,7 @@ export const Progress_State = styled.div`
 `;
 
 export const Scroll_Container = styled.div`
+  width: 100%;
   cursor: pointer;
   display: flex;
   gap: 20px;
@@ -265,6 +266,7 @@ export const Scroll_Container = styled.div`
   scrollbar-width: none;
   -ms-overflow-style: none;
   animation: appear 0.5s ease-out;
+  border: 2px solid red;
 `;
 
 export const Recommend_Right = styled.article`

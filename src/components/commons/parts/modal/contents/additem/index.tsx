@@ -98,7 +98,7 @@ export default function AddItemModalContents() {
     console.log(rrr);
   };
 
-  const { mutateAsync: uploadFiles } = useUploadToStorage();
+  const { mutateAsync: uploadImgFileToStorage } = useUploadToStorage();
   const { mutateAsync: getPublicUrl } = useGetPublicUrl();
   const { mutateAsync: createProduct } = useMutationCreateProduct();
 
@@ -109,8 +109,11 @@ export default function AddItemModalContents() {
     }
 
     const uploadedList = await Promise.all(
-      fileList.map(async (file) => getPublicUrl(await uploadFiles(file)))
+      fileList.map(async (file) =>
+        getPublicUrl(await uploadImgFileToStorage(file))
+      )
     );
+
     formData.previewImages = uploadedList.map((data) => data.url);
 
     const userInputData = {
