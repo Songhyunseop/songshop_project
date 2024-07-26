@@ -5,20 +5,26 @@ import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useRecoilValue } from 'recoil';
+import { UserState } from '@/commons/libraries/atom';
+import { useToggleFavor } from '../../hooks/mutation/useMutationToggleFavor';
 
 export default function ItemBox(props: ItemBoxProps) {
+  const queryClient = useQueryClient();
   const { el, ...rest } = props;
 
-  // const queryClient = useQueryClient();
-
+  const userInfo = useRecoilValue(UserState);
   const [isLiked, setIsLiked] = useState(false);
+
+  const { mutateAsync: toggleFavor } = useToggleFavor();
 
   const productColors = el?.stock
     ? JSON.parse(el?.stock).map((data) => data.selectColor)[0]
     : [];
 
-  const toggleLikeIt = () => {
-    console.log(el);
+  const toggleLikeIt = (e) => {
+    toggleFavor({ product: el.id, user: userInfo.id });
+
     setIsLiked((prev) => !prev);
   };
 
