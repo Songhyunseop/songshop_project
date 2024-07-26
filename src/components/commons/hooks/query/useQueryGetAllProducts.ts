@@ -8,12 +8,10 @@ const supabaseClient = supabase();
 export const getDataList = async () => {
   const { data: productData, error } = await supabaseClient
     .from('product')
-    .select('*, users(id,*)');
+    .select('*, users(id,*), likes(user_id, product_id)');
 
   return { productData, error };
 };
-//
-//
 //
 //
 //

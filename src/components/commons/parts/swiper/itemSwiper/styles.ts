@@ -6,6 +6,8 @@ export const Wrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  /* padding-bottom: 47%; */
+  border: 2px solid blue;
 
   &:hover {
     .swiper-prev,
@@ -13,6 +15,14 @@ export const Wrapper = styled.div`
       opacity: 0.6;
     }
   }
+`;
+
+export const Contents = styled.div`
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border: 3px solid green;
 `;
 
 export const ItemImg = styled.img`

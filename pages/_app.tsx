@@ -12,14 +12,18 @@ config.autoAddCss = false;
 
 import Layout from '@/components/commons/layout/layout';
 import { RecoilRoot } from 'recoil';
+import AuthProvier from '@/components/commons/auth/auth';
 
 export default function App({ Component, pageProps }: AppProps) {
   const client = new QueryClient();
+
+  console.log('렌더링');
 
   return (
     <>
       <QueryClientProvider client={client}>
         <RecoilRoot>
+          <AuthProvier />
           <Global styles={globalStyle} />
           <Layout>
             <Component {...pageProps} />

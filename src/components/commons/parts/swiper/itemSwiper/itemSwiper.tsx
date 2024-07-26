@@ -17,6 +17,7 @@ export default function ItemSwiper() {
 
   return (
     <S.Wrapper>
+      {/* <S.Contents> */}
       <S.Styled_Arrow
         onClick={() => swiper?.slidePrev()}
         className='swipers-prev'
@@ -32,12 +33,13 @@ export default function ItemSwiper() {
           nextEl: '.swiper-next',
           prevEl: '.swiper-prev',
         }}
+        initialSlide={5}
         speed={500}
         spaceBetween={10}
-        slidesPerView={5}
+        slidesPerView={1}
         breakpoints={{
           320: {
-            slidesPerView: 2,
+            slidesPerView: 3,
             spaceBetween: 10,
           },
           768: {
@@ -65,6 +67,7 @@ export default function ItemSwiper() {
         fontSize={100}
         color={'white'}
       ></S.Styled_Arrow>
+      {/* </S.Contents> */}
     </S.Wrapper>
   );
 }

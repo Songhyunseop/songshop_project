@@ -13,6 +13,7 @@ import { getDataList } from '@/components/commons/hooks/query/useQueryGetAllProd
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import ToggleNav from '@/components/commons/layout/navigation/toggleCategorynav/toggleCategorynav';
 import About from './about/about';
+import ReviewBox from '@/components/commons/parts/reviewBox/reviewBox';
 
 export default function Main() {
   const videoUrls = ['/videos/shopvid1.mp4', '/videos/shopvid2.mp4'];
@@ -363,9 +364,9 @@ export default function Main() {
       </S.Recommend>
       <S.Review_Section>
         <S.Section_Title>REVIEWS</S.Section_Title>
-        <S.Review_List minWidth={250}>
+        <S.Review_List minWidth={150}>
           {new Array(4).fill(1).map((_, idx) => (
-            <ItemBox key={idx} height={100} />
+            <ReviewBox key={idx} />
           ))}
         </S.Review_List>
         <S.Button>ALL REVIEWS</S.Button>

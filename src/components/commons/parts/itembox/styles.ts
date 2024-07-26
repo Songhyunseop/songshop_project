@@ -6,6 +6,7 @@ export const ItemBox = styled.div<{ height: number; minWidth: number }>`
   min-width: ${({ minWidth }) => (minWidth ? `${minWidth}px` : 0)};
   font-size: 2rem;
   padding-bottom: ${({ height }) => `${height}%`};
+  border: 2px solid red;
 `;
 
 export const Label = styled.div`
@@ -103,7 +104,7 @@ export const Info_Left_Top = styled.div`
   justify-content: space-between;
 `;
 
-export const Par = styled.p`
+export const Par = styled.p<{ size: number; weight: number }>`
   font-size: ${({ size }) => (size ? `${size}vw` : '1vw')};
   font-weight: ${({ weight }) => (weight ? weight : 300)};
   color: ${({ color }) => (color ? color : 'black')};
@@ -143,7 +144,11 @@ export const Info_Left_Bottom = styled.section`
   align-items: flex-end;
 `;
 
-export const PricePar = styled.p`
+export const PricePar = styled.p<{
+  size?: number;
+  line?: boolean;
+  weight?: number;
+}>`
   font-size: ${({ size }) => (size ? `${size}vw` : '1vw')};
   text-decoration-line: ${({ line }) => (line ? 'line-through' : 'none')};
   font-weight: ${({ weight }) => (weight ? weight : 300)};

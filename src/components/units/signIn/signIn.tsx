@@ -27,6 +27,12 @@ export default function Login() {
 
       if (error) throw error;
 
+      const userData = await supabaseClient.auth.getUser();
+      const { id } = userData.data.user;
+
+      console.log(userData.data.user);
+      console.log(id);
+
       router.push('/');
     } catch (error) {
       if (error instanceof AuthApiError) {

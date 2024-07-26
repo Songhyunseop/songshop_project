@@ -39,3 +39,10 @@ export const fileListState = atom({
   key: 'fileListState',
   default: [],
 });
+
+//user Info
+
+export const UserState = atom({
+  key: 'userInfoState',
+  default: null,
+});

@@ -31,7 +31,7 @@ const globalStyle = css`
   }
 
   .item_swiper .swiper-slide {
-    padding-bottom: 30%;
+    padding-bottom: 35%;
   }
 
   // detail 캐러셀

@@ -3,20 +3,22 @@ import * as S from './styles';
 import { faHeart, faMessage } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function ItemBox(props: ItemBoxProps) {
-  const [isLiked, setIsLiked] = useState(false);
-
   const { el, ...rest } = props;
+
+  // const queryClient = useQueryClient();
+
+  const [isLiked, setIsLiked] = useState(false);
 
   const productColors = el?.stock
     ? JSON.parse(el?.stock).map((data) => data.selectColor)[0]
     : [];
 
-  console.log(productColors, el?.product_name);
-
   const toggleLikeIt = () => {
+    console.log(el);
     setIsLiked((prev) => !prev);
   };
 
@@ -70,6 +72,7 @@ export default function ItemBox(props: ItemBoxProps) {
                 ) : (
                   <S.CountIcon icon={faHeart}></S.CountIcon>
                 )}
+                {/* <div>{el?.likes.length}</div> */}
               </S.Liked>
               <S.Review>
                 <S.CountIcon icon={faMessage}></S.CountIcon>
