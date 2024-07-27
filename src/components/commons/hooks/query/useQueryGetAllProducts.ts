@@ -1,51 +1,21 @@
 import supabase from '@/commons/utils/supabase/client';
-import { useMutation } from '@tanstack/react-query';
-import { v4 as uuidv4 } from 'uuid';
 
 const supabaseClient = supabase();
 
-// 상품 정보 조회 API
+// 모든 아이템 조회 API
 export const getDataList = async () => {
-  const { data: productData, error } = await supabaseClient
+  const { data: dataList, error } = await supabaseClient
     .from('product')
     .select('*, users(id,*), likes(user_id, product_id)');
 
-  return { productData, error };
-};
-//
-//
-//
-//
-//
+  const session = await supabaseClient.auth.getUser();
+  const userId = session.data.user && session.data.user.id;
 
-// 이미지 Storage에 업로드 API
-const uploadImgFileToStorage = async (file: File) => {
-  const newId = uuidv4();
-  const { data, error } = await supabaseClient.storage
-    .from('images')
-    .upload(`product/${newId}`, file);
+  const productData = dataList?.map((data) => {
+    const isLiked = data.likes.some((like) => like.user_id === userId);
 
-  if (error) throw error;
-
-  const { path } = data;
-
-  return { path };
-};
-
-// 이미지 업로드 후 storage에서 PublicUrl 반환
-const getPublicUrl = async ({ path }) => {
-  const { data } = await supabaseClient.storage
-    .from('images')
-    .getPublicUrl(path);
-
-  const url = data.publicUrl;
-
-  return { url };
-};
-
-export const useUploadToStorage = () =>
-  useMutation({
-    mutationFn: uploadImgFileToStorage,
+    return { ...data, isLiked };
   });
 
-export const useGetPublicUrl = () => useMutation({ mutationFn: getPublicUrl });
+  return { productData, error };
+};

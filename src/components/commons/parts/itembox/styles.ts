@@ -5,8 +5,26 @@ export const ItemBox = styled.div<{ height: number; minWidth: number }>`
   position: relative;
   min-width: ${({ minWidth }) => (minWidth ? `${minWidth}px` : 0)};
   font-size: 2rem;
-  padding-bottom: ${({ height }) => `${height}%`};
-  border: 2px solid red;
+  padding-bottom: ${({ height }) => (height ? `${height}%` : 0)};
+  height: 100%;
+
+  @media screen and (max-width: 1280px) {
+    min-width: 200px;
+  }
+
+  @media screen and (max-width: 780px) {
+    min-width: 140px;
+  }
+`;
+
+export const Item_Contents = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border: 3px solid blue;
 `;
 
 export const Label = styled.div`
@@ -20,18 +38,10 @@ export const Label = styled.div`
   background-color: #e2c2b3;
 `;
 
-export const Item_Contents = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-`;
-
 export const Image_Section = styled.div`
   position: relative;
-  padding-bottom: 120%;
+  /* padding-bottom: 100%; */
+  height: 100%;
   width: 100%;
 `;
 

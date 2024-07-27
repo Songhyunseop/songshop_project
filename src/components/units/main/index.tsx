@@ -5,7 +5,7 @@ import ItemSwiper from '@/components/commons/parts/swiper/itemSwiper/itemSwiper'
 
 import ItemBox from '@/components/commons/parts/itembox/itembox';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { throttle } from '@/commons/utils/throttle';
 
@@ -14,6 +14,8 @@ import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import ToggleNav from '@/components/commons/layout/navigation/toggleCategorynav/toggleCategorynav';
 import About from './about/about';
 import ReviewBox from '@/components/commons/parts/reviewBox/reviewBox';
+import { useRecoilValue } from 'recoil';
+import { UserState } from '@/commons/libraries/atom';
 
 export default function Main() {
   const videoUrls = ['/videos/shopvid1.mp4', '/videos/shopvid2.mp4'];
@@ -253,6 +255,10 @@ export default function Main() {
     requestAnimationFrame(animateScroll);
   };
 
+  useEffect(() => {
+    // const rr
+  }, []);
+
   return (
     <S.Main>
       <S.VideoWrapper
@@ -302,7 +308,7 @@ export default function Main() {
             isOpen={isNav.new}
           />
           <S.Main_ItemsList>
-            {data?.productData.map((el, idx) => (
+            {data?.productData?.map((el, idx) => (
               <ItemBox key={idx} el={el} height={150} />
             ))}
           </S.Main_ItemsList>
@@ -310,57 +316,56 @@ export default function Main() {
         </S.Item_Section>
       </S.Main_Body>
       <S.Recommend className='recommend'>
-        <S.Recommend_Left>
-          <S.Rcmd_Left_Top>
-            <S.Recommend_Title>SELECT</S.Recommend_Title>
-          </S.Rcmd_Left_Top>
-          <S.Select_Bar>
-            {selectTag.map((tag, idx) => (
-              <S.Select_Tag
-                key={tag}
-                id={String(idx)}
-                selected={idx === selected}
-                onClick={clickRecommend}
-              >
-                {tag}
-              </S.Select_Tag>
-            ))}
-          </S.Select_Bar>
-          <S.Rcmd_Left_Bottom>
-            <S.Scroll_Container
-              key={selected}
-              ref={mouseScrollRef}
-              onMouseDown={onMove}
-              onMouseMove={throttle(onDrag, 30)}
-              onMouseUp={dragEnd}
-              onMouseLeave={dragEnd}
-            >
-              <ItemBox height={50} minWidth={360} />
-              <ItemBox height={50} minWidth={360} />
-              <ItemBox height={50} minWidth={360} />
-              <ItemBox height={50} minWidth={360} />
-              <ItemBox height={50} minWidth={360} />
-              <ItemBox height={50} minWidth={360} />
-            </S.Scroll_Container>
-            <S.Progress_Bar>
-              <S.Progress_State
+        <S.Recommend_Contents>
+          <S.Recommend_Left>
+            <S.Rcmd_Left_Top>
+              <S.Recommend_Title>SELECT</S.Recommend_Title>
+            </S.Rcmd_Left_Top>
+            <S.Select_Bar>
+              {selectTag.map((tag, idx) => (
+                <S.Select_Tag
+                  key={tag}
+                  id={String(idx)}
+                  selected={idx === selected}
+                  onClick={clickRecommend}
+                >
+                  {tag}
+                </S.Select_Tag>
+              ))}
+            </S.Select_Bar>
+            <S.Rcmd_Left_Bottom>
+              <S.Scroll_Container
                 key={selected}
-                className='progressState'
-              ></S.Progress_State>
-            </S.Progress_Bar>
-          </S.Rcmd_Left_Bottom>
-        </S.Recommend_Left>
-        <S.Recommend_Right key={selected}>
-          <S.StyledImage
-            src={selectData}
-            alt='selectProfiles'
-            fill
-            sizes={`(min-width: 1200px) 70vw,
+                ref={mouseScrollRef}
+                onMouseDown={onMove}
+                onMouseMove={throttle(onDrag, 30)}
+                onMouseUp={dragEnd}
+                onMouseLeave={dragEnd}
+              >
+                {data?.productData?.map((el, idx) => (
+                  <ItemBox key={idx} el={el} minWidth={300} />
+                ))}
+              </S.Scroll_Container>
+              <S.Progress_Bar>
+                <S.Progress_State
+                  key={selected}
+                  className='progressState'
+                ></S.Progress_State>
+              </S.Progress_Bar>
+            </S.Rcmd_Left_Bottom>
+          </S.Recommend_Left>
+          <S.Recommend_Right key={selected}>
+            <S.StyledImage
+              src={selectData}
+              alt='selectProfiles'
+              fill
+              sizes={`(min-width: 1200px) 70vw,
               (min-width: 828px)  50vw,
               (min-width: 640px) 30vw`}
-            priority={true}
-          />
-        </S.Recommend_Right>
+              priority={true}
+            />
+          </S.Recommend_Right>
+        </S.Recommend_Contents>
       </S.Recommend>
       <S.Review_Section>
         <S.Section_Title>REVIEWS</S.Section_Title>

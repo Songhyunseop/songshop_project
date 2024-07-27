@@ -5,10 +5,7 @@ import { Editor as editorType } from '@toast-ui/react-editor';
 import 'react-color-palette/css';
 
 import { useRef } from 'react';
-import {
-  useGetPublicUrl,
-  useUploadToStorage,
-} from '@/components/commons/hooks/query/useQueryGetAllProducts';
+
 import { deepCopy } from '@/commons/utils/deepcopy';
 import Select from 'react-select/dist/declarations/src/Select';
 import { GroupBase } from 'react-select';
@@ -22,6 +19,10 @@ import { useCategorySelect } from '@/components/commons/hooks/custom/useCategory
 import { FormProvider, useForm } from 'react-hook-form';
 import CustomSelect from '../../../select';
 import { useMutationCreateProduct } from '@/components/commons/hooks/mutation/useMutationCreateProduct';
+import {
+  useGetPublicUrl,
+  useUploadToStorage,
+} from '@/components/commons/hooks/mutation/useMutationUploadImage';
 
 // editor 컴포넌트 클라이언트 측에서 렌더링
 const WriteEditor = dynamic(() => import('../../../editor/writeeditor'), {
@@ -29,14 +30,14 @@ const WriteEditor = dynamic(() => import('../../../editor/writeeditor'), {
 });
 
 export default function AddItemModalContents() {
-  interface ISelected {
-    value: string;
-    label: string;
-    item: string;
-    count: number;
-    isdisabled: boolean;
-    isPickerOpen: boolean;
-  }
+  // interface ISelected {
+  //   value: string;
+  //   label: string;
+  //   item: string;
+  //   count: number;
+  //   isdisabled: boolean;
+  //   isPickerOpen: boolean;
+  // }
 
   const defaultStockData = {
     value: '',

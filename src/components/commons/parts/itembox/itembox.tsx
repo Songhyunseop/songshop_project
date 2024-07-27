@@ -3,34 +3,33 @@ import * as S from './styles';
 import { faHeart, faMessage } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
 import { useRecoilValue } from 'recoil';
 import { UserState } from '@/commons/libraries/atom';
 import { useToggleFavor } from '../../hooks/mutation/useMutationToggleFavor';
+import { throttle } from '@/commons/utils/throttle';
 
 export default function ItemBox(props: ItemBoxProps) {
-  const queryClient = useQueryClient();
   const { el, ...rest } = props;
-
   const userInfo = useRecoilValue(UserState);
-  const [isLiked, setIsLiked] = useState(false);
 
   const { mutateAsync: toggleFavor } = useToggleFavor();
+  const throttleToggleFavor = throttle(toggleFavor, 200);
 
   const productColors = el?.stock
     ? JSON.parse(el?.stock).map((data) => data.selectColor)[0]
     : [];
 
-  const toggleLikeIt = (e) => {
-    toggleFavor({ product: el.id, user: userInfo.id });
+  const toggleLikeIt = () => {
+    if (userInfo) {
+      const toggles = { product: el.id, user: userInfo.id };
 
-    setIsLiked((prev) => !prev);
+      throttleToggleFavor(toggles);
+    }
   };
 
   return (
     <S.ItemBox {...rest}>
-      {props.isBest && <S.Label>BEST</S.Label>}
+      {/* {props.isBest && <S.Label>BEST</S.Label>} */}
       <S.Item_Contents>
         <S.Image_Section>
           <S.Item_Img
@@ -72,8 +71,8 @@ export default function ItemBox(props: ItemBoxProps) {
               ))}
             </S.Colors_Wrapper>
             <S.CountsInfo>
-              <S.Liked onClick={toggleLikeIt} isLiked={isLiked}>
-                {isLiked ? (
+              <S.Liked onClick={toggleLikeIt} isLiked={el?.isLiked}>
+                {el?.isLiked ? (
                   <S.CountIcon icon={solidHeart as IconProp}></S.CountIcon>
                 ) : (
                   <S.CountIcon icon={faHeart}></S.CountIcon>

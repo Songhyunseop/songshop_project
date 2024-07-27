@@ -181,44 +181,61 @@ export const Button = styled.button`
 
 export const Recommend = styled.article`
   margin-bottom: 15%;
-  padding: 0 5% 5% 5%;
+  padding: 0 5% 0% 5%;
+  padding-bottom: 45%;
   background-color: rgba(245, 245, 245, 1);
   display: flex;
   position: relative;
-  border: 3px solid blue;
+`;
+
+export const Recommend_Contents = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
 `;
 
 export const Recommend_Left = styled.article`
-  width: 55%;
+  /* width: 55%; */
+  width: 100%;
+  max-width: 60%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  flex: 1.5;
+  border: 3px solid red;
 `;
 
 export const Rcmd_Left_Top = styled.div`
-  min-height: 150px;
+  flex: 1.5;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 5px solid green;
+`;
+
+export const Recommend_Title = styled.span`
+  font-size: 3.5vw;
+  font-weight: 400;
+  transform: translateY(50%);
 `;
 
 export const Select_Bar = styled.div`
   display: flex;
   justify-content: space-around;
-  /* align-items: flex-end; */
+  flex: 0.2;
   padding: 1.5% 0 1.5% 0;
-`;
-
-export const Recommend_Title = styled.span`
-  position: absolute;
-  font-size: 3rem;
-  font-weight: 400;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%);
+  border: 3px solid green;
 `;
 
 export const Select_Tag = styled.span<{ selected: number }>`
   cursor: pointer;
-  font-size: 1.4rem;
-  font-weight: 400;
+  font-size: 1.3vw;
+  font-weight: 600;
   padding: clamp(5px, 10px, 5%);
   color: ${({ selected }) => (selected ? 'black' : 'lightgray')};
   text-decoration-line: ${({ selected }) => (selected ? 'underline' : 'none')};
@@ -226,6 +243,11 @@ export const Select_Tag = styled.span<{ selected: number }>`
 
 export const Rcmd_Left_Bottom = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 2px solid green;
+  flex: 4;
 `;
 
 export const Progress_Bar = styled.div`
@@ -258,6 +280,7 @@ export const Progress_State = styled.div`
 
 export const Scroll_Container = styled.div`
   width: 100%;
+  height: 100%;
   cursor: pointer;
   display: flex;
   gap: 20px;
@@ -266,14 +289,16 @@ export const Scroll_Container = styled.div`
   scrollbar-width: none;
   -ms-overflow-style: none;
   animation: appear 0.5s ease-out;
-  border: 2px solid red;
 `;
 
 export const Recommend_Right = styled.article`
-  width: 45%;
+  /* width: 45%; */
+  height: 100%;
   margin-left: 50px;
   position: relative;
   animation: appear 0.5s ease-out;
+  flex: 1 1;
+  border: 3px solid orange;
 `;
 
 export const StyledImage = styled(Image)`
