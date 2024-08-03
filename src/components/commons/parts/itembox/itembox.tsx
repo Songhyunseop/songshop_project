@@ -7,6 +7,7 @@ import { useRecoilValue } from 'recoil';
 import { UserState } from '@/commons/libraries/atom';
 import { useToggleFavor } from '../../hooks/mutation/useMutationToggleFavor';
 import { throttle } from '@/commons/utils/throttle';
+import { Flip, toast } from 'react-toastify';
 
 export default function ItemBox(props: ItemBoxProps) {
   const { el, ...rest } = props;
@@ -19,16 +20,30 @@ export default function ItemBox(props: ItemBoxProps) {
     ? JSON.parse(el?.stock).map((data) => data.selectColor)[0]
     : [];
 
-  const toggleLikeIt = () => {
+  const toggleLikeIt = (e) => {
+    // 변경사항 업데이트
     if (userInfo) {
       const toggles = { product: el.id, user: userInfo.id };
 
       throttleToggleFavor(toggles);
     }
+
+    // 토스트 알림
+    const message =
+      e.currentTarget.id === 'false'
+        ? '♥︎ 관심상품 목록에 등록되었습니다.'
+        : '♡ 관심상품 목록에서 삭제되었습니다.';
+
+    toast(message, {
+      position: 'bottom-center',
+      toastId: e.currentTarget.id,
+      transition: Flip,
+      autoClose: 1500,
+    });
   };
 
   return (
-    <S.ItemBox {...rest}>
+    <S.ItemBox {...rest} id={el.id}>
       {/* {props.isBest && <S.Label>BEST</S.Label>} */}
       <S.Item_Contents>
         <S.Image_Section>
@@ -71,7 +86,11 @@ export default function ItemBox(props: ItemBoxProps) {
               ))}
             </S.Colors_Wrapper>
             <S.CountsInfo>
-              <S.Liked onClick={toggleLikeIt} isLiked={el?.isLiked}>
+              <S.Liked
+                id={String(el?.isLiked)}
+                onClick={toggleLikeIt}
+                isLiked={el?.isLiked}
+              >
                 {el?.isLiked ? (
                   <S.CountIcon icon={solidHeart as IconProp}></S.CountIcon>
                 ) : (

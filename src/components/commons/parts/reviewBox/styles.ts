@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 
 export const Review_Wrapper = styled.article`
+  cursor: pointer;
   position: relative;
   padding-bottom: 100%;
   border: 3px solid red;
@@ -9,6 +10,7 @@ export const Review_Wrapper = styled.article`
 export const Review_Top = styled.div`
   height: 100%;
   filter: contrast(1);
+  transition: all 0.5s ease;
   border: 2px solid green;
 `;
 
@@ -41,10 +43,13 @@ export const ReviewBottom = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  transition: all 0.5s ease;
+
   opacity: 0;
 
   :hover {
     opacity: 1;
+    transform: translateY(-10%);
   }
 `;
 
@@ -58,6 +63,7 @@ export const Review = styled.p`
   text-align: center;
   overflow: hidden;
   color: white;
+  transform: translateY(100%);
 `;
 
 export const Rate = styled.div`
@@ -65,4 +71,5 @@ export const Rate = styled.div`
   font-size: 20px;
   color: orange;
   font-weight: 500;
+  transform: translateY(100%);
 `;

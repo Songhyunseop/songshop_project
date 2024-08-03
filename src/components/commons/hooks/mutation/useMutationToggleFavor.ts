@@ -35,13 +35,18 @@ export const useToggleFavor = () => {
     mutationFn: toggleFavor,
     onMutate: async (toggleVariable) => {
       await queryClient.cancelQueries({ queryKey: ['product'] });
+
       const perviousData = queryClient.getQueryData(['product']);
 
       queryClient.setQueryData(['product'], (old) => {
-        const selectProduct = old.productData.find(
-          (product) => product.id === toggleVariable.product
-        );
-        selectProduct.isLiked = !selectProduct.isLiked;
+        try {
+          const selectProduct = old?.productData.find(
+            (product) => product.id === toggleVariable.product
+          );
+          selectProduct.isLiked = !selectProduct.isLiked;
+        } catch (error) {
+          console.log(error);
+        }
       });
 
       // 실패를 가정해서 변경 이전의 데이터값을 반환 (onError 발생 시 이 return 값 활용)
@@ -49,7 +54,7 @@ export const useToggleFavor = () => {
     },
 
     onError: (_error, newValue, context) => {
-      queryClient.setQueryData(['product', context?.perviousData]);
+      queryClient.setQueryData(['product', context?.perviousData], () => {});
     },
 
     // 이 부분 때문에 product쿼리 key로 가진 모든 컴포넌트 리렌더링됨 (fix 필요!)

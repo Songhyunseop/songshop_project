@@ -7,5 +7,6 @@ export const Layout_Wrapper = styled.main`
 `;
 
 export const Layout_Child = styled.div`
-  margin-top: ${(props) => (props.isHeader ? 0 : '70px')}; // 헤더 높이값
+  margin-top: ${(props) =>
+    props.isHeader ? 0 : 'clamp(10%, 150px, 15%)'}; // 헤더 높이값
 `;

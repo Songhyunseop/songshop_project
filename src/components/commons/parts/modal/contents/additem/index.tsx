@@ -30,15 +30,6 @@ const WriteEditor = dynamic(() => import('../../../editor/writeeditor'), {
 });
 
 export default function AddItemModalContents() {
-  // interface ISelected {
-  //   value: string;
-  //   label: string;
-  //   item: string;
-  //   count: number;
-  //   isdisabled: boolean;
-  //   isPickerOpen: boolean;
-  // }
-
   const defaultStockData = {
     value: '',
     label: '',
@@ -115,6 +106,7 @@ export default function AddItemModalContents() {
       )
     );
 
+    // data에 이미지리스트 추가
     formData.previewImages = uploadedList.map((data) => data.url);
 
     const userInputData = {

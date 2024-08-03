@@ -47,6 +47,7 @@ export const Image_Section = styled.div`
 
 export const Item_Img = styled.img`
   position: absolute;
+  -webkit-user-drag: none; // 드래그 시 이미지 끌어지는(고스트 이미지) 효과 방지용
   width: 100%;
   height: 100%;
   object-fit: cover;

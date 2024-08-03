@@ -12,23 +12,11 @@ export interface InputProps {
 export interface InputContainerProps {
   register: UseFormRegister<FieldValues>;
   el: {
-    title?: string;
-    field?: string;
-    type?: string;
-    args?: {
-      required?: string;
-      pattern?: {
-        value: RegExp;
-        message: string;
-      };
-      minLength?: {
-        value: number;
-        message: string;
-      };
-      validate?: {
-        isMatchedPassword: (val: string) => true | string;
-      };
-    };
+    title: string;
+    field: string;
+    type: string;
+    placeholder?: string;
+    readOnly: boolean;
   };
   errors: FieldErrors<FieldValues>;
   setFocus: UseFormSetFocus<FieldValues>;

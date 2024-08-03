@@ -1,115 +1,116 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import InputContainer from '@/components/commons/parts/signUp/InputBox/inputBox';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
-
-import supabase from '@/commons/utils/supabase/client';
 
 import * as S from './styles';
+import SignUpInputContainer from './signupContent/inputBox';
+
+import {
+  FieldValues,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from 'react-hook-form';
+import { useRouter } from 'next/router';
+
+import { yupResolver } from '@hookform/resolvers/yup';
+import { signInSchema } from '@/commons/libraries/validate/signInSchema';
+
+import { useState } from 'react';
+import { useSignUp } from '@/components/commons/hooks/mutation/useMutationSignUp';
+import { AuthError } from '@supabase/supabase-js';
+import { useCustomModal } from '@/components/commons/hooks/custom/useCustomModal/modalhook';
+import SearchAddressComponent from '@/components/commons/parts/modal/contents/searchAddress';
 
 export default function SignUp() {
-  const supabaseClient = supabase();
   const router = useRouter();
+
+  const [select, setSelect] = useState('');
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     setFocus,
-    getValues,
-  } = useForm({ mode: 'onChange' });
+    setValue,
+    control,
+  } = useForm({
+    resolver: yupResolver(signInSchema),
+    mode: 'onChange',
+    defaultValues: {
+      phone: [],
+    },
+  });
 
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'phone',
+  });
+
+  const userTypes = ['seller', 'consumer'];
   const SignUpInputDataArr = [
     {
       title: '이름',
       field: 'name',
       type: 'text',
-      args: {
-        required: '빈 칸으로 둘 수 없습니다',
-        pattern: {
-          value: /[ㄱ-ㅎㅏ-ㅣ가-힣]/,
-          message: '올바르지 않은 형식입니다',
-        },
-      },
+      placeholder: '이름을 입력하세요',
+      readOnly: false,
     },
     {
       title: '닉네임',
       field: 'nickName',
       type: 'text',
-      args: {
-        required: '빈 칸으로 둘 수 없습니다',
-        pattern: {
-          value: /^[a-zA-Z0-9ㄱ-힣]*$/,
-          message: '올바르지 않은 형식입니다',
-        },
-      },
+      placeholder: '닉네임을 입력하세요',
+      readOnly: false,
     },
     {
       title: 'E-MAIL',
       field: 'email',
-      args: {
-        required: '빈 칸으로 둘 수 없습니다',
-        pattern: {
-          value: /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/,
-          message: '올바르지 않은 형식입니다',
-        },
-      },
+      placeholder: '이메일을 입력하세요',
+      readOnly: false,
     },
     {
       title: '비밀번호',
       field: 'password',
       type: 'password',
-      args: {
-        required: '빈 칸으로 둘 수 없습니다',
-        minLength: {
-          value: 10,
-          message: '비밀번호는 최소 10자리 이상입니다',
-        },
-        pattern: {
-          value: /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g,
-          message: '최소 1개 이상의 특수문자가 포함되어야 합니다',
-        },
-      },
+      placeholder: '비밀번호를 입력하세요',
+      readOnly: false,
     },
     {
       title: '비밀번호 확인',
       field: 'passwordCheck',
       type: 'password',
-      args: {
-        required: '빈 칸으로 둘 수 없습니다',
-        validate: {
-          isMatchedPassword: (val: string) => {
-            const { password } = getValues();
-            return password === val || '비밀번호가 일치하지 않습니다';
-          },
-        },
-      },
+      placeholder: '비밀번호를 입력하세요',
+      readOnly: false,
     },
     {
       title: '휴대전화',
-      filed: 'phone',
+      field: 'phone',
+      readOnly: false,
+    },
+    {
+      title: '주소',
+      field: 'address',
+      placeholder: '주소를 입력하세요',
+      readOnly: true,
     },
   ];
+
+  const { mutateAsync: signUp } = useSignUp();
 
   const onSubmit: SubmitHandler<FieldValues> = async (data, e) => {
     e?.preventDefault();
 
-    const phone = data.phone;
-    const phoneNum = phone.map((el: string) => el).join('-');
+    // 가입유형 미체크 시
+    if (select === '') {
+      alert('가입 유형을 선택해주세요');
+      return;
+    }
+
+    // 휴대폰번호, 가입유형
+    const phoneNum = data.phone?.map((el) => el.num).join('');
+    const subData = { phoneNum, userType: select };
 
     try {
-      const { data: signUpData, error } = await supabaseClient.auth.signUp({
-        email: data.email,
-        password: data.password,
-        options: {
-          data: {
-            user_name: data.name,
-            user_nickname: data.nickName,
-            user_phone: phoneNum,
-          },
-        },
-      });
-      if (error) throw error;
+      await signUp({ data, subData });
 
       alert('회원가입이 완료되었습니다 다시 로그인 해주세요');
       router.push('/signIn');
@@ -121,12 +122,22 @@ export default function SignUp() {
     }
   };
 
+  const toggleType = (e) => {
+    setSelect(e.target.id);
+  };
+
+  const { Modal, handleModal, isOpen } = useCustomModal();
+
   return (
     <S.Main>
+      {/* <Modal isOpen={true}> */}
+      {/* <SearchAddressComponent /> */}
+      {/* </Modal> */}
       <S.Title>회원가입</S.Title>
       <S.SignUpForm onSubmit={handleSubmit(onSubmit)}>
+        <S.SignUp_Index>User Info</S.SignUp_Index>
         {SignUpInputDataArr.map((el, idx) => (
-          <InputContainer
+          <SignUpInputContainer
             key={idx}
             el={el}
             errors={errors}
@@ -134,6 +145,19 @@ export default function SignUp() {
             setFocus={setFocus}
           />
         ))}
+        <S.Select_Section>
+          <S.SignUp_Index>User Type</S.SignUp_Index>
+          <S.UserType_Seciton>
+            {userTypes.map((type) => (
+              <S.UserType
+                key={type}
+                id={type}
+                isSelect={select === type}
+                onClick={toggleType}
+              ></S.UserType>
+            ))}
+          </S.UserType_Seciton>
+        </S.Select_Section>
         <S.SignUp_Button type='submit'>JOIN</S.SignUp_Button>
       </S.SignUpForm>
     </S.Main>

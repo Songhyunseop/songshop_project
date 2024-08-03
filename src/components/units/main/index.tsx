@@ -14,8 +14,6 @@ import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import ToggleNav from '@/components/commons/layout/navigation/toggleCategorynav/toggleCategorynav';
 import About from './about/about';
 import ReviewBox from '@/components/commons/parts/reviewBox/reviewBox';
-import { useRecoilValue } from 'recoil';
-import { UserState } from '@/commons/libraries/atom';
 
 export default function Main() {
   const videoUrls = ['/videos/shopvid1.mp4', '/videos/shopvid2.mp4'];
@@ -143,23 +141,35 @@ export default function Main() {
     }
   };
 
-  const dragEnd = () => {
+  // 기본 이벤트 트리거 방지 함수
+  const prevetEffects = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const dragEnd = (e) => {
     if (!isDragging) return;
 
     const container = mouseScrollRef.current;
     const items = mouseScrollRef.current.children;
-    const currentScrollX = mouseScrollRef.current.scrollLeft;
 
+    const currentScrollX = mouseScrollRef.current.scrollLeft;
     const containerLeft = mouseScrollRef.current.getBoundingClientRect().left;
+
+    const scrolledDiff = Math.abs(startX - e.clientX);
 
     // 가장 근거리에 있는 아이템, 스크롤 상 타겟 위치 초기화
     let closestItem = items[0];
     let targetPosition = 0;
 
     Array.from(items).forEach((item, idx) => {
-      const itemLeft = items[idx].getBoundingClientRect().left;
+      // 드래그 시 아이템 클릭 이벤트 방지 (드래그 범위 diff가 일정범위 이상일 경우 클릭으로 간주(eventListener 제거))
+      if (scrolledDiff > 15) item.addEventListener('click', prevetEffects);
+      else item.removeEventListener('click', prevetEffects);
 
       // distance 거리와 이전까지 가장가까운 item(clossest) 비교
+      const itemLeft = items[idx].getBoundingClientRect().left;
+
       const distance = Math.abs(itemLeft - containerLeft);
       const currentClosest = Math.abs(closestItem.getBoundingClientRect().left);
 
@@ -182,7 +192,7 @@ export default function Main() {
 
     // 현재 스크롤 진행도 계산
     setTimeout(() => {
-      const scrollDistance = items[0].offsetWidth;
+      const scrollDistance = items[0]?.offsetWidth;
 
       const usuableScrollTimes = Math.round(
         usuableScrollRange / scrollDistance
@@ -193,14 +203,14 @@ export default function Main() {
 
       const percentage = (curretnScrollTime / usuableScrollTimes) * 100;
 
-      smoothScrollBar(percentage, 200);
+      smoothScrollXbar(percentage, 200);
     }, 200);
 
     smoothScrollTo(targetPosition, 200);
     setIsDragging(false);
   };
 
-  const smoothScrollBar = (targetX, duration) => {
+  const smoothScrollXbar = (targetX, duration) => {
     const progressBar = document.querySelector('.progressState');
     const container = mouseScrollRef.current;
 
@@ -217,7 +227,8 @@ export default function Main() {
       const progress = Math.min(elapsedTime / duration, 1);
 
       const items = container.children;
-      const itemArr = [items[0].offsetLeft, items[1].offsetLeft];
+      const itemArr =
+        items.length > 0 ? [items[0].offsetLeft, items[1].offsetLeft] : [];
 
       const isFirstOrSecond = itemArr.every(
         (_, idx) => items[idx].offsetLeft >= container.scrollLeft

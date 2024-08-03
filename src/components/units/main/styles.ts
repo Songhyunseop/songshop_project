@@ -164,7 +164,7 @@ export const Review_List = styled.div<{ minWidth: number }>`
     `repeat(auto-fit, minmax(${minWidth}px, 1fr))`};
   grid-gap: 50px 20px;
   overflow: hidden;
-  border: 10px solid yellowgreen;
+  border: 3px solid yellowgreen;
 `;
 
 export const Button = styled.button`

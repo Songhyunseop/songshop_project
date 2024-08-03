@@ -41,7 +41,7 @@ export const Cube = styled.div`
   min-width: 10px;
 
   transform-style: preserve-3d;
-  transition: transform 0.5s ease-out 0.05s;
+  transition: transform 0.5s ease-in-out;
 
   /* :nth-of-type(1) {
     top: 0;
