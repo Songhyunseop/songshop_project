@@ -130,9 +130,9 @@ export default function SignUp() {
 
   return (
     <S.Main>
-      {/* <Modal isOpen={true}> */}
-      {/* <SearchAddressComponent /> */}
-      {/* </Modal> */}
+      <Modal isOpen={true}>
+        <SearchAddressComponent />
+      </Modal>
       <S.Title>회원가입</S.Title>
       <S.SignUpForm onSubmit={handleSubmit(onSubmit)}>
         <S.SignUp_Index>User Info</S.SignUp_Index>
