@@ -25,7 +25,7 @@ export const useCustomModal = () => {
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
     overflow: auto;
-    border: 3px solid red;
+    /* border: 3px solid red */
   `;
 
   const Modal = (props) => {
