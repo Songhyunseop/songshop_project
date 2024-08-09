@@ -20,4 +20,5 @@ export interface InputContainerProps {
   };
   errors: FieldErrors<FieldValues>;
   setFocus: UseFormSetFocus<FieldValues>;
+  handleModal: () => void;
 }

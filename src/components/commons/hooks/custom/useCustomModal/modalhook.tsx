@@ -28,9 +28,13 @@ export const useCustomModal = () => {
     /* border: 3px solid red */
   `;
 
-  const Modal = (props) => {
-    const { isOpen, children, handleModal } = props;
+  const [isOpen, setIsOpen] = useState(false);
 
+  const handleModal = () => {
+    setIsOpen((prev) => !prev);
+  };
+
+  const Modal = ({ children }) => {
     return (
       <StyledModal
         id='modal'
@@ -45,11 +49,5 @@ export const useCustomModal = () => {
     );
   };
 
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleModal = () => {
-    setIsOpen(!isOpen);
-  };
-
-  return { handleModal, Modal, isOpen };
+  return { handleModal, Modal, isOpen, setIsOpen };
 };

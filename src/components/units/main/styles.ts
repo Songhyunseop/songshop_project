@@ -196,6 +196,7 @@ export const Recommend_Contents = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 100%;
+  padding-bottom: 4%;
 `;
 
 export const Recommend_Left = styled.article`
@@ -203,6 +204,7 @@ export const Recommend_Left = styled.article`
   width: 100%;
   max-width: 60%;
   height: 100%;
+  margin-left: 7%;
   display: flex;
   flex-direction: column;
   flex: 1.5;
@@ -292,12 +294,12 @@ export const Scroll_Container = styled.div`
 `;
 
 export const Recommend_Right = styled.article`
-  /* width: 45%; */
   height: 100%;
   margin-left: 50px;
   position: relative;
   animation: appear 0.5s ease-out;
   flex: 1 1;
+  margin-right: 7%;
   border: 3px solid orange;
 `;
 

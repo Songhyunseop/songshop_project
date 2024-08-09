@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import * as S from './styles';
 
 export default function About() {
-  const ItemWrapperRef = useRef();
+  const ItemWrapperRef = useRef(null);
 
   const DEFAULT_Z = 100;
   const [zPosition, setZposition] = useState(DEFAULT_Z);
@@ -11,11 +11,11 @@ export default function About() {
   const getParentSize = () => {
     if (ItemWrapperRef.current) {
       const parentWidth = ItemWrapperRef.current.offsetWidth;
-      const DEFAULT_RATIO = 8.37; // default 비율
+      const DEFAULT_RATIO = 9; // default 비율
 
       const currentZ = Number((parentWidth * DEFAULT_RATIO) / 100);
 
-      setZposition(currentZ);
+      setZposition(Math.floor(currentZ));
     }
   };
 

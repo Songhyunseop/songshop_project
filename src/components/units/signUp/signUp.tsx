@@ -14,15 +14,13 @@ import { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { signInSchema } from '@/commons/libraries/validate/signInSchema';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSignUp } from '@/components/commons/hooks/mutation/useMutationSignUp';
-import { AuthError } from '@supabase/supabase-js';
 import { useCustomModal } from '@/components/commons/hooks/custom/useCustomModal/modalhook';
 import SearchAddressComponent from '@/components/commons/parts/modal/contents/searchAddress';
 
 export default function SignUp() {
   const router = useRouter();
-
   const [select, setSelect] = useState('');
 
   const {
@@ -36,6 +34,11 @@ export default function SignUp() {
     resolver: yupResolver(signInSchema),
     mode: 'onChange',
     defaultValues: {
+      email: '',
+      name: '',
+      nickName: '',
+      password: '',
+      passwordCheck: '',
       phone: [],
     },
   });
@@ -99,6 +102,8 @@ export default function SignUp() {
   const onSubmit: SubmitHandler<FieldValues> = async (data, e) => {
     e?.preventDefault();
 
+    console.log(data);
+
     // 가입유형 미체크 시
     if (select === '') {
       alert('가입 유형을 선택해주세요');
@@ -130,8 +135,8 @@ export default function SignUp() {
 
   return (
     <S.Main>
-      <Modal isOpen={true}>
-        <SearchAddressComponent />
+      <Modal>
+        <SearchAddressComponent setValue={setValue} handleModal={handleModal} />
       </Modal>
       <S.Title>회원가입</S.Title>
       <S.SignUpForm onSubmit={handleSubmit(onSubmit)}>
@@ -143,6 +148,7 @@ export default function SignUp() {
             errors={errors}
             register={register}
             setFocus={setFocus}
+            handleModal={handleModal}
           />
         ))}
         <S.Select_Section>

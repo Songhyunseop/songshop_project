@@ -1,7 +1,7 @@
 import { InputContainerProps } from '@/commons/types/signUp_type';
 
 import * as S from './styles';
-import { ChangeEvent, ReactNode } from 'react';
+import { ChangeEvent, ReactNode, useEffect } from 'react';
 
 interface FieldError {
   message?: string;
@@ -29,6 +29,8 @@ export default function SignUpInputContainer(props: InputContainerProps) {
   // phone 빈 칸 체크
   const phoneError = props.errors.phone as unknown as PhoneError[];
   const isPhoneBlank = phoneError ? phoneError?.find((err) => err) : null;
+
+  //
 
   return (
     <S.Input_Container>
@@ -59,7 +61,11 @@ export default function SignUpInputContainer(props: InputContainerProps) {
         )}
         <S.ButtonContainer>
           {title === 'E-MAIL' && <S.ConfirmButton>중복확인</S.ConfirmButton>}
-          {title === '주소' && <S.ConfirmButton>주소검색</S.ConfirmButton>}
+          {title === '주소' && (
+            <S.ConfirmButton onClick={props.handleModal} type='button'>
+              주소검색
+            </S.ConfirmButton>
+          )}
         </S.ButtonContainer>
       </S.Input_Detail>
       {title === '휴대전화' ? (

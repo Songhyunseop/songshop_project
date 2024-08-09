@@ -5,7 +5,7 @@ import ItemSwiper from '@/components/commons/parts/swiper/itemSwiper/itemSwiper'
 
 import ItemBox from '@/components/commons/parts/itembox/itembox';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { throttle } from '@/commons/utils/throttle';
 
@@ -265,10 +265,6 @@ export default function Main() {
 
     requestAnimationFrame(animateScroll);
   };
-
-  useEffect(() => {
-    // const rr
-  }, []);
 
   return (
     <S.Main>
