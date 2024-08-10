@@ -1,3 +1,4 @@
+import { css, keyframes } from '@emotion/react';
 import styled from 'node_modules/@emotion/styled';
 
 const getPositon = ({ isScrolled, isChangeStylePath }) => {
@@ -12,17 +13,21 @@ const getBackgroudColor = ({ isScrolled, isChangeStylePath }) => {
   return 'white';
 };
 
+const getDropDownDisplayStat = ({ isScrolled }) => {
+  if (isScrolled) return 'none';
+  // return 'none';
+};
+
 export const Header_Wrapper = styled.header`
   width: 100%;
-  z-index: 999;
   transition: all 0.9s ease;
   position: ${(props) => getPositon(props)};
   top: 0;
   left: 0;
   background-color: ${(props) => getBackgroudColor(props)};
   transform: ${(props) => (props.isScrolled ? 'translateY(px)' : 'auto')};
-
   border-bottom: 1px solid #d8d8d8;
+  z-index: 9999;
 `;
 
 export const Header_Main = styled.section`
@@ -43,18 +48,49 @@ export const Main_Left = styled.div`
 
 export const Main_Right = styled.div`
   width: 45%;
-  /* min-width: 680px; */
+  height: 100%;
   display: flex;
   align-items: center;
 `;
 
 export const Main_Title = styled.p``;
 
+const fadeOut = keyframes`
+    0% {
+        opacity: 0;
+    }  
+    100% {
+        opacity: 1;
+    }
+`;
+
+export const DropDown = styled.div`
+  transition: all 0.3s ease;
+  background-color: white;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: translateY(50px);
+  border: 1px solid lightgray;
+  border-top: none;
+
+  ${(props) =>
+    props.isHover
+      ? css`
+          animation: ${fadeOut} 0.5s ease;
+        `
+      : null}/* animation: dropdown 0.3s ease-in; */
+`;
+
+export const DropItem = styled.div`
+  height: 45px;
+`;
+
 export const Search_Box = styled.input`
-  /* width: 17vw; */
   width: 100%;
   height: 100%;
-  flex: 1;
 `;
 
 export const Basket = styled.img`

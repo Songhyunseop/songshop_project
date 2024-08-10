@@ -29,10 +29,16 @@ export default function SearchAddressComponent({ setValue, handleModal }) {
     handleModal();
   };
 
+  const themeObj = {
+    bgColor: '#DEDBD9',
+    searchBgColor: '#ebe7e6',
+  };
+
   return (
-    <S.SearchAddress_Wrapper id='address_wrapper'>
+    <S.SearchAddress_Wrapper>
       <DaumPostcodeEmbed
         onComplete={handleComplete}
+        theme={themeObj}
         style={{ height: '100%' }}
       />
     </S.SearchAddress_Wrapper>

@@ -12,8 +12,8 @@ export const Main = styled.main`
 `;
 
 export const Title = styled.h1`
-  font-size: 2.5rem;
-  font-weight: 300;
+  font-size: 2rem;
+  font-weight: 400;
   margin-bottom: 3rem;
 `;
 
@@ -24,13 +24,15 @@ export const Input_Section = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-bottom: 4rem;
+  margin-bottom: 10%;
 `;
 
 export const Login_Input = styled.input`
   width: 100%;
   height: 100%;
   max-height: 60px;
+  border-radius: 3px;
+  border: 1px solid lightgray;
 `;
 
 export const User_Contact_Section = styled.section`

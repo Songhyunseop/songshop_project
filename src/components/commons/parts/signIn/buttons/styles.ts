@@ -5,6 +5,7 @@ export const Button_Wrapper = styled.button<IButtonProps>`
   width: 100%;
   max-height: 65px;
   height: 60px;
+  border-radius: 5px;
   /* height: calc(110px * (45 / 100)); //받아오는 container 높이값의 45%로 계산 */
   letter-spacing: 0.08rem;
   border: none;

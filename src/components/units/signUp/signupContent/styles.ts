@@ -41,8 +41,6 @@ export const PhoneNumber_Input_Container = styled.article`
 
   justify-content: space-between;
   align-items: center;
-
-  border: 2px solid green;
 `;
 
 export const Error_Msg = styled.span`

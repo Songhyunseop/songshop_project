@@ -37,18 +37,20 @@ export default function Main() {
     '/carousel3.jpeg',
   ];
 
-  const [phrase, setPhrase] = useState(randomPhrases[0]);
-  const [isNav, setIsNav] = useState({ best: false, new: false });
-
   // 추후 리팩토링 시 관련 폴더로 옮길코드
   const { data, isLoading, isError } = useQuery({
     queryKey: ['product'],
     queryFn: getDataList,
   });
 
-  // 화면 문구 변환 함수
+  //
+  //
+  //
+  const [phrase, setPhrase] = useState(randomPhrases[0]);
+  const [isNav, setIsNav] = useState({ best: false, new: false });
 
-  const changePhrase = () => {
+  // 화면 문구 변환 함수
+  const changedPhrase = () => {
     const index = Math.floor(Math.random() * 5);
 
     return randomPhrases[index];
@@ -58,17 +60,14 @@ export default function Main() {
     let isRunning = false;
     let timer: ReturnType<typeof setTimeout>;
 
-    changePhrase();
-
     const delaytoTrigger = (e) => {
       if (isRunning) clearTimeout(timer);
 
       isRunning = true;
       timer = setTimeout(() => {
-        const phrase = changePhrase();
-        if (e._reactName === 'onMouseLeave') setPhrase(phrase);
+        if (e._reactName === 'onMouseLeave') setPhrase(changedPhrase());
         isRunning = false;
-      }, 2000);
+      }, 1500);
     };
 
     return { delaytoTrigger };
@@ -111,6 +110,10 @@ export default function Main() {
     setSelectedData(selectMockDataImage[selectOne]);
   };
 
+  //
+  //
+  //
+  //
   // mouseScroll
   const [startX, setStartX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -119,13 +122,12 @@ export default function Main() {
 
   const onMove = (e) => {
     const leftMargin = mouseScrollRef.current.offsetLeft;
-    const viewPortX = e.clientX;
+    const currentStartX = e.clientX - leftMargin;
 
-    const xPosition = viewPortX - leftMargin;
     const scrolledX = mouseScrollRef.current.scrollLeft;
 
     setIsDragging(true);
-    setStartX(xPosition + scrolledX);
+    setStartX(currentStartX + scrolledX);
   };
 
   const onDrag = (e) => {

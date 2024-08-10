@@ -5,7 +5,6 @@ import Link from 'next/link';
 // 헤더 메뉴목록 링크
 const headerLinkStyle = css`
   font-size: 1.3rem;
-  /* color: black; */
   transition: all 0.3s ease-out;
   font-weight: 400;
 

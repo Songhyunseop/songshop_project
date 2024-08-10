@@ -10,8 +10,9 @@ import {
 } from '@/commons/constants/constants';
 import { AuthApiError } from '@supabase/supabase-js';
 import { useRouter } from 'next/router';
+import WithAuth from '@/components/commons/hocs/withAuth';
 
-export default function Login() {
+function Login() {
   const router = useRouter();
 
   const supabaseClient = supabase();
@@ -47,7 +48,7 @@ export default function Login() {
 
   return (
     <S.Main>
-      <S.Title>LOGIN</S.Title>
+      <S.Title>로그인</S.Title>
       <form onSubmit={handleSubmit(onSubmit)} style={{ width: '40%' }}>
         <S.Input_Section>
           <S.Login_Input
@@ -71,3 +72,5 @@ export default function Login() {
     </S.Main>
   );
 }
+
+export default WithAuth(Login);

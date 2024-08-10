@@ -1,7 +1,7 @@
 import { InputContainerProps } from '@/commons/types/signUp_type';
 
 import * as S from './styles';
-import { ChangeEvent, ReactNode, useEffect } from 'react';
+import { ChangeEvent, ReactNode } from 'react';
 
 interface FieldError {
   message?: string;
