@@ -5,10 +5,10 @@ import Link from 'next/link';
 // 헤더 메뉴목록 링크
 const headerLinkStyle = css`
   font-size: 1.3rem;
-  transition: all 0.3s ease-out;
+  transition: all 0.2s ease;
   font-weight: 400;
 
-  &:hover {
+  :hover {
     color: #e2c2b3;
   }
 `;
@@ -29,7 +29,6 @@ export const linkStyles = {
 const getPropsResult = ({ isScrolled, isChangeStylePath }) => {
   if (isScrolled) return 'black';
   if (isChangeStylePath === false) return 'black';
-  console.log(isChangeStylePath);
 
   return 'white';
 };
@@ -42,7 +41,7 @@ export const StyledLink = styled(Link)`
 
 export const Link_Wrapper = styled.div<{ type: keyof typeof linkStyles }>`
   ${StyledLink} {
-    ${({ type }) => linkStyles[type]}
     color: ${(props) => getPropsResult(props)};
+    ${({ type }) => linkStyles[type]}
   }
 `;

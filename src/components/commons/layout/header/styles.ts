@@ -1,5 +1,5 @@
 import { css, keyframes } from '@emotion/react';
-import styled from 'node_modules/@emotion/styled';
+import styled from '@emotion/styled';
 
 const getPositon = ({ isScrolled, isChangeStylePath }) => {
   if (isScrolled) return 'fixed';
@@ -13,9 +13,11 @@ const getBackgroudColor = ({ isScrolled, isChangeStylePath }) => {
   return 'white';
 };
 
-const getDropDownDisplayStat = ({ isScrolled }) => {
-  if (isScrolled) return 'none';
-  // return 'none';
+const getPropsResult = ({ isScrolled, isChangeStylePath }) => {
+  if (isScrolled) return 'black';
+  if (isChangeStylePath === false) return 'black';
+
+  return 'white';
 };
 
 export const Header_Wrapper = styled.header`
@@ -26,7 +28,7 @@ export const Header_Wrapper = styled.header`
   left: 0;
   background-color: ${(props) => getBackgroudColor(props)};
   transform: ${(props) => (props.isScrolled ? 'translateY(px)' : 'auto')};
-  border-bottom: 1px solid #d8d8d8;
+
   z-index: 9999;
 `;
 
@@ -55,39 +57,6 @@ export const Main_Right = styled.div`
 
 export const Main_Title = styled.p``;
 
-const fadeOut = keyframes`
-    0% {
-        opacity: 0;
-    }  
-    100% {
-        opacity: 1;
-    }
-`;
-
-export const DropDown = styled.div`
-  transition: all 0.3s ease;
-  background-color: white;
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  left: 0;
-  width: 100%;
-  transform: translateY(50px);
-  border: 1px solid lightgray;
-  border-top: none;
-
-  ${(props) =>
-    props.isHover
-      ? css`
-          animation: ${fadeOut} 0.5s ease;
-        `
-      : null}/* animation: dropdown 0.3s ease-in; */
-`;
-
-export const DropItem = styled.div`
-  height: 45px;
-`;
-
 export const Search_Box = styled.input`
   width: 100%;
   height: 100%;
@@ -98,6 +67,14 @@ export const Basket = styled.img`
   height: 30px;
   padding-bottom: 0.08rem;
   margin-left: 1rem;
+`;
+
+export const NavButtonLi = styled.li`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-right: 1rem;
+  transition: all 1s ease;
 `;
 
 export const Nav_Bar = styled.nav`
@@ -116,7 +93,6 @@ export const Nav_Bar = styled.nav`
     align-items: center;
     color: black;
     cursor: pointer;
-    padding: 0 2%;
 
     :nth-of-type(5) {
       flex: 1;

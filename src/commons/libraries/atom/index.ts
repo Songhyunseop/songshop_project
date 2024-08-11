@@ -42,7 +42,18 @@ export const fileListState = atom({
 
 //user Info
 
-export const UserState = atom({
+type UserMetadata = {
+  [key: string]: string;
+  user_type: string;
+};
+
+interface IUser {
+  user_metadata: UserMetadata;
+}
+
+type atomUser = IUser | null;
+
+export const UserState = atom<atomUser>({
   key: 'userInfoState',
   default: null,
 });

@@ -290,7 +290,7 @@ export default function Main() {
           <S.Section_Title>
             {' BEST ITEM '}
             <S.ToggleItemBtn
-              onClick={throttle(showCategory, 600)}
+              onClick={throttle(showCategory, 400)}
               icon={faSortDown}
               id='best'
             />
@@ -308,7 +308,7 @@ export default function Main() {
             <S.ToggleItemBtn
               icon={faSortDown}
               id='new'
-              onClick={throttle(showCategory, 600)}
+              onClick={throttle(showCategory, 400)}
             />
           </S.Section_Title>
           <ToggleNav

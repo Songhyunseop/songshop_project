@@ -2,22 +2,27 @@ import * as S from './styles';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import CustomLink from '../../parts/link/link';
+import { UseDropDown } from '../../hooks/custom/useDropdown/dropdown';
+import { useRecoilValue } from 'recoil';
+import { UserState } from '@/commons/libraries/atom';
 
 export default function Header() {
   const router = useRouter();
-
   const headerRef = useRef(null);
-  const dropDownRef = useRef(null);
 
-  const navRoute = [
-    { route: '/signIn', name: 'LOGIN' },
-    { route: '/signUp', name: 'JOIN' },
-    { route: '/', name: 'REVIEW' },
-    { route: '/', name: 'MYPAGE' },
-  ];
+  const user = useRecoilValue(UserState);
 
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isHover, setIsHover] = useState(false);
+
+  const navRoute = [
+    { route: '/signIn', name: user ? 'LOGOUT' : 'LOGIN' },
+    { route: '/signUp', name: 'JOIN' },
+    { route: '/', name: 'REVIEW' },
+    { route: '/', name: 'MYPAGE', prevent: true },
+  ];
+
+  const { DropDown, isHover, onAnimationEnd, isVisible, openDrop, closeDrop } =
+    UseDropDown();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,21 +36,13 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll);
   }, [router.asPath]);
 
-  const openDrop = (e) => {
-    if (e.currentTarget.id === 'MYPAGE') {
-      setIsHover(true);
-      // dropDownRef.current.style.height = `${100}%`;
-      // dropDownRef.current.style.opacity = 1;
-    }
-  };
-
-  const closeDrop = (e) => {
-    if (e.currentTarget.id === 'MYPAGE') {
-      setIsHover(false);
-      // dropDownRef.current.style.height = 0;
-      // dropDownRef.current.style.opacity = 0;
-    }
-  };
+  const userType = user?.user_metadata.user_type;
+  const optionArr = [
+    '내 정보',
+    '장바구니',
+    userType === 'seller' ? '상품등록' : '쇼핑하기',
+    '회원탈퇴',
+  ];
 
   return (
     <>
@@ -69,41 +66,33 @@ export default function Header() {
           <S.Main_Right isScrolled={isScrolled}>
             <S.Nav_Bar>
               <ul>
-                {navRoute.map(({ route, name }) => (
-                  <li
+                {navRoute.map(({ route, name, prevent }) => (
+                  <S.NavButtonLi
                     key={name}
                     id={name}
-                    onMouseEnter={openDrop}
+                    onMouseEnter={() => openDrop(name)}
                     onMouseLeave={closeDrop}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      position: 'relative',
-                      transition: 'all 1s ease',
-                    }}
                   >
                     <CustomLink
                       type={'headerMenu'}
                       href={route}
+                      prevent={prevent}
                       isScrolled={isScrolled}
                       isChangeStylePath={router.asPath === '/'}
                     >
                       {name}
                     </CustomLink>
-                    {name === 'MYPAGE' && isHover && (
-                      <S.DropDown
-                        ref={dropDownRef}
+                    {name === 'MYPAGE' && (
+                      <DropDown
+                        onAnimationEnd={onAnimationEnd}
+                        isHover={isHover === 'MYPAGE'}
+                        isVisible={isVisible === 'MYPAGE'}
                         isScrolled={isScrolled}
-                        isHover={isHover}
-                      >
-                        <S.DropItem>아이템쓰</S.DropItem>
-                        <S.DropItem>아이템쓰</S.DropItem>
-                        <S.DropItem>아이템쓰</S.DropItem>
-                        <S.DropItem>아이템쓰</S.DropItem>
-                        <S.DropItem>아이템쓰</S.DropItem>
-                      </S.DropDown>
+                        isChangeStylePath={router.asPath === '/'}
+                        options={optionArr}
+                      />
                     )}
-                  </li>
+                  </S.NavButtonLi>
                 ))}
                 <li>
                   <S.Search_Box></S.Search_Box>
