@@ -42,3 +42,10 @@ export const signInSchema = yup.object().shape({
 
   address: yup.string().required('주소 입력은 필수입니다'),
 });
+
+export const uploadProductSchema = yup.object().shape({
+  itemName: yup.string().required('상품명을 입력하세요'),
+  itemPrice: yup.string().required('입력 필수'),
+  itemDetail: yup.string().required('필수요'),
+  previewImages: yup.string().required('입력'),
+});

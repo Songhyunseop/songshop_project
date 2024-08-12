@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { Editor as editorType } from '@toast-ui/react-editor';
 import 'react-color-palette/css';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import { deepCopy } from '@/commons/utils/deepcopy';
 import Select from 'react-select/dist/declarations/src/Select';
@@ -23,6 +23,8 @@ import {
   useGetPublicUrl,
   useUploadToStorage,
 } from '@/components/commons/hooks/mutation/useMutationUploadImage';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { uploadProductSchema } from '@/commons/libraries/validate/signInSchema';
 
 // editor 컴포넌트 클라이언트 측에서 렌더링
 const WriteEditor = dynamic(() => import('../../../editor/writeeditor'), {
@@ -58,9 +60,15 @@ export default function AddItemModalContents() {
       stocks: [],
       description: '',
     },
+    resolver: yupResolver(uploadProductSchema),
   });
 
-  const { handleSubmit, register } = methods;
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    formState: { errors },
+  } = methods;
 
   const { getCategorySelectProps } = useCategorySelect(subCategoryRef);
   const { categoryProps, subCategoryProps } = getCategorySelectProps();
@@ -95,19 +103,12 @@ export default function AddItemModalContents() {
   const { mutateAsync: createProduct } = useMutationCreateProduct();
 
   const submitBoard = async (formData) => {
+    console.log(formData);
+
     if (editorRef.current) {
       const textData = editorRef.current.getInstance().getHTML();
       formData.description = textData;
     }
-
-    const uploadedList = await Promise.all(
-      fileList.map(async (file) =>
-        getPublicUrl(await uploadImgFileToStorage(file))
-      )
-    );
-
-    // data에 이미지리스트 추가
-    formData.previewImages = uploadedList.map((data) => data.url);
 
     const userInputData = {
       product_name: formData.itemName,
@@ -116,10 +117,27 @@ export default function AddItemModalContents() {
       product_price: formData.itemPrice,
       product_summary: formData.itemDetail,
       product_description: formData.description,
-      product_img: formData.previewImages,
+      product_img: await returnStorageUrl(formData.previewImages),
       stock: formData.stocks,
     };
+
     await createProduct(userInputData);
+  };
+
+  const returnStorageUrl = async (imgArr: File[]) => {
+    const urlList = await uploadImgFiles(imgArr);
+
+    return urlList.map((data) => data.url);
+  };
+
+  const uploadImgFiles = async (imgArr: File[]) => {
+    const publicUrl = await Promise.all(
+      imgArr.map(async (file: File) =>
+        getPublicUrl(await uploadImgFileToStorage(file))
+      )
+    );
+
+    return publicUrl;
   };
 
   return (
@@ -128,19 +146,38 @@ export default function AddItemModalContents() {
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(submitBoard)}>
           <S.Modal_Body>
-            <ItemInfo register={register('itemName')} title='상품명' />
-            <ItemInfo register={register('itemPrice')} title='상품가격' />
-            <ItemInfo title='상세내용' isCustom>
+            <ItemInfo
+              register={register('itemName')}
+              title={['상품명', 'itemName']}
+              errorstate={errors}
+            />
+            <ItemInfo
+              register={register('itemPrice')}
+              title={['상품가격', 'itemPrice']}
+              errorstate={errors}
+            />
+            <ItemInfo
+              title={['상세내용', 'itemDetail']}
+              isCustom
+              errorstate={errors}
+            >
               <S.DetailText
                 {...register('itemDetail')}
                 placeholder='상세내용을 입력하세요'
                 maxLength={300}
               />
             </ItemInfo>
-            <ItemInfo title='IMAGE' isCustom>
-              <UploadImageComponent />
+            <ItemInfo
+              title={['IMAGE', 'previewImages']}
+              isCustom
+              errorstate={errors}
+            >
+              <UploadImageComponent
+                register={() => register('previewImages')}
+                setValue={setValue}
+              />
             </ItemInfo>
-            <ItemInfo title='카테고리' isCustom>
+            {/* <ItemInfo title='카테고리' isCustom>
               <CustomSelect {...categoryProps} />
             </ItemInfo>
             <ItemInfo title='상세 카테고리' isCustom>
@@ -161,7 +198,7 @@ export default function AddItemModalContents() {
                 changeContent={changeContent}
                 editorRef={editorRef}
               />
-            </ItemInfo>
+            </ItemInfo> */}
             <S.Add_Button>상품등록</S.Add_Button>
           </S.Modal_Body>
         </form>

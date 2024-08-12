@@ -43,7 +43,7 @@ export default function ItemBox(props: ItemBoxProps) {
   };
 
   return (
-    <S.ItemBox {...rest} id={el.id}>
+    <S.ItemBox {...rest} id={el?.id}>
       {/* {props.isBest && <S.Label>BEST</S.Label>} */}
       <S.Item_Contents>
         <S.Image_Section>

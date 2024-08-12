@@ -55,7 +55,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Global styles={globalStyle} />
           <Layout>
             <Component {...pageProps} />
-            <StyledToastContainer />
+            <StyledToastContainer limit={1} containerId='default' />
           </Layout>
         </RecoilRoot>
         <ReactQueryDevtools initialIsOpen={false} />

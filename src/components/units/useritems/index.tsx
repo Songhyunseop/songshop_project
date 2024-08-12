@@ -4,15 +4,14 @@ import { IItemInfoList } from '@/commons/types/list_type';
 import { useCustomModal } from '@/components/commons/hooks/custom/useCustomModal/modalhook';
 import AddItemModalContents from '@/components/commons/parts/modal/contents/additem';
 
-export default function ItemList(props) {
+export default function ItemInfo() {
+  const itemInfo = useSearchParams().get('itemInfo');
+
   const itemInfoList: IItemInfoList = {
     basket: '장바구니',
     order: '주문목록',
     sell: '판매상품',
   };
-
-  const searchParams = useSearchParams();
-  const itemInfo = searchParams.get('itemInfo');
 
   const { Modal, handleModal, isOpen } = useCustomModal();
 
@@ -22,9 +21,11 @@ export default function ItemList(props) {
         <AddItemModalContents />
       </Modal>
       <S.Title>{itemInfo && itemInfoList[itemInfo]}</S.Title>
-      <S.Button_Wrapper>
-        <S.Add_Button onClick={handleModal}>상품추가</S.Add_Button>
-      </S.Button_Wrapper>
+      {itemInfo === 'sell' && (
+        <S.Button_Wrapper>
+          <S.Add_Button onClick={handleModal}>상품추가</S.Add_Button>
+        </S.Button_Wrapper>
+      )}
       <S.Table_Header>
         <S.Table_List>ORDERS</S.Table_List>
         <S.Table_List>IMAGE</S.Table_List>

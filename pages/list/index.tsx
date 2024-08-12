@@ -1,4 +1,4 @@
-import ItemList from '@/components/units/itemlist/sellingItems';
+import ItemList from '@/components/units/products/all';
 
 export default function ListPage() {
   return <ItemList />;

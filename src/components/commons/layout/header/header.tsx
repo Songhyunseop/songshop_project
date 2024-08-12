@@ -16,7 +16,7 @@ export default function Header() {
 
   const navRoute = [
     { route: '/signIn', name: user ? 'LOGOUT' : 'LOGIN' },
-    { route: '/signUp', name: 'JOIN' },
+    { route: '/signUp', name: user ? 'Q&A' : 'JOIN' },
     { route: '/', name: 'REVIEW' },
     { route: '/', name: 'MYPAGE', prevent: true },
   ];
@@ -40,7 +40,7 @@ export default function Header() {
   const optionArr = [
     '내 정보',
     '장바구니',
-    userType === 'seller' ? '상품등록' : '쇼핑하기',
+    userType === 'seller' ? '내 판매상품' : '주문현황',
     '회원탈퇴',
   ];
 

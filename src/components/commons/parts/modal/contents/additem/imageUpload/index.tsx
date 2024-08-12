@@ -4,10 +4,22 @@ import * as S from './styles';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState } from 'recoil';
 import { fileListState, imageUrlState } from '@/commons/libraries/atom';
+import { useEffect } from 'react';
 
-export default function UploadImageComponent() {
+export default function UploadImageComponent({ register, setValue }) {
   const [fileList, setFilesList] = useRecoilState(fileListState);
   const [uploadImgUrl, setUploadImgUrl] = useRecoilState(imageUrlState);
+
+  useEffect(() => {
+    register();
+  }, []);
+
+  const handleFiles = (e) => {
+    const files = e.target.files;
+    const fileArray: File[] = Array.from(files);
+
+    createPreviewImg(fileArray);
+  };
 
   const createPreviewImg = (fileArray: File[]) => {
     // 이미지 미리보기 로직
@@ -16,14 +28,9 @@ export default function UploadImageComponent() {
 
       setUploadImgUrl((prev) => [...prev, blobUrl]);
       setFilesList((fileList) => [file, ...fileList]);
+
+      setValue('previewImages', [file, ...fileList]);
     });
-  };
-
-  const handleFiles = (e) => {
-    const files = e.target.files;
-    const fileArray: File[] = Array.from(files);
-
-    createPreviewImg(fileArray);
   };
 
   const removeImg = (imgIndex: number) => {
