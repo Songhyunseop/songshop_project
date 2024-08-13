@@ -1,6 +1,10 @@
 import { css } from '@emotion/react';
 
 const globalStyle = css`
+  :root {
+    --toastify-toast-width: none; // alert Toast 기본 너비값 제거
+  }
+
   * {
     margin: 0;
     padding: 0;

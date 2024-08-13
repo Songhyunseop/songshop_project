@@ -10,15 +10,17 @@ import { throttle } from '@/commons/utils/throttle';
 import { Flip, toast } from 'react-toastify';
 
 export default function ItemBox(props: ItemBoxProps) {
-  const { el, ...rest } = props;
   const userInfo = useRecoilValue(UserState);
 
+  const { el, ...rest } = props;
+
   const { mutateAsync: toggleFavor } = useToggleFavor();
-  const throttleToggleFavor = throttle(toggleFavor, 200);
 
   const productColors = el?.stock
     ? JSON.parse(el?.stock).map((data) => data.selectColor)[0]
     : [];
+
+  const throttleToggleFavor = throttle(toggleFavor, 200);
 
   const toggleLikeIt = (e) => {
     // 변경사항 업데이트
