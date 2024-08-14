@@ -45,7 +45,9 @@ export const signInSchema = yup.object().shape({
 
 export const uploadProductSchema = yup.object().shape({
   itemName: yup.string().required('상품명을 입력하세요'),
-  itemPrice: yup.string().required('입력 필수'),
-  itemDetail: yup.string().required('필수요'),
-  previewImages: yup.string().required('입력'),
+  itemPrice: yup.string().required('가격을 입력하세요'),
+  itemDetail: yup.string().required('내용을 입력하세요'),
+  previewImages: yup.array().min(1, '이미지는 필수입니다.'),
+  category: yup.string().required('카테고리를 입력하세요'),
+  subCategory: yup.string().required('카테고리를 입력하세요'),
 });

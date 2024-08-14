@@ -28,6 +28,9 @@ export const useCategorySelect = (subRef) => {
 
   const handleCategoryChange = ({ select }) => {
     // //clearValue 실행으로 인한 트리거 처리
+
+    console.log(111111, select);
+
     if (!select) return;
 
     if (select.name === 'mainCategory') {
@@ -36,6 +39,7 @@ export const useCategorySelect = (subRef) => {
           opt.isdisabled = true;
           return;
         }
+
         opt.isdisabled = false;
         opt.subCategory.forEach((o) => (o.isdisabled = false));
       });

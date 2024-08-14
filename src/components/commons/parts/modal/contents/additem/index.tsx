@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { Editor as editorType } from '@toast-ui/react-editor';
 import 'react-color-palette/css';
 
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
 import { deepCopy } from '@/commons/utils/deepcopy';
 import Select from 'react-select/dist/declarations/src/Select';
@@ -12,7 +12,6 @@ import { GroupBase } from 'react-select';
 import ItemInfo from './iteminfo';
 
 import UploadImageComponent from './imageUpload';
-import StocksComponent from './stocks';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { fileListState, stocksState } from '@/commons/libraries/atom';
 import { useCategorySelect } from '@/components/commons/hooks/custom/useCategorySelect/categorySelecthook';
@@ -177,13 +176,21 @@ export default function AddItemModalContents() {
                 setValue={setValue}
               />
             </ItemInfo>
-            {/* <ItemInfo title='카테고리' isCustom>
+            <ItemInfo
+              title={['카테고리', 'category']}
+              isCustom
+              errorstate={errors}
+            >
               <CustomSelect {...categoryProps} />
             </ItemInfo>
-            <ItemInfo title='상세 카테고리' isCustom>
+            <ItemInfo
+              title={['상세 카테고리', 'subCategory']}
+              isCustom
+              errorstate={errors}
+            >
               <CustomSelect {...subCategoryProps} />
             </ItemInfo>
-            <ItemInfo title='재고' isCustom>
+            {/* <ItemInfo title='재고' isCustom>
               {stocks.map((stock) => (
                 <StocksComponent key={stock.item} stock={stock} />
               ))}
@@ -192,8 +199,8 @@ export default function AddItemModalContents() {
                   재고추가
                 </S.AddItem>
               )}
-            </ItemInfo>
-            <ItemInfo title={'상품 디테일'} isCustom>
+            </ItemInfo> */}
+            {/* <ItemInfo title={'상품 디테일'} isCustom>
               <WriteEditor
                 changeContent={changeContent}
                 editorRef={editorRef}

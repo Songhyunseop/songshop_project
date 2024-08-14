@@ -14,16 +14,27 @@ interface ItemInfoProps {
 const NAME = 0;
 const FIELD = 1;
 
-const StyledToastContainer = styled(ToastContainer)`
+const StyledToastContainer = styled(ToastContainer)<{ isError: boolean }>`
+  position: absolute;
+  top: 30px;
+  left: 20%;
   z-index: 1;
-  max-width: 170px;
+  min-width: 170px;
+  max-width: 200px;
   max-height: 45px;
   padding: 7px 0 0 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 
-  border: 4px solid gold;
+  opacity: 0;
+  opacity: ${(props) => (props.isError ? 1 : 0)};
+  transform: ${(props) =>
+    props.isError ? 'translateY(0)' : 'translateY(-50%)'};
+  transition: ${(props) =>
+    props.isError ? 'all 0.3s ease-in' : 'all 0.2s ease-out'};
+
+  /* border: 4px solid gold; */
 
   ::before {
     content: '';
@@ -38,8 +49,11 @@ const StyledToastContainer = styled(ToastContainer)`
   .validToast {
     padding: 0;
     /* width: 100px; */
-    border: 2px solid blue;
     display: flex;
+  }
+
+  .Toastify--animate {
+    animation: none;
   }
 
   .Toastify__toast {
@@ -49,13 +63,12 @@ const StyledToastContainer = styled(ToastContainer)`
   }
 
   .Toastify__toast-body {
-    padding: 0 3px;
+    padding: 0 10px;
   }
 
   .Toastify__toast-icon {
-    width: 18px;
-    height: 18px;
-    border: 2px solid red;
+    width: 15px;
+    height: 15px;
   }
 
   .Toastify__toast-body > div:last-child {
@@ -71,43 +84,42 @@ export default function ItemInfo({
   children,
   errorstate,
 }: PropsWithChildren<ItemInfoProps>) {
-  const [isInit, setIsInit] = useState(false);
+  const [isErrors, setIsErrors] = useState(false);
 
   useEffect(() => {
-    // 초기화 (Toast Container 초기 렌더링)
-    setIsInit(true);
-
     const containerId = 'valid' + title[NAME];
 
-    if (isFieldError() || !isInit) {
-      toast.warning(<AlertToast />, {
-        position: '',
+    if (isFieldError()) {
+      toast.warning(<AlertToast message={errorstate[title[FIELD]].message} />, {
+        // position: 'top-right',
         containerId,
       });
       return;
     }
-
-    setIsInit(false);
   }, [errorstate]);
 
   // 각 Field 에러 유무 체크
   const isFieldError = () => {
-    return Object.keys(errorstate).includes(title[FIELD]);
+    console.log('error', errorstate, title[NAME]);
+    const result = errorstate && Object.keys(errorstate).includes(title[FIELD]);
+
+    setIsErrors(result);
+
+    return result;
   };
 
   return (
     <S.Body_Container>
       <S.Body_Left>
         {title[NAME]}
-        {(isInit || isFieldError()) && (
-          <StyledToastContainer
-            toastClassName='validToast'
-            containerId={'valid' + title[NAME]}
-            autoClose={false}
-            limit={1}
-            closeButton={false}
-          />
-        )}
+        <StyledToastContainer
+          isError={isErrors}
+          toastClassName='validToast'
+          containerId={'valid' + title[NAME]}
+          autoClose={false}
+          limit={1}
+          closeButton={false}
+        />
       </S.Body_Left>
       <S.Body_Right>
         {isCustom ? children : <S.AddInput type={type} {...register} />}

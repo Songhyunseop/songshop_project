@@ -14,6 +14,7 @@ function CustomSelect({ selectType, subRef, onChange, stockId, ...rest }) {
         name={selectType}
         render={({ field }) => (
           <S.CustomSelector
+            menuShouldScrollIntoView={false}
             ref={(el) => {
               if (subRef) subRef.current = el;
             }}

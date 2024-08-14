@@ -24,6 +24,9 @@ export const Body_Left = styled.div`
   color: #f7f3f5;
   background-color: #e2c2b3;
   padding: 0.5rem 0 0.5rem 0.8rem;
+
+  position: relative;
+  border: 3px solid blue;
 `;
 
 export const Body_Right = styled.div`
