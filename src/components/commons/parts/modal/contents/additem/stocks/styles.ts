@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import Select from 'react-select';
 
 export const Stocks = styled.div`
   position: relative;
@@ -25,10 +24,11 @@ export const Select_Stock = styled.div`
 
 export const Stocks_Info = styled.div`
   font-size: 1rem;
+  font-weight: 400;
   color: #f7f3f5;
 
   :not(:nth-of-type(1)) {
-    margin-left: 2.5rem;
+    margin-left: clamp(15px, 3%, 2rem);
   }
 `;
 

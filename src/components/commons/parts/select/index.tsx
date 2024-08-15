@@ -1,7 +1,8 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import * as S from './styles';
+import { forwardRef } from 'react';
 
-function CustomSelect({ selectType, subRef, onChange, stockId, ...rest }) {
+function CustomSelect({ selectType, onChange, stockId, ...rest }, ref) {
   // registerParms = react hook form register 내부 Props
   // subRef = categorySelect 의 참조
 
@@ -15,11 +16,9 @@ function CustomSelect({ selectType, subRef, onChange, stockId, ...rest }) {
         render={({ field }) => (
           <S.CustomSelector
             menuShouldScrollIntoView={false}
-            ref={(el) => {
-              if (subRef) subRef.current = el;
-            }}
+            ref={ref}
             onChange={(select) => {
-              if (select) field.onChange(select.value);
+              field.onChange(select ? select.value : null);
               onChange({ select, stockId });
             }}
             {...rest}
@@ -30,4 +29,4 @@ function CustomSelect({ selectType, subRef, onChange, stockId, ...rest }) {
   );
 }
 
-export default CustomSelect;
+export default forwardRef(CustomSelect);

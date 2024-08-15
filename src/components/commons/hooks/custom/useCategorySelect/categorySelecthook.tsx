@@ -1,11 +1,17 @@
 import { optionDataState } from '@/commons/libraries/atom';
 import { IOptionSize } from '@/commons/types/selectoption_type';
 import { deepCopy } from '@/commons/utils/deepcopy';
+import { useRef } from 'react';
+import { GroupBase } from 'react-select';
+import Select from 'react-select/dist/declarations/src/Select';
 import { useRecoilState } from 'recoil';
 
-export const useCategorySelect = (subRef) => {
+export const useCategorySelect = () => {
   const [options, setOptions] = useRecoilState(optionDataState);
   const [copyOptionGroup] = deepCopy([options]);
+
+  const subCategoryRef =
+    useRef<Select<unknown, boolean, GroupBase<unknown>>>(null);
 
   const selectProps = {
     styles: {
@@ -29,8 +35,6 @@ export const useCategorySelect = (subRef) => {
   const handleCategoryChange = ({ select }) => {
     // //clearValue 실행으로 인한 트리거 처리
 
-    console.log(111111, select);
-
     if (!select) return;
 
     if (select.name === 'mainCategory') {
@@ -41,13 +45,13 @@ export const useCategorySelect = (subRef) => {
         }
 
         opt.isdisabled = false;
-        opt.subCategory.forEach((o) => (o.isdisabled = false));
+        opt.subCategory.forEach((opt) => (opt.isdisabled = false));
       });
 
       //   // 현재 서브카테고리에 담긴 선택값을 초기화
-      if (subRef.current) {
-        subRef.current.clearValue();
-      }
+      if (subCategoryRef && subCategoryRef.current)
+        subCategoryRef.current.clearValue();
+
       setOptions(copyOptionGroup);
       return;
     }
@@ -71,25 +75,20 @@ export const useCategorySelect = (subRef) => {
     return checked ? checked?.subCategory : [];
   };
 
-  const getCategorySelectProps = () => {
-    const categoryProps = {
-      ...selectProps,
-      selectType: 'category',
-      options: copyOptionGroup.CategoryOptions,
-      onChange: handleCategoryChange,
-      subRef: null,
-    };
-
-    const subCategoryProps = {
-      ...selectProps,
-      selectType: 'subCategory',
-      options: getsubCategoryList(),
-      onChange: handleCategoryChange,
-      subRef: subRef,
-    };
-
-    return { categoryProps, subCategoryProps };
+  // Props
+  const categoryProps = {
+    ...selectProps,
+    selectType: 'category',
+    options: copyOptionGroup.CategoryOptions,
+    onChange: handleCategoryChange,
   };
 
-  return { getCategorySelectProps };
+  const subCategoryProps = {
+    ...selectProps,
+    selectType: 'subCategory',
+    options: getsubCategoryList(),
+    onChange: handleCategoryChange,
+  };
+
+  return { categoryProps, subCategoryProps, subCategoryRef };
 };

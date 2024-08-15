@@ -60,6 +60,7 @@ export const useSizeSelect = (stockIndex) => {
     setOptions(copyOptionGroup);
   };
 
+  // Props
   const sizeSelectProps = {
     ...SelectProps,
     selectType: `stocks[${stockIndex}].size`,

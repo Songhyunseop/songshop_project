@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import * as S from './styles';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { toast, ToastContainer } from 'react-toastify';
@@ -86,15 +86,33 @@ export default function ItemInfo({
 }: PropsWithChildren<ItemInfoProps>) {
   const [isErrors, setIsErrors] = useState(false);
 
+  const toastId = useRef(null);
+
   useEffect(() => {
     const containerId = 'valid' + title[NAME];
 
-    if (isFieldError()) {
-      toast.warning(<AlertToast message={errorstate[title[FIELD]].message} />, {
-        // position: 'top-right',
-        containerId,
+    const aa = errorstate[title[FIELD]];
+    // aa.forEach((el) => console.log(111, errorstate[title[FIELD]].message));
+
+    if (toastId.current) {
+      console.log(title[FIELD], toastId.current, 31231223123123);
+
+      toast.update(toastId.current, {
+        render: '31232131312323123123213',
+        type: 'warning',
+        autoClose: false,
       });
-      return;
+    }
+
+    if (isFieldError() && !toastId.current) {
+      console.log('다시 렌더링요오오오', errorstate[title[FIELD]].message);
+
+      toastId.current = toast.warning(
+        <AlertToast message={errorstate[title[FIELD]].message} />,
+        {
+          containerId,
+        }
+      );
     }
   }, [errorstate]);
 

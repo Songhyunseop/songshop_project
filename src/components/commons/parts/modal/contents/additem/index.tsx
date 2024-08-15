@@ -7,8 +7,6 @@ import 'react-color-palette/css';
 import { useRef } from 'react';
 
 import { deepCopy } from '@/commons/utils/deepcopy';
-import Select from 'react-select/dist/declarations/src/Select';
-import { GroupBase } from 'react-select';
 import ItemInfo from './iteminfo';
 
 import UploadImageComponent from './imageUpload';
@@ -24,6 +22,7 @@ import {
 } from '@/components/commons/hooks/mutation/useMutationUploadImage';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { uploadProductSchema } from '@/commons/libraries/validate/signInSchema';
+import StocksComponent from './stocks';
 
 // editor 컴포넌트 클라이언트 측에서 렌더링
 const WriteEditor = dynamic(() => import('../../../editor/writeeditor'), {
@@ -42,11 +41,8 @@ export default function AddItemModalContents() {
   };
 
   const [stocks, setStocks] = useRecoilState(stocksState);
-  const fileList = useRecoilValue(fileListState);
 
   const editorRef = useRef<editorType>();
-  const subCategoryRef =
-    useRef<Select<unknown, boolean, GroupBase<unknown>>>(null);
 
   const methods = useForm({
     defaultValues: {
@@ -69,8 +65,8 @@ export default function AddItemModalContents() {
     formState: { errors },
   } = methods;
 
-  const { getCategorySelectProps } = useCategorySelect(subCategoryRef);
-  const { categoryProps, subCategoryProps } = getCategorySelectProps();
+  const { categoryProps, subCategoryProps, subCategoryRef } =
+    useCategorySelect();
 
   // Functions
   const addItemStock = () => {
@@ -103,6 +99,8 @@ export default function AddItemModalContents() {
 
   const submitBoard = async (formData) => {
     console.log(formData);
+
+    return;
 
     if (editorRef.current) {
       const textData = editorRef.current.getInstance().getHTML();
@@ -188,18 +186,23 @@ export default function AddItemModalContents() {
               isCustom
               errorstate={errors}
             >
-              <CustomSelect {...subCategoryProps} />
+              <CustomSelect {...subCategoryProps} ref={subCategoryRef} />
             </ItemInfo>
-            {/* <ItemInfo title='재고' isCustom>
-              {stocks.map((stock) => (
-                <StocksComponent key={stock.item} stock={stock} />
+            <ItemInfo title={['재고', 'stocks']} isCustom errorstate={errors}>
+              {stocks.map((stock, idx) => (
+                <StocksComponent
+                  key={stock.item}
+                  register={() => register(`stocks.${idx}.selectColor`)}
+                  stock={stock}
+                  stockIndex={idx}
+                />
               ))}
               {isRemainingSpace() && (
                 <S.AddItem type='button' onClick={addItemStock}>
                   재고추가
                 </S.AddItem>
               )}
-            </ItemInfo> */}
+            </ItemInfo>
             {/* <ItemInfo title={'상품 디테일'} isCustom>
               <WriteEditor
                 changeContent={changeContent}

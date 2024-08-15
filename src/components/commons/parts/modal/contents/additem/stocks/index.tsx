@@ -7,13 +7,18 @@ import { useCountSelect } from '@/components/commons/hooks/custom/useCountSelect
 import ColorPicker from '@/components/commons/parts/colorpicker/colorpicker';
 import { deepCopy } from '@/commons/utils/deepcopy';
 import CustomSelect from '@/components/commons/parts/select';
+import { useEffect } from 'react';
 
-export default function StocksComponent({ stock }) {
+export default function StocksComponent({ stock, register }) {
   const [stocks, setStocks] = useRecoilState(stocksState);
   const [options, setOptions] = useRecoilState(optionDataState);
 
   const { sizeSelectProps } = useSizeSelect(stock.index);
   const { countSelectProps } = useCountSelect(stock.index);
+
+  useEffect(() => {
+    register();
+  }, []);
 
   const removeItemStock = (e) => {
     const [copyStock, copyOptionGroup] = deepCopy([stocks, options]);

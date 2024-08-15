@@ -50,4 +50,17 @@ export const uploadProductSchema = yup.object().shape({
   previewImages: yup.array().min(1, '이미지는 필수입니다.'),
   category: yup.string().required('카테고리를 입력하세요'),
   subCategory: yup.string().required('카테고리를 입력하세요'),
+  stocks: yup
+    .array()
+    .of(
+      yup.object().shape({
+        size: yup.string().required('필수'),
+        count: yup.string().required('필수'),
+        selectColor: yup
+          .array()
+          .min(1, 'At least one color is required')
+          .default([]),
+      })
+    )
+    .min(1, 'At least one stock item is required'),
 });
