@@ -9,7 +9,12 @@ import { deepCopy } from '@/commons/utils/deepcopy';
 import CustomSelect from '@/components/commons/parts/select';
 import { useEffect } from 'react';
 
-export default function StocksComponent({ stock, register }) {
+export default function StocksComponent({
+  stock,
+  register,
+  remove,
+  stockIndex,
+}) {
   const [stocks, setStocks] = useRecoilState(stocksState);
   const [options, setOptions] = useRecoilState(optionDataState);
 
@@ -57,6 +62,8 @@ export default function StocksComponent({ stock, register }) {
     setOptions((prev) => {
       return { ...prev, sizeOptions: editedOption };
     });
+
+    remove(stockIndex);
   };
 
   return (
@@ -69,7 +76,9 @@ export default function StocksComponent({ stock, register }) {
         <S.Stocks_Info>COUNT</S.Stocks_Info>
         <CustomSelect {...countSelectProps} stockId={stock.item} />
       </S.Select_Stock>
-      <S.Close onClick={removeItemStock} id={stock.item}></S.Close>
+      {stocks.length === stockIndex + 1 && (
+        <S.Close onClick={removeItemStock} id={stock.item}></S.Close>
+      )}
     </S.Stocks>
   );
 }

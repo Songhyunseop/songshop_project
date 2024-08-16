@@ -54,13 +54,12 @@ export const uploadProductSchema = yup.object().shape({
     .array()
     .of(
       yup.object().shape({
-        size: yup.string().required('필수'),
-        count: yup.string().required('필수'),
-        selectColor: yup
-          .array()
-          .min(1, 'At least one color is required')
-          .default([]),
+        size: yup.string().required('세부정보를 입력하세요'),
+        count: yup.string().required('세부정보를 입력하세요'),
+        selectColor: yup.array().min(1, '색상을 선택하세요').default([]),
       })
     )
-    .min(1, 'At least one stock item is required'),
+    .test('check-StockLength', '재고를 추가하세요', (val) => {
+      return val && val.length > 0;
+    }),
 });

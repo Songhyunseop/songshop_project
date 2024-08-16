@@ -4,16 +4,16 @@ import dynamic from 'next/dynamic';
 import { Editor as editorType } from '@toast-ui/react-editor';
 import 'react-color-palette/css';
 
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { deepCopy } from '@/commons/utils/deepcopy';
 import ItemInfo from './iteminfo';
 
 import UploadImageComponent from './imageUpload';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { fileListState, stocksState } from '@/commons/libraries/atom';
+import { useRecoilState } from 'recoil';
+import { stocksState } from '@/commons/libraries/atom';
 import { useCategorySelect } from '@/components/commons/hooks/custom/useCategorySelect/categorySelecthook';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useFieldArray } from 'react-hook-form';
 import CustomSelect from '../../../select';
 import { useMutationCreateProduct } from '@/components/commons/hooks/mutation/useMutationCreateProduct';
 import {
@@ -62,8 +62,17 @@ export default function AddItemModalContents() {
     handleSubmit,
     register,
     setValue,
+    getValues,
+    clearErrors,
+
+    control,
     formState: { errors },
   } = methods;
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'stocks',
+  });
 
   const { categoryProps, subCategoryProps, subCategoryRef } =
     useCategorySelect();
@@ -77,6 +86,7 @@ export default function AddItemModalContents() {
     copyStock.index = stocks.length;
 
     // 사이즈, 카운트 수 옵션기본값을 stock에 담아둠
+    append({ size: '', selectColor: [], count: '' });
     setStocks((prev) => [...prev, copyStock]);
   };
 
@@ -191,8 +201,12 @@ export default function AddItemModalContents() {
             <ItemInfo title={['재고', 'stocks']} isCustom errorstate={errors}>
               {stocks.map((stock, idx) => (
                 <StocksComponent
-                  key={stock.item}
-                  register={() => register(`stocks.${idx}.selectColor`)}
+                  key={idx}
+                  remove={remove}
+                  setValue={setValue}
+                  getValues={getValues}
+                  clearErrors={clearErrors}
+                  register={() => register(`stocks.${idx}`)}
                   stock={stock}
                   stockIndex={idx}
                 />
