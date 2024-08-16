@@ -41,7 +41,6 @@ export default function AddItemModalContents() {
   };
 
   const [stocks, setStocks] = useRecoilState(stocksState);
-
   const editorRef = useRef<editorType>();
 
   const methods = useForm({
@@ -63,8 +62,6 @@ export default function AddItemModalContents() {
     register,
     setValue,
     getValues,
-    clearErrors,
-
     control,
     formState: { errors },
   } = methods;
@@ -98,9 +95,12 @@ export default function AddItemModalContents() {
   };
 
   // editor 입력값 핸들링
-  const changeContent = (e) => {
-    const rrr = editorRef.current.getInstance().getSelectedText();
-    console.log(rrr);
+  const changeContent = () => {
+    const description = editorRef.current
+      ? editorRef.current.getInstance().getHTML()
+      : '';
+
+    setValue('description', description);
   };
 
   const { mutateAsync: uploadImgFileToStorage } = useUploadToStorage();
@@ -109,8 +109,6 @@ export default function AddItemModalContents() {
 
   const submitBoard = async (formData) => {
     console.log(formData);
-
-    return;
 
     if (editorRef.current) {
       const textData = editorRef.current.getInstance().getHTML();
@@ -205,7 +203,6 @@ export default function AddItemModalContents() {
                   remove={remove}
                   setValue={setValue}
                   getValues={getValues}
-                  clearErrors={clearErrors}
                   register={() => register(`stocks.${idx}`)}
                   stock={stock}
                   stockIndex={idx}
@@ -217,12 +214,16 @@ export default function AddItemModalContents() {
                 </S.AddItem>
               )}
             </ItemInfo>
-            {/* <ItemInfo title={'상품 디테일'} isCustom>
+            <ItemInfo
+              title={['상품 디테일', 'description']}
+              isCustom
+              errorstate={errors}
+            >
               <WriteEditor
                 changeContent={changeContent}
                 editorRef={editorRef}
               />
-            </ItemInfo> */}
+            </ItemInfo>
             <S.Add_Button>상품등록</S.Add_Button>
           </S.Modal_Body>
         </form>

@@ -85,15 +85,12 @@ export default function ItemInfo({
   errorstate,
 }: PropsWithChildren<ItemInfoProps>) {
   const [isErrors, setIsErrors] = useState(false);
-
   const toastId = useRef(null);
 
   useEffect(() => {
     const containerId = 'valid' + title[NAME];
-    const fieldErr = errorstate[title[FIELD]];
 
-    console.log(errorstate, fieldErr?.message, 1111111);
-    console.log(fieldErr, title[FIELD]);
+    const fieldErr = errorstate[title[FIELD]];
 
     // 각 Field 에러 유무 체크
     const isFieldError = () => {
@@ -111,20 +108,15 @@ export default function ItemInfo({
     const getErrMsg = () => {
       const isStockEmpty = !Array.isArray(fieldErr);
 
-      console.log(111, title[FIELD], fieldErr);
-
       const msgData = isStockEmpty
-        ? fieldErr?.root
+        ? fieldErr?.root ?? fieldErr
         : Object.values(fieldErr.find((el) => el))[0];
 
-      console.log(fieldErr[0], '메시지다용오오옹');
       return msgData.message;
     };
 
     // 일반적인 field 에러일 시
     if (isFieldError() && !toastId.current) {
-      // console.log('다시 렌더링요오오오', errorstate[title[FIELD]].message);
-
       toastId.current = toast.warning(
         <AlertToast message={fieldErr.message} />,
         {
@@ -147,8 +139,6 @@ export default function ItemInfo({
 
       return;
     }
-
-    // if (toastId.current) toastId.current = null;
   }, [errorstate]);
 
   return (

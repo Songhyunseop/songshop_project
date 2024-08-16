@@ -62,4 +62,5 @@ export const uploadProductSchema = yup.object().shape({
     .test('check-StockLength', '재고를 추가하세요', (val) => {
       return val && val.length > 0;
     }),
+  description: yup.string().required('내용을 입력하세요'),
 });

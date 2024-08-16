@@ -18,12 +18,12 @@ export default function StocksComponent({
   const [stocks, setStocks] = useRecoilState(stocksState);
   const [options, setOptions] = useRecoilState(optionDataState);
 
-  const { sizeSelectProps } = useSizeSelect(stock.index);
-  const { countSelectProps } = useCountSelect(stock.index);
-
   useEffect(() => {
     register();
   }, []);
+
+  const { sizeSelectProps } = useSizeSelect(stock.index);
+  const { countSelectProps } = useCountSelect(stock.index);
 
   const removeItemStock = (e) => {
     const [copyStock, copyOptionGroup] = deepCopy([stocks, options]);

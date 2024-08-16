@@ -4,13 +4,16 @@ import { ColorPicker } from 'react-color-palette';
 export const AddItem_Content_Wrapper = styled.main`
   width: 55vw;
   height: 65vh;
+  overflow-y: auto;
 `;
 
 export const Modal_Header = styled.header`
   position: sticky;
+  width: 100%;
   z-index: 9999;
   top: 0;
-  height: 12%;
+  left: 0;
+  height: 15%;
   color: #f7f3f5;
   font-size: 2rem;
   display: flex;

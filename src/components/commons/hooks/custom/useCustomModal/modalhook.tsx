@@ -16,6 +16,7 @@ export const useCustomModal = () => {
   };
 
   const StyledModal = styled(ReactModal)`
+    position: fixed;
     border: 1.5px solid #d2d2d2;
     -webkit-overflow-scrolling: touch;
     background-color: white;
@@ -24,8 +25,6 @@ export const useCustomModal = () => {
     left: 50%;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
-    overflow: auto;
-    /* border: 3px solid red */
   `;
 
   const [isOpen, setIsOpen] = useState(false);

@@ -9,7 +9,10 @@ import { useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { throttle } from '@/commons/utils/throttle';
 
-import { getDataList } from '@/components/commons/hooks/query/useQueryGetAllProducts';
+import {
+  getAllProduct,
+  getDataList,
+} from '@/components/commons/hooks/query/useQueryGetAllProducts';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import ToggleNav from '@/components/commons/layout/navigation/toggleCategorynav/toggleCategorynav';
 import About from './about/about';
@@ -37,15 +40,8 @@ export default function Main() {
     '/carousel3.jpeg',
   ];
 
-  // 추후 리팩토링 시 관련 폴더로 옮길코드
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['product'],
-    queryFn: getDataList,
-  });
+  const { data, isLoading, isError } = getAllProduct();
 
-  //
-  //
-  //
   const [phrase, setPhrase] = useState(randomPhrases[0]);
   const [isNav, setIsNav] = useState({ best: false, new: false });
 

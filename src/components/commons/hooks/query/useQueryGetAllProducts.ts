@@ -1,9 +1,10 @@
 import supabase from '@/commons/utils/supabase/client';
+import { useQuery } from '@tanstack/react-query';
 
 const supabaseClient = supabase();
 
 // 모든 아이템 조회 API
-export const getDataList = async () => {
+const getDataList = async () => {
   try {
     const { data: dataList, error } = await supabaseClient
       .from('product')
@@ -22,4 +23,11 @@ export const getDataList = async () => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const getAllProduct = () => {
+  return useQuery({
+    queryKey: ['product'],
+    queryFn: getDataList,
+  });
 };

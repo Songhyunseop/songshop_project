@@ -11,8 +11,6 @@ import fontSize from 'tui-editor-plugin-font-size';
 import 'tui-editor-plugin-font-size/dist/tui-editor-plugin-font-size.css';
 
 import * as S from './styles';
-import supabase from '@/commons/utils/supabase/client';
-import { v4 as uuidv4 } from 'uuid';
 
 export default function WriteEditor({ editorRef, changeContent }) {
   type HookCallback = (url: string, text?: string) => void;
@@ -20,26 +18,6 @@ export default function WriteEditor({ editorRef, changeContent }) {
     const blobUrl = URL.createObjectURL(blob);
 
     callbackFunc(blobUrl, '');
-
-    // const newId = uuidv4();
-
-    // const supabaseClient = supabase();
-
-    // try {
-    //   const { data, error } = await supabaseClient.storage
-    //     .from('images')
-    //     .upload(`editorblobs/${newId}`, blob);
-
-    //   if (error) throw error;
-
-    //   const { data: imgUrl } = await supabaseClient.storage
-    //     .from('images')
-    //     .getPublicUrl(data.path);
-
-    //   callbackFunc(imgUrl.publicUrl, '');
-    // } catch (e) {
-    //   console.log(e);
-    // }
   };
 
   return (

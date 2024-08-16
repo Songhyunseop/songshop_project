@@ -31,14 +31,14 @@ export const useCountSelect = (stockIndex) => {
     const { value: newCount } = select;
 
     // stock 데이터 갱신
-    const prevSelect = copyStocks.find((stock) => stock.item === stockId);
-    const targetIdx = copyStocks.findIndex((stock) => stock.item === stockId);
+    // const prevSelect = copyStocks.find((stock) => stock.item === stockId);
+    // const targetIdx = copyStocks.findIndex((stock) => stock.item === stockId);
 
     const selectOptions = deepCopy([options[stockIndex]])[0];
 
     selectOptions.forEach((opt) => {
       if (opt.value === newCount) opt.isdisabled = true;
-      if (opt.value === prevSelect.count) opt.isdisabled = false;
+      else opt.isdisabled = false;
     });
 
     // select Option 값 갱신
@@ -47,10 +47,6 @@ export const useCountSelect = (stockIndex) => {
       newOption[stockIndex] = selectOptions;
       return newOption;
     });
-
-    // 이전 값 최근 값으로 갱신
-    prevSelect.count = newCount;
-    copyStocks[targetIdx] = prevSelect;
 
     setStocks(copyStocks);
   };

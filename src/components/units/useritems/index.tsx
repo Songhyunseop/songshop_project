@@ -3,9 +3,17 @@ import { useSearchParams } from 'next/navigation';
 import { IItemInfoList } from '@/commons/types/list_type';
 import { useCustomModal } from '@/components/commons/hooks/custom/useCustomModal/modalhook';
 import AddItemModalContents from '@/components/commons/parts/modal/contents/additem';
+import supabase from '@/commons/utils/supabase/client';
+import { useRecoilValue } from 'recoil';
+import { UserState } from '@/commons/libraries/atom';
+import { useEffect, useState } from 'react';
+import { getAllSellProduct } from '@/components/commons/hooks/query/useQueryGetSellProdcuts';
 
 export default function ItemInfo() {
   const itemInfo = useSearchParams().get('itemInfo');
+  const user = useRecoilValue(UserState);
+
+  const [userId, setUserId] = useState(null);
 
   const itemInfoList: IItemInfoList = {
     basket: '장바구니',
@@ -13,7 +21,21 @@ export default function ItemInfo() {
     sell: '판매상품',
   };
 
+  useEffect(() => {
+    if (user) setUserId(user.id);
+  }, [user]);
+
   const { Modal, handleModal, isOpen } = useCustomModal();
+  const { data, isLoading } = getAllSellProduct(userId);
+
+  console.log(data, 333);
+
+  if (data)
+    console.log(
+      JSON.parse(data?.data[0].stock).forEach((el) =>
+        console.log(el.selectColor, el.count, el.size)
+      )
+    );
 
   return (
     <S.ItemList_Wrapper>
@@ -34,24 +56,47 @@ export default function ItemInfo() {
         <S.Table_List>수량</S.Table_List>
         <S.Table_List>비고</S.Table_List>
       </S.Table_Header>
-      {new Array(3).fill(1).map((el, idx) => (
-        <S.Items key={idx}>
-          <S.Item_Info>{idx + 1}</S.Item_Info>
-          <S.Item_Info>
-            <S.Item_Img src='/item.png' />
-          </S.Item_Info>
-          <S.Item_Info>상품이름</S.Item_Info>
-          <S.Item_Info>40,000원</S.Item_Info>
-          <S.Item_Info>3</S.Item_Info>
-          <S.Item_Info>
-            <S.Delete_Btn>상품제거</S.Delete_Btn>
-          </S.Item_Info>
-        </S.Items>
-      ))}
-      <S.Payment_Section>
-        <S.Total_Price>120,000원</S.Total_Price>
-        <S.Pay_Button>결제진행</S.Pay_Button>
-      </S.Payment_Section>
+      {isLoading ? (
+        <div style={{ height: '100vh' }}>로딩중...</div>
+      ) : (
+        data?.data.map((el, idx) => (
+          <S.Items key={idx}>
+            <S.Item_Info>{idx + 1}</S.Item_Info>
+            <S.Item_Info>
+              <S.Item_Img src='/item.png' />
+            </S.Item_Info>
+            <S.Item_Info>{el.product_name}</S.Item_Info>
+            <S.Item_Info>{`${el.product_price} 원`}</S.Item_Info>
+            <S.Item_Info>
+              <div>
+                <span>S</span>
+                <span>3개</span>
+              </div>
+              <div>
+                <span>M</span>
+                <span>3개</span>
+              </div>
+              <div>
+                <span>L</span>
+                <span>3개</span>
+              </div>
+            </S.Item_Info>
+            <S.Item_Info>
+              <S.Edit_Btn>상품수정</S.Edit_Btn>
+              <S.Delete_Btn>상품제거</S.Delete_Btn>
+            </S.Item_Info>
+          </S.Items>
+        ))
+      )}
+      {itemInfo !== 'sell' && (
+        <S.Payment_Section>
+          <S.PayInfo>결제예정금액</S.PayInfo>
+          <S.Total_Price>
+            {data?.data?.reduce((acc, cur) => acc + cur.product_price, 0)}원
+          </S.Total_Price>
+          <S.Pay_Button>구매하기</S.Pay_Button>
+        </S.Payment_Section>
+      )}
     </S.ItemList_Wrapper>
   );
 }
