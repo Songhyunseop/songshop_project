@@ -8,6 +8,7 @@ import { UserState } from '@/commons/libraries/atom';
 import { useEffect, useState } from 'react';
 import { getDatalist } from '@/components/commons/hooks/query/useQueryGetSellProdcuts';
 import { useQuery } from '@tanstack/react-query';
+import { useMutationDeleteProduct } from '@/components/commons/hooks/mutation/useMutationDeleteSellProduct';
 
 export default function ItemInfo() {
   const itemInfo = useSearchParams().get('itemInfo');
@@ -21,6 +22,10 @@ export default function ItemInfo() {
     order: '주문목록',
     sell: '판매상품',
   };
+
+  useEffect(() => {
+    if (user && !data) setUserId(user.id);
+  }, [user]);
 
   const getQueryFunc = (parms) => {
     const queryFuncs = {
@@ -36,14 +41,12 @@ export default function ItemInfo() {
   };
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['product', userId],
+    queryKey: ['product', 'user', userId],
     queryFn: () => getQueryFunc(userId),
     enabled: !!userId && !!itemInfo,
   });
 
-  useEffect(() => {
-    if (user && !data) setUserId(user.id);
-  }, [user]);
+  console.log('rerender');
 
   const getSizeCount = (data) => {
     const sizeData = [
@@ -60,9 +63,17 @@ export default function ItemInfo() {
     return sizeData;
   };
 
+  const { mutateAsync: deleteSellProduct } = useMutationDeleteProduct();
+
+  const deleteProduct = async ({ id }) => {
+    const { data, error } = await deleteSellProduct(id);
+
+    console.log(data);
+  };
+
   return (
     <S.ItemList_Wrapper>
-      <Modal handleModal={handleModal} isOpen={isOpen}>
+      <Modal isOpen={isOpen}>
         <AddItemModalContents />
       </Modal>
       <S.Title>{itemInfo && itemInfoList[itemInfo]}</S.Title>
@@ -100,7 +111,9 @@ export default function ItemInfo() {
             </S.Item_Info>
             <S.Item_Info>
               <S.Edit_Btn>상품수정</S.Edit_Btn>
-              <S.Delete_Btn>상품제거</S.Delete_Btn>
+              <S.Delete_Btn onClick={() => deleteProduct(el)}>
+                상품제거
+              </S.Delete_Btn>
             </S.Item_Info>
           </S.Items>
         ))

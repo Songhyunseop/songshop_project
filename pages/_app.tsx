@@ -18,9 +18,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from '@emotion/styled';
 
-export default function App({ Component, pageProps }: AppProps) {
-  const client = new QueryClient();
+const client = new QueryClient();
 
+export default function App({ Component, pageProps }: AppProps) {
   const StyledToastContainer = styled(ToastContainer)`
     .Toastify__toast {
       background-color: #403234;

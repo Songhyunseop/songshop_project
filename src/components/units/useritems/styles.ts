@@ -177,6 +177,7 @@ export const Edit_Btn = styled.button`
 `;
 
 export const Delete_Btn = styled.button`
+  cursor: pointer;
   width: 80px;
   height: 25px;
   border: none;
