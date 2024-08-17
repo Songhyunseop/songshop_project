@@ -17,6 +17,7 @@ import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import ToggleNav from '@/components/commons/layout/navigation/toggleCategorynav/toggleCategorynav';
 import About from './about/about';
 import ReviewBox from '@/components/commons/parts/reviewBox/reviewBox';
+import AboutSection from './about/about';
 
 export default function Main() {
   const videoUrls = ['/videos/shopvid1.mp4', '/videos/shopvid2.mp4'];
@@ -381,7 +382,7 @@ export default function Main() {
         </S.Review_List>
         <S.Button>ALL REVIEWS</S.Button>
       </S.Review_Section>
-      <About />
+      <AboutSection />
     </S.Main>
   );
 }

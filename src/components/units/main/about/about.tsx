@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import * as S from './styles';
+import { throttle } from '@/commons/utils/throttle';
 
-export default function About() {
-  const ItemWrapperRef = useRef(null);
-
+export default function AboutSection() {
   const DEFAULT_Z = 100;
   const [zPosition, setZposition] = useState(DEFAULT_Z);
 
+  const ItemWrapperRef = useRef(null);
+
   // 컨테이너 크기에 따라 zPosition 값 비율 조정
-  const getParentSize = () => {
+  const getParentSize = (ItemWrapperRef) => {
     if (ItemWrapperRef.current) {
       const parentWidth = ItemWrapperRef.current.offsetWidth;
       const DEFAULT_RATIO = 9; // default 비율
@@ -19,12 +20,14 @@ export default function About() {
     }
   };
 
+  const throttleResize = throttle(getParentSize, 1000);
+
   useEffect(() => {
-    window.addEventListener('resize', getParentSize);
-    getParentSize();
+    window.addEventListener('resize', throttleResize);
+    throttleResize(ItemWrapperRef);
 
     return () => {
-      window.removeEventListener('resize', getParentSize);
+      window.removeEventListener('resize', throttleResize);
     };
   }, []);
 
@@ -48,7 +51,7 @@ export default function About() {
         {bgPosition.map((bgPosition, idx) => (
           <S.Cube key={bgPosition} index={idx}>
             <S.Visible
-              index={idx}
+              // index={idx}
               bgPosition={bgPosition}
               zPosition={zPosition}
             ></S.Visible>

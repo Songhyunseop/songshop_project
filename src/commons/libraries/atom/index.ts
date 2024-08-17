@@ -48,6 +48,7 @@ type UserMetadata = {
 };
 
 interface IUser {
+  [x: string]: SetStateAction<null>;
   user_metadata: UserMetadata;
 }
 

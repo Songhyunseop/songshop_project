@@ -58,12 +58,12 @@ export const Review = styled.p`
   font-weight: 500;
   line-height: 1.22;
   display: -webkit-box;
+  -webkit-line-clamp: 2; // 원하는 라인수
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
   text-align: center;
   overflow: hidden;
   color: white;
-  transform: translateY(100%);
+  transform: translateY(50%);
 `;
 
 export const Rate = styled.div`
@@ -71,5 +71,5 @@ export const Rate = styled.div`
   font-size: 20px;
   color: orange;
   font-weight: 500;
-  transform: translateY(100%);
+  transform: translateY(50%);
 `;

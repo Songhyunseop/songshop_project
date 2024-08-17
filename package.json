@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "gen-supabaseTypes": "npx supabase login && npx dotenv supabase gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" > types/database.types.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -38,6 +39,7 @@
     "react-select": "^5.8.0",
     "react-toastify": "^10.0.5",
     "recoil": "^0.7.7",
+    "supabase": "^1.190.0",
     "swiper": "^11.0.7",
     "tui-editor-plugin-font-size": "^1.0.4",
     "uuid": "^9.0.1",

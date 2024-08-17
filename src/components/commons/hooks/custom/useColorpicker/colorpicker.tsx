@@ -6,7 +6,6 @@ import { useRecoilState } from 'recoil';
 
 export const useColorPicker = () => {
   const [color, setColor] = useColor('#000000');
-
   const [stocks, setStocks] = useRecoilState(stocksState);
   const [copyStocks] = deepCopy([stocks]);
 
@@ -39,7 +38,8 @@ export const useColorPicker = () => {
     copyStocks[targetIdx] = selected;
 
     setStocks(copyStocks);
-    setValue(`stocks.${selected.index}.selectColor`, selected.selectColor);
+
+    return selected;
   };
 
   const selectColor = (item) => {

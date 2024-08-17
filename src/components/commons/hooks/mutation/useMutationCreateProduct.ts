@@ -9,6 +9,8 @@ export const createProduct = async (userInputData) => {
     .insert([userInputData])
     .select();
 
+  if (error) throw error;
+
   return { data, error };
 };
 

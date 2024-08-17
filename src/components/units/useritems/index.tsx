@@ -3,17 +3,18 @@ import { useSearchParams } from 'next/navigation';
 import { IItemInfoList } from '@/commons/types/list_type';
 import { useCustomModal } from '@/components/commons/hooks/custom/useCustomModal/modalhook';
 import AddItemModalContents from '@/components/commons/parts/modal/contents/additem';
-import supabase from '@/commons/utils/supabase/client';
 import { useRecoilValue } from 'recoil';
 import { UserState } from '@/commons/libraries/atom';
 import { useEffect, useState } from 'react';
-import { getAllSellProduct } from '@/components/commons/hooks/query/useQueryGetSellProdcuts';
+import { getDatalist } from '@/components/commons/hooks/query/useQueryGetSellProdcuts';
+import { useQuery } from '@tanstack/react-query';
 
 export default function ItemInfo() {
   const itemInfo = useSearchParams().get('itemInfo');
   const user = useRecoilValue(UserState);
 
   const [userId, setUserId] = useState(null);
+  const { Modal, handleModal, isOpen } = useCustomModal();
 
   const itemInfoList: IItemInfoList = {
     basket: '장바구니',
@@ -21,21 +22,43 @@ export default function ItemInfo() {
     sell: '판매상품',
   };
 
+  const getQueryFunc = (parms) => {
+    const queryFuncs = {
+      // basket: () => {},
+      // order: () => {},
+      sell: getDatalist,
+    };
+
+    const queryFunc = queryFuncs[itemInfo as keyof typeof queryFuncs];
+    const data = queryFunc(parms);
+
+    return data;
+  };
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['product', userId],
+    queryFn: () => getQueryFunc(userId),
+    enabled: !!userId && !!itemInfo,
+  });
+
   useEffect(() => {
-    if (user) setUserId(user.id);
+    if (user && !data) setUserId(user.id);
   }, [user]);
 
-  const { Modal, handleModal, isOpen } = useCustomModal();
-  const { data, isLoading } = getAllSellProduct(userId);
+  const getSizeCount = (data) => {
+    const sizeData = [
+      { size: 'S', count: 0 },
+      { size: 'M', count: 0 },
+      { size: 'L', count: 0 },
+    ];
 
-  console.log(data, 333);
+    JSON.parse(data.stock).forEach((s) => {
+      const countedSize = sizeData.find((el) => el.size === s.size);
+      if (countedSize) countedSize.count = Number(s.count);
+    });
 
-  if (data)
-    console.log(
-      JSON.parse(data?.data[0].stock).forEach((el) =>
-        console.log(el.selectColor, el.count, el.size)
-      )
-    );
+    return sizeData;
+  };
 
   return (
     <S.ItemList_Wrapper>
@@ -57,7 +80,7 @@ export default function ItemInfo() {
         <S.Table_List>비고</S.Table_List>
       </S.Table_Header>
       {isLoading ? (
-        <div style={{ height: '100vh' }}>로딩중...</div>
+        <div style={{ height: '50vh' }}>로딩중...</div>
       ) : (
         data?.data.map((el, idx) => (
           <S.Items key={idx}>
@@ -68,18 +91,12 @@ export default function ItemInfo() {
             <S.Item_Info>{el.product_name}</S.Item_Info>
             <S.Item_Info>{`${el.product_price} 원`}</S.Item_Info>
             <S.Item_Info>
-              <div>
-                <span>S</span>
-                <span>3개</span>
-              </div>
-              <div>
-                <span>M</span>
-                <span>3개</span>
-              </div>
-              <div>
-                <span>L</span>
-                <span>3개</span>
-              </div>
+              {getSizeCount(el).map((el, idx) => (
+                <div key={idx}>
+                  <span>{el.size}</span>
+                  <span>{`${el.count}개`}</span>
+                </div>
+              ))}
             </S.Item_Info>
             <S.Item_Info>
               <S.Edit_Btn>상품수정</S.Edit_Btn>
@@ -92,7 +109,12 @@ export default function ItemInfo() {
         <S.Payment_Section>
           <S.PayInfo>결제예정금액</S.PayInfo>
           <S.Total_Price>
-            {data?.data?.reduce((acc, cur) => acc + cur.product_price, 0)}원
+            {data
+              ? `${data?.data?.reduce(
+                  (acc, cur) => acc + cur.product_price,
+                  0
+                )}원`
+              : `${0}원`}
           </S.Total_Price>
           <S.Pay_Button>구매하기</S.Pay_Button>
         </S.Payment_Section>

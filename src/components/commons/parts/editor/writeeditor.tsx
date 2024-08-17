@@ -49,7 +49,6 @@ export default function WriteEditor({ editorRef, changeContent }) {
         height='100%'
         initialEditType='wysiwyg'
         useCommandShortcut={false}
-        // events={{ keyup: checks }}
         hooks={{
           addImageBlobHook: convertBlob,
         }}

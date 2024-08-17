@@ -1,21 +1,17 @@
 import supabase from '@/commons/utils/supabase/client';
-import { useQuery } from '@tanstack/react-query';
-
+import { Product } from 'types/databaseCollect.type';
 const supabaseClient = supabase();
 
-const getDatalist = async (id) => {
-  const { data, error } = await supabaseClient
-    .from('product')
-    .select('*')
-    .eq('user_id', id);
+export const getDatalist = async (id: string) => {
+  try {
+    const { data, error } = await supabaseClient
+      .from('product')
+      .select('*')
+      .eq('user_id', id)
+      .returns<Product>();
 
-  return { data, error };
-};
-
-export const getAllSellProduct = (id) => {
-  return useQuery({
-    queryKey: ['product', id],
-    queryFn: () => getDatalist(id),
-    enabled: !!id,
-  });
+    return { data, error };
+  } catch (error) {
+    if (error instanceof Error) throw new Error(error.message);
+  }
 };

@@ -11,7 +11,7 @@ export const ItemList_Wrapper = styled.section`
 `;
 
 export const Title = styled.h1`
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 400;
   margin-bottom: 8rem;
 `;
@@ -125,25 +125,30 @@ export const Item_Info = styled.div`
     justify-content: space-between;
 
     > div {
-      width: 70px;
+      width: 50px;
       display: flex;
+      align-items: center;
       justify-content: space-between;
     }
 
     > div > span {
       font-weight: 400;
-      font-size: 1.2rem;
+      font-size: 1rem;
     }
 
     > div > span:nth-of-type(1) {
-      width: 25px;
-      height: 25px;
+      width: 17px;
+      height: 17px;
+      font-size: 1rem;
       border-radius: 3px;
       display: flex;
       justify-content: center;
-      align-items: center;
       background-color: #403234;
       color: white;
+    }
+
+    > div > span:nth-of-type(2) {
+      letter-spacing: 0.1rem;
     }
   }
 

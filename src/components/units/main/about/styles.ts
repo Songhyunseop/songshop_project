@@ -16,7 +16,6 @@ export const About_Wrapper = styled.article`
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  margin-bottom: 15%;
 `;
 
 export const About_Title = styled.span`
