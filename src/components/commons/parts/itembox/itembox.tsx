@@ -20,29 +20,33 @@ export default function ItemBox(props: ItemBoxProps) {
     ? JSON.parse(el?.stock).map((data) => data.selectColor)[0]
     : [];
 
-  const throttleToggleFavor = throttle(toggleFavor, 200);
-
-  const toggleLikeIt = (e) => {
+  const toggleLikeIt = (target) => {
     // 변경사항 업데이트
-    if (userInfo) {
-      const toggles = { product: el.id, user: userInfo.id };
-
-      throttleToggleFavor(toggles);
-    }
+    if (userInfo) throttleToggleFavor({ product: el.id, user: userInfo.id });
 
     // 토스트 알림
     const message =
-      e.currentTarget.id === 'false'
+      target.id === 'false'
         ? '♥︎ 관심상품 목록에 등록되었습니다.'
         : '♡ 관심상품 목록에서 삭제되었습니다.';
 
     toast(message, {
       position: 'bottom-center',
-      toastId: e.currentTarget.id,
+      toastId: target.id,
       transition: Flip,
       autoClose: 1500,
+      containerId: 'default',
     });
   };
+
+  const throttleToggleFavor = throttle(toggleFavor, 200);
+
+  const triggerToggle = (e) => {
+    const currentTarget = e.currentTarget;
+    trigger(currentTarget);
+  };
+
+  const trigger = throttle((currentTarget) => toggleLikeIt(currentTarget), 800);
 
   return (
     <S.ItemBox {...rest} id={el?.id}>
@@ -90,7 +94,7 @@ export default function ItemBox(props: ItemBoxProps) {
             <S.CountsInfo>
               <S.Liked
                 id={String(el?.isLiked)}
-                onClick={toggleLikeIt}
+                onClick={triggerToggle}
                 isLiked={el?.isLiked}
               >
                 {el?.isLiked ? (

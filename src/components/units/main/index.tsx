@@ -226,6 +226,9 @@ export default function Main() {
       const progress = Math.min(elapsedTime / duration, 1);
 
       const items = container.children;
+
+      console.log(items, 'item');
+
       const itemArr =
         items.length > 0 ? [items[0].offsetLeft, items[1].offsetLeft] : [];
 
@@ -349,7 +352,7 @@ export default function Main() {
                 onMouseLeave={dragEnd}
               >
                 {data?.productData?.map((el, idx) => (
-                  <ItemBox key={idx} el={el} minWidth={300} />
+                  <ItemBox key={idx} el={el} minWidth={250} />
                 ))}
               </S.Scroll_Container>
               <S.Progress_Bar>

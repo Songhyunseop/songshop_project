@@ -6,10 +6,10 @@ export const ItemBox = styled.div<{ height: number; minWidth: number }>`
   min-width: ${({ minWidth }) => (minWidth ? `${minWidth}px` : 0)};
   font-size: 2rem;
   padding-bottom: ${({ height }) => (height ? `${height}%` : 0)};
-  height: 100%;
+  /* height: 100%; */
 
   @media screen and (max-width: 1280px) {
-    min-width: 200px;
+    /* min-width: 200px; */
   }
 
   @media screen and (max-width: 780px) {
@@ -24,7 +24,7 @@ export const Item_Contents = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  border: 3px solid blue;
+  border: 2px solid blue;
 `;
 
 export const Label = styled.div`
@@ -40,7 +40,6 @@ export const Label = styled.div`
 
 export const Image_Section = styled.div`
   position: relative;
-  /* padding-bottom: 100%; */
   height: 100%;
   width: 100%;
 `;

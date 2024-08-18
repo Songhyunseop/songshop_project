@@ -204,7 +204,6 @@ export const Recommend_Left = styled.article`
   width: 100%;
   max-width: 60%;
   height: 100%;
-  margin-left: 7%;
   display: flex;
   flex-direction: column;
   flex: 1.5;
@@ -248,7 +247,7 @@ export const Rcmd_Left_Bottom = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 2px solid green;
+  border: 10px solid green;
   flex: 4;
 `;
 
@@ -281,9 +280,9 @@ export const Progress_State = styled.div`
 `;
 
 export const Scroll_Container = styled.div`
+  cursor: pointer;
   width: 100%;
   height: 100%;
-  cursor: pointer;
   display: flex;
   gap: 20px;
   margin-top: 5%;
@@ -293,13 +292,13 @@ export const Scroll_Container = styled.div`
   animation: appear 0.5s ease-out;
 `;
 
-export const Recommend_Right = styled.article`
+export const Recommend_Right = styled.div`
   height: 100%;
   margin-left: 50px;
   position: relative;
   animation: appear 0.5s ease-out;
   flex: 1 1;
-  margin-right: 7%;
+  /* margin-right: 7%; */
   border: 3px solid orange;
 `;
 

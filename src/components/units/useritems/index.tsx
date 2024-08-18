@@ -46,8 +46,6 @@ export default function ItemInfo() {
     enabled: !!userId && !!itemInfo,
   });
 
-  console.log('rerender');
-
   const getSizeCount = (data) => {
     const sizeData = [
       { size: 'S', count: 0 },
