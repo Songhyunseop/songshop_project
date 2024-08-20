@@ -9,15 +9,13 @@ import { useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { throttle } from '@/commons/utils/throttle';
 
-import {
-  getAllProduct,
-  getDataList,
-} from '@/components/commons/hooks/query/useQueryGetAllProducts';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import ToggleNav from '@/components/commons/layout/navigation/toggleCategorynav/toggleCategorynav';
-import About from './about/about';
 import ReviewBox from '@/components/commons/parts/reviewBox/reviewBox';
 import AboutSection from './about/about';
+import { getDataList } from '@/components/commons/hooks/query/useQueryGetAllProducts';
+import { useCustomScroller } from '@/components/commons/hooks/custom/useCustomScroller/csutomScroller';
+import { DragScroller } from '@/components/commons/parts/dragScroller/dragScroller';
 
 export default function Main() {
   const videoUrls = ['/videos/shopvid1.mp4', '/videos/shopvid2.mp4'];
@@ -41,7 +39,10 @@ export default function Main() {
     '/carousel3.jpeg',
   ];
 
-  const { data, isLoading, isError } = getAllProduct();
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['product'],
+    queryFn: () => getDataList(12),
+  });
 
   const [phrase, setPhrase] = useState(randomPhrases[0]);
   const [isNav, setIsNav] = useState({ best: false, new: false });
@@ -112,101 +113,101 @@ export default function Main() {
   //
   //
   // mouseScroll
+
   const [startX, setStartX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [totalScroll, setTotalScroll] = useState(0);
 
   const mouseScrollRef = useRef(null);
 
-  const onMove = (e) => {
-    const leftMargin = mouseScrollRef.current.offsetLeft;
-    const currentStartX = e.clientX - leftMargin;
-
+  const onMouseClick = (e) => {
     const scrolledX = mouseScrollRef.current.scrollLeft;
 
     setIsDragging(true);
-    setStartX(currentStartX + scrolledX);
+    setStartX(e.clientX + scrolledX);
+    setTotalScroll(scrolledX);
   };
 
   const onDrag = (e) => {
     if (!isDragging) return;
 
     if (mouseScrollRef.current) {
-      // 스크롤 범위 계산
-      const leftMargin = mouseScrollRef.current.offsetLeft;
-      const viewPortX = e.clientX;
-
-      const xPosition = viewPortX - leftMargin;
-      mouseScrollRef.current.scrollLeft = startX - xPosition;
+      mouseScrollRef.current.scrollLeft = startX - e.clientX;
     }
-  };
-
-  // 기본 이벤트 트리거 방지 함수
-  const prevetEffects = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
   };
 
   const dragEnd = (e) => {
     if (!isDragging) return;
 
-    const container = mouseScrollRef.current;
-    const items = mouseScrollRef.current.children;
+    // 기본 이벤트 트리거 방지 함수
+    const preventEffects = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
 
     const currentScrollX = mouseScrollRef.current.scrollLeft;
-    const containerLeft = mouseScrollRef.current.getBoundingClientRect().left;
 
-    const scrolledDiff = Math.abs(startX - e.clientX);
+    const items = mouseScrollRef.current.children;
+    const scrolledDiff = Math.abs(currentScrollX - totalScroll);
 
-    // 가장 근거리에 있는 아이템, 스크롤 상 타겟 위치 초기화
+    // // 가장 근거리에 있는 아이템, 스크롤 상 타겟 위치 초기화
     let closestItem = items[0];
     let targetPosition = 0;
 
     Array.from(items).forEach((item, idx) => {
       // 드래그 시 아이템 클릭 이벤트 방지 (드래그 범위 diff가 일정범위 이상일 경우 클릭으로 간주(eventListener 제거))
-      if (scrolledDiff > 15) item.addEventListener('click', prevetEffects);
-      else item.removeEventListener('click', prevetEffects);
+      if (scrolledDiff > 15) item.addEventListener('click', preventEffects);
+      else item.removeEventListener('click', preventEffects);
 
-      // distance 거리와 이전까지 가장가까운 item(clossest) 비교
-      const itemLeft = items[idx].getBoundingClientRect().left;
+      const distance = Math.abs(item.offsetLeft - currentScrollX);
+      const currentClose = Math.abs(closestItem.offsetLeft - currentScrollX);
 
-      const distance = Math.abs(itemLeft - containerLeft);
-      const currentClosest = Math.abs(closestItem.getBoundingClientRect().left);
-
-      if (distance < currentClosest) {
-        closestItem = item;
-        targetPosition = item.offsetLeft - container.offsetLeft;
-      }
+      if (distance < currentClose) closestItem = item;
     });
 
-    const scrollWidth = container.scrollWidth;
-    const clientWidth = container.clientWidth;
-
-    const ERROR_RANGE = 20;
-    const usuableScrollRange = scrollWidth - clientWidth - ERROR_RANGE;
-
-    // 좌, 우 끝에 도달 시 아이템 해당방향 밀착
-    if (currentScrollX === 0) targetPosition = ERROR_RANGE;
-    if (currentScrollX >= usuableScrollRange)
-      targetPosition = usuableScrollRange;
-
-    // 현재 스크롤 진행도 계산
-    setTimeout(() => {
-      const scrollDistance = items[0]?.offsetWidth;
-
-      const usuableScrollTimes = Math.round(
-        usuableScrollRange / scrollDistance
-      );
-      const curretnScrollTime = Math.round(
-        container.scrollLeft / scrollDistance
-      );
-
-      const percentage = (curretnScrollTime / usuableScrollTimes) * 100;
-
-      smoothScrollXbar(percentage, 200);
-    }, 200);
-
+    targetPosition = closestItem.offsetLeft;
     smoothScrollTo(targetPosition, 200);
+
+    // // 현재 스크롤 진행도 계산
+    // setTimeout(() => {
+    //   const scrollDistance = items[0]?.offsetWidth;
+
+    //   const usuableScrollTimes = Math.round(
+    //     usuableScrollRange / scrollDistance
+    //   );
+    //   const curretnScrollTime = Math.round(
+    //     container.scrollLeft / scrollDistance
+    //   );
+
+    //   const percentage = (curretnScrollTime / usuableScrollTimes) * 100;
+
+    //   smoothScrollXbar(percentage, 200);
+    // }, 0);
+
+    // 드래그 상태 종료
     setIsDragging(false);
+  };
+
+  const smoothScrollTo = (targetX, duration) => {
+    const container = mouseScrollRef.current;
+    const startX = container.scrollLeft;
+    const startTime = performance.now();
+
+    const animateScroll = (currentTime) => {
+      const elapsedTime = currentTime - startTime;
+      const progress = Math.min(elapsedTime / duration, 1);
+      const easing = 0.5 - Math.cos(progress * Math.PI) / 2; // Ease-in-out
+
+      container.scrollLeft = startX + (targetX - startX) * easing;
+
+      // console.log('left', container.scrollLeft);
+      console.log(targetX, startX);
+
+      const rafId = requestAnimationFrame(animateScroll);
+      if (progress >= 1) cancelAnimationFrame(rafId);
+    };
+
+    requestAnimationFrame(animateScroll);
   };
 
   const smoothScrollXbar = (targetX, duration) => {
@@ -227,7 +228,7 @@ export default function Main() {
 
       const items = container.children;
 
-      console.log(items, 'item');
+      // console.log(items, 'item');
 
       const itemArr =
         items.length > 0 ? [items[0].offsetLeft, items[1].offsetLeft] : [];
@@ -247,25 +248,6 @@ export default function Main() {
     };
 
     requestAnimationFrame(animateScrollTo);
-  };
-
-  const smoothScrollTo = (targetX, duration) => {
-    const container = mouseScrollRef.current;
-    const startX = container.scrollLeft;
-    const startTime = performance.now();
-
-    const animateScroll = (currentTime) => {
-      const elapsedTime = currentTime - startTime;
-      const progress = Math.min(elapsedTime / duration, 1);
-      const easing = 0.5 - Math.cos(progress * Math.PI) / 2; // Ease-in-out
-
-      container.scrollLeft = startX + (targetX - startX) * easing;
-
-      const rafId = requestAnimationFrame(animateScroll);
-      if (progress >= 1) cancelAnimationFrame(rafId);
-    };
-
-    requestAnimationFrame(animateScroll);
   };
 
   return (
@@ -317,8 +299,8 @@ export default function Main() {
             isOpen={isNav.new}
           />
           <S.Main_ItemsList>
-            {data?.productData?.map((el, idx) => (
-              <ItemBox key={idx} el={el} height={150} />
+            {data?.productData?.map((product, idx) => (
+              <ItemBox key={idx} product={product} height={150} />
             ))}
           </S.Main_ItemsList>
           <S.Button>MORE</S.Button>
@@ -346,21 +328,26 @@ export default function Main() {
               <S.Scroll_Container
                 key={selected}
                 ref={mouseScrollRef}
-                onMouseDown={onMove}
+                onMouseDown={onMouseClick}
                 onMouseMove={throttle(onDrag, 30)}
                 onMouseUp={dragEnd}
-                onMouseLeave={dragEnd}
+                // onMouseLeave={dragEnd}
               >
-                {data?.productData?.map((el, idx) => (
-                  <ItemBox key={idx} el={el} minWidth={250} />
+                {data?.productData?.map((product, idx) => (
+                  <ItemBox key={idx} product={product} minWidth={250} />
                 ))}
               </S.Scroll_Container>
-              <S.Progress_Bar>
+              {/* <DragScroller>
+                {data?.productData?.map((product, idx) => (
+                  <ItemBox key={idx} product={product} minWidth={250} />
+                ))}
+              </DragScroller> */}
+              {/* <S.Progress_Bar>
                 <S.Progress_State
                   key={selected}
                   className='progressState'
                 ></S.Progress_State>
-              </S.Progress_Bar>
+              </S.Progress_Bar> */}
             </S.Rcmd_Left_Bottom>
           </S.Recommend_Left>
           <S.Recommend_Right key={selected}>

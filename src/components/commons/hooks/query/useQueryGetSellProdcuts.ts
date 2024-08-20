@@ -8,10 +8,15 @@ export const getDatalist = async (id: string) => {
       .from('product')
       .select('*')
       .eq('user_id', id)
-      .returns<Product>();
+      .returns<Product[]>();
+
+    if (error) throw error;
 
     return { data, error };
   } catch (error) {
-    if (error instanceof Error) throw new Error(error.message);
+    if (error instanceof Error) {
+      throw new Error(error.message); // 에러를 던져서 함수 종료
+    }
+    throw 'unexpected Error!';
   }
 };

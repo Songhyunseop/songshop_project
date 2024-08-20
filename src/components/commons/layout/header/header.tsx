@@ -16,6 +16,7 @@ export default function Header() {
 
   const navRoute = [
     { route: '/signIn', name: user ? 'LOGOUT' : 'LOGIN' },
+    { route: '/list', name: 'SHOP' },
     { route: '/signUp', name: user ? 'Q&A' : 'JOIN' },
     { route: '/', name: 'REVIEW' },
     { route: '/', name: 'MYPAGE', prevent: true },

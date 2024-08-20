@@ -11,10 +11,11 @@ import { useQuery } from '@tanstack/react-query';
 import { useMutationDeleteProduct } from '@/components/commons/hooks/mutation/useMutationDeleteSellProduct';
 
 export default function ItemInfo() {
-  const itemInfo = useSearchParams().get('itemInfo');
   const user = useRecoilValue(UserState);
-
   const [userId, setUserId] = useState(null);
+
+  const itemInfo = useSearchParams().get('itemInfo');
+
   const { Modal, handleModal, isOpen } = useCustomModal();
 
   const itemInfoList: IItemInfoList = {
@@ -25,6 +26,8 @@ export default function ItemInfo() {
 
   useEffect(() => {
     if (user && !data) setUserId(user.id);
+
+    console.log(user, 333);
   }, [user]);
 
   const getQueryFunc = (parms) => {
@@ -46,6 +49,10 @@ export default function ItemInfo() {
     enabled: !!userId && !!itemInfo,
   });
 
+  console.log(userId);
+
+  // console.log(JSON.parse(data?.data[0].product_img)[0]);
+
   const getSizeCount = (data) => {
     const sizeData = [
       { size: 'S', count: 0 },
@@ -65,8 +72,6 @@ export default function ItemInfo() {
 
   const deleteProduct = async ({ id }) => {
     const { data, error } = await deleteSellProduct(id);
-
-    console.log(data);
   };
 
   return (
@@ -95,7 +100,7 @@ export default function ItemInfo() {
           <S.Items key={idx}>
             <S.Item_Info>{idx + 1}</S.Item_Info>
             <S.Item_Info>
-              <S.Item_Img src='/item.png' />
+              <S.Item_Img src={JSON.parse(el.product_img)[0]} />
             </S.Item_Info>
             <S.Item_Info>{el.product_name}</S.Item_Info>
             <S.Item_Info>{`${el.product_price} 원`}</S.Item_Info>

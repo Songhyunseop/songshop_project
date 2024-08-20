@@ -1,5 +1,6 @@
 import supabase from '@/commons/utils/supabase/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Product } from 'types/databaseCollect.type';
 
 const supabaseClient = supabase();
 
@@ -13,7 +14,7 @@ const toggleFavor = async ({ product, user }) => {
       .select('*', { count: 'exact' });
 
     if (data?.length === 0) throw new Error('NO DATA');
-    else throw new Error(error?.message);
+    throw new Error(error?.message);
   } catch (error) {
     if (error.message === 'NO DATA') {
       const setLiked = async () => {
@@ -28,26 +29,30 @@ const toggleFavor = async ({ product, user }) => {
   }
 };
 
+type SelectProductType = { isLiked: boolean } | undefined;
+type ProductData = Product & SelectProductType;
+
 export const useToggleFavor = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: toggleFavor,
     onMutate: async (toggleVariable) => {
+      // console.log(toggleVariable);
       await queryClient.cancelQueries({ queryKey: ['product'] });
 
       const perviousData = queryClient.getQueryData(['product']);
 
-      queryClient.setQueryData(['product'], (old) => {
-        try {
-          const selectProduct = old?.productData.find(
+      queryClient.setQueryData(
+        ['product'],
+        (old: { productData: ProductData[] }) => {
+          const selectProduct: SelectProductType = old?.productData.find(
             (product) => product.id === toggleVariable.product
           );
-          selectProduct.isLiked = !selectProduct.isLiked;
-        } catch (error) {
-          console.log(error);
+
+          if (selectProduct) selectProduct.isLiked = !selectProduct.isLiked;
         }
-      });
+      );
 
       // 실패를 가정해서 변경 이전의 데이터값을 반환 (onError 발생 시 이 return 값 활용)
       return { perviousData };
@@ -58,8 +63,8 @@ export const useToggleFavor = () => {
     },
 
     // 이 부분 때문에 product쿼리 key로 가진 모든 컴포넌트 리렌더링됨 (fix 필요!)
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['product'] });
-    },
+    // onSettled: (data, error) => {
+    // queryClient.invalidateQueries({ queryKey: ['product'] });
+    // },
   });
 };

@@ -58,3 +58,8 @@ export const UserState = atom<atomUser>({
   key: 'userInfoState',
   default: null,
 });
+
+export const FavorToggleActiveState = atom({
+  key: 'favorToggleState',
+  default: false,
+});

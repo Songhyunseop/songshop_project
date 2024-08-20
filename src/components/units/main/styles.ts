@@ -183,7 +183,7 @@ export const Recommend = styled.article`
   margin-bottom: 15%;
   padding: 0 5% 0% 5%;
   padding-bottom: 45%;
-  background-color: rgba(245, 245, 245, 1);
+  background-color: #f0eded;
   display: flex;
   position: relative;
 `;
@@ -247,7 +247,7 @@ export const Rcmd_Left_Bottom = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 10px solid green;
+  border: 2px solid green;
   flex: 4;
 `;
 

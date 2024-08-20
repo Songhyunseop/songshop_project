@@ -94,7 +94,7 @@ export const Nav_Bar = styled.nav`
     color: black;
     cursor: pointer;
 
-    :nth-of-type(5) {
+    :nth-last-of-type(1) {
       flex: 1;
     }
   }

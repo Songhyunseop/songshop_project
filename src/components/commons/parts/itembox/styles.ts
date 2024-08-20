@@ -120,10 +120,10 @@ export const Par = styled.p<{ size: number; weight: number }>`
   color: ${({ color }) => (color ? color : 'black')};
 `;
 
-export const Summary_Setcion = styled.div`
+export const Summary_Setcion = styled.div<{ color: string }>`
   display: flex;
   align-items: center;
-  color: rgba(189, 187, 183);
+  color: ${({ color }) => color};
 `;
 
 export const Bracket = styled.span`
@@ -141,6 +141,7 @@ export const Summary = styled.span`
 `;
 
 export const Item_Name = styled.p`
+  margin-top: 3%;
   font-size: 1.1vw;
   font-weight: 500;
 `;

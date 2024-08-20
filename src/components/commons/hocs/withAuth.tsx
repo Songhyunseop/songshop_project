@@ -9,11 +9,23 @@ export default function WithAuth(Component: ComponentType) {
 
     useEffect(() => {
       const getUser = async () => {
-        const data = await supabaseClient.auth.getUser();
+        try {
+          const { data, error } = await supabaseClient.auth.getSession();
 
-        if (data.data.user) {
-          alert('이미 로그인 하셨습니다');
-          router.push('/');
+          if (error) throw error;
+
+          if (data?.session) {
+            alert('이미 로그인 하셨습니다');
+            router.push('/');
+          }
+        } catch (error) {
+          if (error instanceof Error) {
+            error.message ===
+              `Cannot read properties of undefined (reading 'user')`;
+            return;
+          }
+
+          throw error;
         }
       };
 

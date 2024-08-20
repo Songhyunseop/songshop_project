@@ -29,10 +29,6 @@ function Login() {
       if (error) throw error;
 
       const userData = await supabaseClient.auth.getUser();
-      const { id } = userData.data.user;
-
-      console.log(userData.data.user);
-      console.log(id);
 
       router.push('/');
     } catch (error) {
@@ -42,7 +38,10 @@ function Login() {
           error.message === 'Invalid login credentials'
         )
           alert('가입되지 않은 유저입니다');
+        return;
       }
+
+      throw 'unexpected error';
     }
   };
 

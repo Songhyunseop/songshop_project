@@ -7,13 +7,35 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import {
+  getBestProduct,
+  getDataList,
+} from '@/components/commons/hooks/query/useQueryGetAllProducts';
+import { useQuery } from '@tanstack/react-query';
 
 export default function ItemList() {
+  const {
+    data: productData,
+    isLoading: productLoading,
+    isError: productError,
+  } = useQuery({
+    queryKey: ['product'],
+    queryFn: () => getDataList(8),
+  });
+
+  const {
+    data: bestData,
+    isLoading: bestProductLoading,
+    isError: bestProductError,
+  } = useQuery({
+    queryKey: ['product', 'best'],
+    queryFn: getBestProduct,
+  });
+
   const categoryArr = ['JACKET', 'COAT', 'JUMPER'];
 
   const [currentPage, setCurrentPage] = useState(1);
-
-  const searchParams = useSearchParams();
+  const category = useSearchParams().get('category');
 
   // 총 페이지 수
   // const totalItems = 69;
@@ -29,8 +51,6 @@ export default function ItemList() {
   };
 
   // queryString 추출
-  const category = searchParams.get('category');
-  console.log(category);
 
   return (
     <S.Main>
@@ -43,16 +63,16 @@ export default function ItemList() {
       <S.BestItem_Section>
         <S.Item_Title>BEST ITEM</S.Item_Title>
         <S.Items>
-          {new Array(4).fill(1).map((_, idx) => (
-            <ItemBox isBest={true} key={idx} />
+          {bestData?.bestProduct?.map((_, idx) => (
+            <ItemBox key={idx} isBest={true} height={150} />
           ))}
         </S.Items>
       </S.BestItem_Section>
       <S.AllItem_Section>
         <S.Item_Title>ALL ITEM</S.Item_Title>
         <S.Items isAll={true}>
-          {new Array(8).fill(1).map((_, idx) => (
-            <ItemBox key={idx} />
+          {productData?.productData?.map((_, idx) => (
+            <ItemBox key={idx} height={150} />
           ))}
         </S.Items>
       </S.AllItem_Section>
