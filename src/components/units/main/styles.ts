@@ -269,14 +269,15 @@ export const Progress_Bar = styled.div`
 `;
 
 export const Progress_State = styled.div`
+  width: 150px;
   padding: 3px 0;
   border-radius: 15px;
   position: relative;
   z-index: 1;
-  height: 5px;
-  width: 25%;
+  /* height: 5px; */
   overflow: hidden;
   background-color: black;
+  transform: none;
 `;
 
 export const Scroll_Container = styled.div`

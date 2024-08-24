@@ -133,6 +133,14 @@ export default function Main() {
 
     if (mouseScrollRef.current) {
       mouseScrollRef.current.scrollLeft = startX - e.clientX;
+
+      const range =
+        mouseScrollRef.current.scrollWidth - mouseScrollRef.current.offsetWidth;
+
+      const barProgress = mouseScrollRef.current.scrollLeft / range;
+
+      smoothScrollXbar(barProgress, 200);
+      console.log('진행률', barProgress * 100);
     }
   };
 
@@ -155,7 +163,7 @@ export default function Main() {
     let targetPosition = 0;
 
     Array.from(items).forEach((item, idx) => {
-      // 드래그 시 아이템 클릭 이벤트 방지 (드래그 범위 diff가 일정범위 이상일 경우 클릭으로 간주(eventListener 제거))
+      // 드래그 시 아이템 클릭 이벤트 방지 (드래그 범위 diff가 일정범위 이하일 경우 클릭으로 간주(eventListener 제거))
       if (scrolledDiff > 15) item.addEventListener('click', preventEffects);
       else item.removeEventListener('click', preventEffects);
 
@@ -169,19 +177,14 @@ export default function Main() {
     smoothScrollTo(targetPosition, 200);
 
     // // 현재 스크롤 진행도 계산
-    // setTimeout(() => {
-    //   const scrollDistance = items[0]?.offsetWidth;
 
-    //   const usuableScrollTimes = Math.round(
-    //     usuableScrollRange / scrollDistance
-    //   );
-    //   const curretnScrollTime = Math.round(
-    //     container.scrollLeft / scrollDistance
-    //   );
+    const range =
+      mouseScrollRef.current.scrollWidth - mouseScrollRef.current.offsetWidth;
 
-    //   const percentage = (curretnScrollTime / usuableScrollTimes) * 100;
+    const barProgress = mouseScrollRef.current.scrollLeft / range;
 
-    //   smoothScrollXbar(percentage, 200);
+    // console.log('진행률', barProgress * 100);
+
     // }, 0);
 
     // 드래그 상태 종료
@@ -212,12 +215,10 @@ export default function Main() {
 
   const smoothScrollXbar = (targetX, duration) => {
     const progressBar = document.querySelector('.progressState');
-    const container = mouseScrollRef.current;
 
-    const containerWidth = container.offsetWidth;
-    const currentwidth = Math.ceil(
-      (progressBar.offsetWidth / containerWidth) * 100
-    );
+    const startX = progressBar.style.transform;
+
+    console.log(startX);
 
     // 애니메이션 시작시간, 최초 상태바 width 값
     const startTime = performance.now();
@@ -226,28 +227,28 @@ export default function Main() {
       const elapsedTime = currentTime - startTime;
       const progress = Math.min(elapsedTime / duration, 1);
 
-      const items = container.children;
+      const transformX = startX + Math.abs(startX - targetX * 100) * progress;
 
-      // console.log(items, 'item');
+      console.log('변화과정', startX);
 
-      const itemArr =
-        items.length > 0 ? [items[0].offsetLeft, items[1].offsetLeft] : [];
-
-      const isFirstOrSecond = itemArr.every(
-        (_, idx) => items[idx].offsetLeft >= container.scrollLeft
-      );
-
-      const updatedWidth = isFirstOrSecond
-        ? currentwidth
-        : currentwidth + (targetX - currentwidth) * progress;
-
-      progressBar.style.width = `${updatedWidth}%`;
+      progressBar.style.transform = `translateX(${transformX}%)`;
 
       const rafId = requestAnimationFrame(animateScrollTo);
       if (progress === 1) cancelAnimationFrame(rafId);
     };
 
     requestAnimationFrame(animateScrollTo);
+
+    // const itemArr =
+    //   items.length > 0 ? [items[0].offsetLeft, items[1].offsetLeft] : [];
+
+    // const isFirstOrSecond = itemArr.every(
+    //   (_, idx) => items[idx].offsetLeft >= container.scrollLeft
+    // );
+
+    // const updatedWidth = isFirstOrSecond
+    //   ? currentwidth
+    //   : currentwidth + (targetX - currentwidth) * progress;
   };
 
   return (
@@ -329,7 +330,7 @@ export default function Main() {
                 key={selected}
                 ref={mouseScrollRef}
                 onMouseDown={onMouseClick}
-                onMouseMove={throttle(onDrag, 30)}
+                onMouseMove={throttle(onDrag, 50)}
                 onMouseUp={dragEnd}
                 // onMouseLeave={dragEnd}
               >
@@ -342,12 +343,12 @@ export default function Main() {
                   <ItemBox key={idx} product={product} minWidth={250} />
                 ))}
               </DragScroller> */}
-              {/* <S.Progress_Bar>
+              <S.Progress_Bar>
                 <S.Progress_State
                   key={selected}
                   className='progressState'
                 ></S.Progress_State>
-              </S.Progress_Bar> */}
+              </S.Progress_Bar>
             </S.Rcmd_Left_Bottom>
           </S.Recommend_Left>
           <S.Recommend_Right key={selected}>
