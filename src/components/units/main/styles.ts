@@ -251,49 +251,6 @@ export const Rcmd_Left_Bottom = styled.div`
   flex: 4;
 `;
 
-export const Progress_Bar = styled.div`
-  width: 100%;
-  padding: 10px 0;
-  position: relative;
-
-  ::after {
-    content: '';
-    border-radius: 15px;
-    position: absolute;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-    width: 100%;
-    height: 5px;
-    background-color: #dbdbdb;
-  }
-`;
-
-export const Progress_State = styled.div`
-  width: 200px;
-  padding: 3px 0;
-  border-radius: 15px;
-  position: relative;
-  z-index: 1;
-  /* height: 5px; */
-  overflow: hidden;
-  background-color: black;
-  transform: translateX(-100px);
-`;
-
-export const Scroll_Container = styled.div`
-  cursor: pointer;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  gap: 20px;
-  margin-top: 5%;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  animation: appear 0.5s ease-out;
-`;
-
 export const Recommend_Right = styled.div`
   height: 100%;
   margin-left: 50px;

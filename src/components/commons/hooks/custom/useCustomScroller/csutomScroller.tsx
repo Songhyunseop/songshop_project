@@ -1,32 +1,21 @@
-import { useRef, useState } from 'react';
-// import styled from '@emotion/styled';
+import { RefObject, useState } from 'react';
 
-// const StyledContainer = styled.div`
-//   cursor: pointer;
-//   width: 100%;
-//   height: 100%;
-//   display: flex;
-//   gap: 20px;
-//   margin-top: 5%;
-//   overflow-x: auto;
-//   scrollbar-width: none;
-//   -ms-overflow-style: none;
-//   animation: appear 0.5s ease-out;
-// `;
-
-export const useDragScroller = (scrollRef) => {
+export const useDragScroller = (
+  scrollRef: RefObject<HTMLDivElement>,
+  scrollBarRef: RefObject<HTMLDivElement>
+) => {
   const [startX, setStartX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [totalScroll, setTotalScroll] = useState(0);
 
-  const onMouseClick = (e) => {
-    // console.log(scrollRef, 'refreferef');
-
-    const scrolledX = scrollRef.current.scrollLeft;
+  const onMouseClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (scrollRef.current) {
+      const scrolledX = scrollRef.current.scrollLeft;
+      setStartX(e.clientX + scrolledX);
+      setTotalScroll(scrolledX);
+    }
 
     setIsDragging(true);
-    setStartX(e.clientX + scrolledX);
-    setTotalScroll(scrolledX);
   };
 
   const onDrag = (e) => {
@@ -34,7 +23,21 @@ export const useDragScroller = (scrollRef) => {
 
     if (scrollRef.current) {
       scrollRef.current.scrollLeft = startX - e.clientX;
+
+      smoothScrollbar(getBarProgress(), 200);
     }
+  };
+
+  const getBarProgress = () => {
+    let scrolledPercentage;
+
+    if (scrollRef.current) {
+      const range =
+        scrollRef.current.scrollWidth - scrollRef.current.offsetWidth;
+      scrolledPercentage = scrollRef.current.scrollLeft / range;
+    }
+
+    return scrolledPercentage ?? 0;
   };
 
   const onDragEnd = (e) => {
@@ -53,9 +56,8 @@ export const useDragScroller = (scrollRef) => {
 
     // // 가장 근거리에 있는 아이템, 스크롤 상 타겟 위치 초기화
     let closestItem = items[0];
-    let targetPosition = 0;
 
-    Array.from(items).forEach((item, idx) => {
+    Array.from(items).forEach((item) => {
       // 드래그 시 아이템 클릭 이벤트 방지 (드래그 범위 diff가 일정범위 이하일 경우 클릭으로 간주(eventListener 제거))
       if (scrolledDiff > 15) item.addEventListener('click', preventEffects);
       else item.removeEventListener('click', preventEffects);
@@ -72,21 +74,54 @@ export const useDragScroller = (scrollRef) => {
     setIsDragging(false);
   };
 
+  // 스크롤 섹션 애니메이션
   const smoothScrollTo = (targetX: number, duration: number) => {
     const startX = scrollRef.current.scrollLeft;
     const startTime = performance.now();
 
     const animateScroll = (currentTime: number) => {
       const elapsedTime = currentTime - startTime;
+
       const progress = Math.min(elapsedTime / duration, 1);
       const easing = 0.5 - Math.cos(progress * Math.PI) / 2; // Ease-in-out
 
       scrollRef.current.scrollLeft = startX + (targetX - startX) * easing;
 
-      // console.log(targetX, startX, 111);
+      const rafId = requestAnimationFrame(animateScroll);
+      if (progress >= 1) {
+        cancelAnimationFrame(rafId);
+        smoothScrollbar(getBarProgress(), 100);
+      }
+    };
+
+    requestAnimationFrame(animateScroll);
+  };
+
+  // 상태 바 애니메이션
+  const progressState = scrollBarRef?.current?.children[0];
+  const progressStateRect = progressState?.getBoundingClientRect();
+
+  let currentPosition = progressStateRect?.left;
+
+  const smoothScrollbar = (targetX: number, duration: number) => {
+    const barWidth = scrollBarRef?.current.getBoundingClientRect().width;
+    const stateWidth = progressStateRect?.width;
+
+    // 애니메이션 시작시간, 최초 상태바 width 값
+    const startTime = performance.now();
+    const xPosition = ((targetX * 100) / 100) * barWidth;
+
+    const animateScroll = (currentTime: number) => {
+      const elapsedTime = currentTime - startTime;
+      const progress = Math.min(elapsedTime / duration, 1);
+
+      currentPosition =
+        currentPosition + (xPosition - currentPosition - stateWidth / 2) * 0.2;
+
+      progressState.style.transform = `translateX(${currentPosition}px)`;
 
       const rafId = requestAnimationFrame(animateScroll);
-      if (progress >= 1) cancelAnimationFrame(rafId);
+      if (progress === 1) cancelAnimationFrame(rafId);
     };
 
     requestAnimationFrame(animateScroll);

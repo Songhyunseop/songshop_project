@@ -42,13 +42,17 @@ export const Progress_State = styled.div`
   /* height: 5px; */
   overflow: hidden;
   background-color: black;
-  transform: translateX(100%);
+  transform: translateX(-100px);
 `;
 
 export const DragScroller = ({ children }) => {
-  const mouseScrollRef = useRef(null);
+  const mouseScrollRef = useRef<HTMLDivElement>(null);
+  const scrollBarRef = useRef<HTMLDivElement>(null);
 
-  const { onMouseClick, onDrag, onDragEnd } = useDragScroller(mouseScrollRef);
+  const { onMouseClick, onDrag, onDragEnd } = useDragScroller(
+    mouseScrollRef,
+    scrollBarRef
+  );
 
   return (
     <>
@@ -57,10 +61,11 @@ export const DragScroller = ({ children }) => {
         onMouseDown={onMouseClick}
         onMouseMove={onDrag}
         onMouseUp={onDragEnd}
+        onMouseLeave={onDragEnd}
       >
         {children}
       </StyledContainer>
-      <Progress_Bar className='progressBar'>
+      <Progress_Bar ref={scrollBarRef}>
         <Progress_State
         //   key={selected}
         ></Progress_State>

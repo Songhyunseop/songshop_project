@@ -14,7 +14,6 @@ import ToggleNav from '@/components/commons/layout/navigation/toggleCategorynav/
 import ReviewBox from '@/components/commons/parts/reviewBox/reviewBox';
 import AboutSection from './about/about';
 import { getDataList } from '@/components/commons/hooks/query/useQueryGetAllProducts';
-import { useCustomScroller } from '@/components/commons/hooks/custom/useCustomScroller/csutomScroller';
 import { DragScroller } from '@/components/commons/parts/dragScroller/dragScroller';
 
 export default function Main() {
@@ -48,30 +47,27 @@ export default function Main() {
   const [isNav, setIsNav] = useState({ best: false, new: false });
 
   // 화면 문구 변환 함수
-  const changedPhrase = () => {
+  const changePhrase = () => {
     const index = Math.floor(Math.random() * 5);
 
     return randomPhrases[index];
   };
 
-  const usePhraseChanger = () => {
-    let isRunning = false;
-    let timer: ReturnType<typeof setTimeout>;
+  //
+  //
+  let isRunning = false;
+  let timer: ReturnType<typeof setTimeout>;
 
-    const delaytoTrigger = (e) => {
-      if (isRunning) clearTimeout(timer);
+  const delaytoTrigger = (e) => {
+    if (isRunning) clearTimeout(timer);
 
-      isRunning = true;
-      timer = setTimeout(() => {
-        if (e._reactName === 'onMouseLeave') setPhrase(changedPhrase());
-        isRunning = false;
-      }, 1500);
-    };
+    isRunning = true;
 
-    return { delaytoTrigger };
+    timer = setTimeout(() => {
+      if (e._reactName === 'onMouseLeave') setPhrase(changePhrase());
+      isRunning = false;
+    }, 1500);
   };
-
-  const { delaytoTrigger } = usePhraseChanger();
 
   //토글 인자 타입
   type navTypeProps = { best: boolean; new: boolean };
@@ -113,122 +109,121 @@ export default function Main() {
   //
   // mouseScroll
 
-  const [startX, setStartX] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [totalScroll, setTotalScroll] = useState(0);
+  // const [startX, setStartX] = useState(0);
+  // const [isDragging, setIsDragging] = useState(false);
+  // const [totalScroll, setTotalScroll] = useState(0);
 
-  const mouseScrollRef = useRef(null);
+  // const mouseScrollRef = useRef(null);
 
-  const onMouseClick = (e) => {
-    const scrolledX = mouseScrollRef.current.scrollLeft;
+  // const onMouseClick = (e) => {
+  //   const scrolledX = mouseScrollRef.current.scrollLeft;
 
-    setIsDragging(true);
-    setStartX(e.clientX + scrolledX);
-    setTotalScroll(scrolledX);
-  };
+  //   setIsDragging(true);
+  //   setStartX(e.clientX + scrolledX);
+  //   setTotalScroll(scrolledX);
+  // };
 
-  const onDrag = (e) => {
-    if (!isDragging) return;
+  // const onDrag = (e) => {
+  //   if (!isDragging) return;
 
-    if (mouseScrollRef.current) {
-      mouseScrollRef.current.scrollLeft = startX - e.clientX;
+  //   if (mouseScrollRef.current) {
+  //     mouseScrollRef.current.scrollLeft = startX - e.clientX;
 
-      smoothScrollXbar(getBarProgress(), 200);
-    }
-  };
+  //     smoothScrollXbar(getBarProgress(), 200);
+  //   }
+  // };
 
-  const getBarProgress = () => {
-    const range =
-      mouseScrollRef.current.scrollWidth - mouseScrollRef.current.offsetWidth;
+  // const getBarProgress = () => {
+  //   const range =
+  //     mouseScrollRef.current.scrollWidth - mouseScrollRef.current.offsetWidth;
 
-    return mouseScrollRef.current.scrollLeft / range;
-  };
+  //   return mouseScrollRef.current.scrollLeft / range;
+  // };
 
-  const dragEnd = (e) => {
-    if (!isDragging) return;
+  // const dragEnd = (e) => {
+  //   if (!isDragging) return;
 
-    // 기본 이벤트 트리거 방지 함수
-    const preventEffects = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-    };
+  //   // 기본 이벤트 트리거 방지 함수
+  //   const preventEffects = (e) => {
+  //     e.preventDefault();
+  //     e.stopPropagation();
+  //   };
 
-    const currentScrollX = mouseScrollRef.current.scrollLeft;
+  //   const currentScrollX = mouseScrollRef.current.scrollLeft;
 
-    const items = mouseScrollRef.current.children;
-    const scrolledDiff = Math.abs(currentScrollX - totalScroll);
+  //   const items = mouseScrollRef.current.children;
+  //   const scrolledDiff = Math.abs(currentScrollX - totalScroll);
 
-    // // 가장 근거리에 있는 아이템, 스크롤 상 타겟 위치 초기화
-    let closestItem = items[0];
+  //   // // 가장 근거리에 있는 아이템, 스크롤 상 타겟 위치 초기화
+  //   let closestItem = items[0];
 
-    Array.from(items).forEach((item, idx) => {
-      // 드래그 시 아이템 클릭 이벤트 방지 (드래그 범위 diff가 일정범위 이하일 경우 클릭으로 간주(eventListener 제거))
-      if (scrolledDiff > 15) item.addEventListener('click', preventEffects);
-      else item.removeEventListener('click', preventEffects);
+  //   Array.from(items).forEach((item, idx) => {
+  //     // 드래그 시 아이템 클릭 이벤트 방지 (드래그 범위 diff가 일정범위 이하일 경우 클릭으로 간주(eventListener 제거))
+  //     if (scrolledDiff > 15) item.addEventListener('click', preventEffects);
+  //     else item.removeEventListener('click', preventEffects);
 
-      const distance = Math.abs(item.offsetLeft - currentScrollX);
-      const currentClose = Math.abs(closestItem.offsetLeft - currentScrollX);
+  //     const distance = Math.abs(item.offsetLeft - currentScrollX);
+  //     const currentClose = Math.abs(closestItem.offsetLeft - currentScrollX);
 
-      if (distance < currentClose) closestItem = item;
-    });
+  //     if (distance < currentClose) closestItem = item;
+  //   });
 
-    smoothScrollTo(closestItem.offsetLeft, 200);
+  //   smoothScrollTo(closestItem.offsetLeft, 200);
 
-    // 드래그 상태 종료
-    setIsDragging(false);
-  };
+  //   // 드래그 상태 종료
+  //   setIsDragging(false);
+  // };
 
-  const smoothScrollTo = (targetX, duration) => {
-    const container = mouseScrollRef.current;
-    const startX = container.scrollLeft;
-    const startTime = performance.now();
+  // const smoothScrollTo = (targetX, duration) => {
+  //   const container = mouseScrollRef.current;
+  //   const startX = container.scrollLeft;
+  //   const startTime = performance.now();
 
-    const animateScroll = (currentTime) => {
-      const elapsedTime = currentTime - startTime;
-      const progress = Math.min(elapsedTime / duration, 1);
-      const easing = 0.5 - Math.cos(progress * Math.PI) / 2; // Ease-in-out
+  //   const animateScroll = (currentTime) => {
+  //     const elapsedTime = currentTime - startTime;
+  //     const progress = Math.min(elapsedTime / duration, 1);
+  //     const easing = 0.5 - Math.cos(progress * Math.PI) / 2; // Ease-in-out
 
-      container.scrollLeft = startX + (targetX - startX) * easing;
+  //     container.scrollLeft = startX + (targetX - startX) * easing;
 
-      const rafId = requestAnimationFrame(animateScroll);
-      if (progress >= 1) {
-        cancelAnimationFrame(rafId);
-        smoothScrollXbar(getBarProgress(), 100);
-      }
-    };
+  //     const rafId = requestAnimationFrame(animateScroll);
+  //     if (progress >= 1) {
+  //       cancelAnimationFrame(rafId);
+  //       smoothScrollXbar(getBarProgress(), 100);
+  //     }
+  //   };
 
-    requestAnimationFrame(animateScroll);
-  };
+  //   requestAnimationFrame(animateScroll);
+  // };
 
-  // 전역 처리
-  const progressBar = useRef(null);
-  const progressState = progressBar?.current?.children[0];
-  let currentPosition = progressState?.getBoundingClientRect().left;
+  // // 전역 처리
+  // const progressBar = useRef(null);
+  // const progressState = progressBar?.current?.children[0];
+  // let currentPosition = progressState?.getBoundingClientRect().left;
 
-  const smoothScrollXbar = (targetX, duration) => {
-    const barWidth = progressBar?.current.getBoundingClientRect().width;
-    const stateWidth = progressState?.getBoundingClientRect().width;
+  // const smoothScrollXbar = (targetX, duration) => {
+  //   const barWidth = progressBar?.current.getBoundingClientRect().width;
+  //   const stateWidth = progressState?.getBoundingClientRect().width;
 
-    // 애니메이션 시작시간, 최초 상태바 width 값
-    const startTime = performance.now();
+  //   // 애니메이션 시작시간, 최초 상태바 width 값
+  //   const startTime = performance.now();
+  //   const xPosition = ((targetX * 100) / 100) * barWidth;
 
-    const xPosition = ((targetX * 100) / 100) * barWidth;
+  //   const animateScroll = (currentTime) => {
+  //     const elapsedTime = currentTime - startTime;
+  //     const progress = Math.min(elapsedTime / duration, 1);
 
-    const animateScroll = (currentTime) => {
-      const elapsedTime = currentTime - startTime;
-      const progress = Math.min(elapsedTime / duration, 1);
+  //     currentPosition =
+  //       currentPosition + (xPosition - currentPosition - stateWidth / 2) * 0.1;
 
-      currentPosition =
-        currentPosition + (xPosition - currentPosition - stateWidth / 2) * 0.2;
+  //     progressState.style.transform = `translateX(${currentPosition}px)`;
 
-      progressState.style.transform = `translateX(${currentPosition}px)`;
+  //     const rafId = requestAnimationFrame(animateScroll);
+  //     if (progress === 1) cancelAnimationFrame(rafId);
+  //   };
 
-      const rafId = requestAnimationFrame(animateScroll);
-      if (progress === 1) cancelAnimationFrame(rafId);
-    };
-
-    requestAnimationFrame(animateScroll);
-  };
+  //   requestAnimationFrame(animateScroll);
+  // };
 
   return (
     <S.Main>
@@ -305,26 +300,26 @@ export default function Main() {
               ))}
             </S.Select_Bar>
             <S.Rcmd_Left_Bottom>
-              <S.Scroll_Container
+              {/* <S.Scroll_Container
                 key={selected}
                 ref={mouseScrollRef}
                 onMouseDown={onMouseClick}
                 onMouseMove={throttle(onDrag, 50)}
                 onMouseUp={dragEnd}
-                // onMouseLeave={dragEnd}
+                onMouseLeave={dragEnd}
               >
                 {data?.productData?.map((product, idx) => (
                   <ItemBox key={idx} product={product} minWidth={250} />
                 ))}
-              </S.Scroll_Container>
-              {/* <DragScroller>
+              </S.Scroll_Container> */}
+              <DragScroller key={selected}>
                 {data?.productData?.map((product, idx) => (
                   <ItemBox key={idx} product={product} minWidth={250} />
                 ))}
-              </DragScroller> */}
-              <S.Progress_Bar ref={progressBar}>
+              </DragScroller>
+              {/* <S.Progress_Bar ref={progressBar}>
                 <S.Progress_State></S.Progress_State>
-              </S.Progress_Bar>
+              </S.Progress_Bar> */}
             </S.Rcmd_Left_Bottom>
           </S.Recommend_Left>
           <S.Recommend_Right key={selected}>
