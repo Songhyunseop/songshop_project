@@ -252,6 +252,7 @@ export const Rcmd_Left_Bottom = styled.div`
 `;
 
 export const Progress_Bar = styled.div`
+  width: 100%;
   padding: 10px 0;
   position: relative;
 
@@ -269,7 +270,7 @@ export const Progress_Bar = styled.div`
 `;
 
 export const Progress_State = styled.div`
-  width: 150px;
+  width: 200px;
   padding: 3px 0;
   border-radius: 15px;
   position: relative;
@@ -277,7 +278,7 @@ export const Progress_State = styled.div`
   /* height: 5px; */
   overflow: hidden;
   background-color: black;
-  transform: none;
+  transform: translateX(-100px);
 `;
 
 export const Scroll_Container = styled.div`

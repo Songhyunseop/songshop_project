@@ -11,6 +11,7 @@ export const getDataList = async (limitNum) => {
       .limit(limitNum);
 
     const session = await supabaseClient.auth.getSession();
+
     const userId = session.data.session ? session.data.session?.user.id : '';
 
     const productData = dataList?.map((data) => {

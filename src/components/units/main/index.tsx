@@ -5,7 +5,7 @@ import ItemSwiper from '@/components/commons/parts/swiper/itemSwiper/itemSwiper'
 
 import ItemBox from '@/components/commons/parts/itembox/itembox';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { throttle } from '@/commons/utils/throttle';
 
@@ -111,7 +111,6 @@ export default function Main() {
   //
   //
   //
-  //
   // mouseScroll
 
   const [startX, setStartX] = useState(0);
@@ -134,14 +133,15 @@ export default function Main() {
     if (mouseScrollRef.current) {
       mouseScrollRef.current.scrollLeft = startX - e.clientX;
 
-      const range =
-        mouseScrollRef.current.scrollWidth - mouseScrollRef.current.offsetWidth;
-
-      const barProgress = mouseScrollRef.current.scrollLeft / range;
-
-      smoothScrollXbar(barProgress, 200);
-      console.log('진행률', barProgress * 100);
+      smoothScrollXbar(getBarProgress(), 200);
     }
+  };
+
+  const getBarProgress = () => {
+    const range =
+      mouseScrollRef.current.scrollWidth - mouseScrollRef.current.offsetWidth;
+
+    return mouseScrollRef.current.scrollLeft / range;
   };
 
   const dragEnd = (e) => {
@@ -160,7 +160,6 @@ export default function Main() {
 
     // // 가장 근거리에 있는 아이템, 스크롤 상 타겟 위치 초기화
     let closestItem = items[0];
-    let targetPosition = 0;
 
     Array.from(items).forEach((item, idx) => {
       // 드래그 시 아이템 클릭 이벤트 방지 (드래그 범위 diff가 일정범위 이하일 경우 클릭으로 간주(eventListener 제거))
@@ -173,19 +172,7 @@ export default function Main() {
       if (distance < currentClose) closestItem = item;
     });
 
-    targetPosition = closestItem.offsetLeft;
-    smoothScrollTo(targetPosition, 200);
-
-    // // 현재 스크롤 진행도 계산
-
-    const range =
-      mouseScrollRef.current.scrollWidth - mouseScrollRef.current.offsetWidth;
-
-    const barProgress = mouseScrollRef.current.scrollLeft / range;
-
-    // console.log('진행률', barProgress * 100);
-
-    // }, 0);
+    smoothScrollTo(closestItem.offsetLeft, 200);
 
     // 드래그 상태 종료
     setIsDragging(false);
@@ -203,52 +190,44 @@ export default function Main() {
 
       container.scrollLeft = startX + (targetX - startX) * easing;
 
-      // console.log('left', container.scrollLeft);
-      console.log(targetX, startX);
-
       const rafId = requestAnimationFrame(animateScroll);
-      if (progress >= 1) cancelAnimationFrame(rafId);
+      if (progress >= 1) {
+        cancelAnimationFrame(rafId);
+        smoothScrollXbar(getBarProgress(), 100);
+      }
     };
 
     requestAnimationFrame(animateScroll);
   };
 
+  // 전역 처리
+  const progressBar = useRef(null);
+  const progressState = progressBar?.current?.children[0];
+  let currentPosition = progressState?.getBoundingClientRect().left;
+
   const smoothScrollXbar = (targetX, duration) => {
-    const progressBar = document.querySelector('.progressState');
-
-    const startX = progressBar.style.transform;
-
-    console.log(startX);
+    const barWidth = progressBar?.current.getBoundingClientRect().width;
+    const stateWidth = progressState?.getBoundingClientRect().width;
 
     // 애니메이션 시작시간, 최초 상태바 width 값
     const startTime = performance.now();
 
-    const animateScrollTo = (currentTime) => {
+    const xPosition = ((targetX * 100) / 100) * barWidth;
+
+    const animateScroll = (currentTime) => {
       const elapsedTime = currentTime - startTime;
       const progress = Math.min(elapsedTime / duration, 1);
 
-      const transformX = startX + Math.abs(startX - targetX * 100) * progress;
+      currentPosition =
+        currentPosition + (xPosition - currentPosition - stateWidth / 2) * 0.2;
 
-      console.log('변화과정', startX);
+      progressState.style.transform = `translateX(${currentPosition}px)`;
 
-      progressBar.style.transform = `translateX(${transformX}%)`;
-
-      const rafId = requestAnimationFrame(animateScrollTo);
+      const rafId = requestAnimationFrame(animateScroll);
       if (progress === 1) cancelAnimationFrame(rafId);
     };
 
-    requestAnimationFrame(animateScrollTo);
-
-    // const itemArr =
-    //   items.length > 0 ? [items[0].offsetLeft, items[1].offsetLeft] : [];
-
-    // const isFirstOrSecond = itemArr.every(
-    //   (_, idx) => items[idx].offsetLeft >= container.scrollLeft
-    // );
-
-    // const updatedWidth = isFirstOrSecond
-    //   ? currentwidth
-    //   : currentwidth + (targetX - currentwidth) * progress;
+    requestAnimationFrame(animateScroll);
   };
 
   return (
@@ -343,11 +322,8 @@ export default function Main() {
                   <ItemBox key={idx} product={product} minWidth={250} />
                 ))}
               </DragScroller> */}
-              <S.Progress_Bar>
-                <S.Progress_State
-                  key={selected}
-                  className='progressState'
-                ></S.Progress_State>
+              <S.Progress_Bar ref={progressBar}>
+                <S.Progress_State></S.Progress_State>
               </S.Progress_Bar>
             </S.Rcmd_Left_Bottom>
           </S.Recommend_Left>

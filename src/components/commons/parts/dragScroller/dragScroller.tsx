@@ -15,18 +15,56 @@ const StyledContainer = styled.div`
   animation: appear 0.5s ease-out;
 `;
 
+export const Progress_Bar = styled.div`
+  width: 100%;
+  padding: 10px 0;
+  position: relative;
+
+  ::after {
+    content: '';
+    border-radius: 15px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 5px;
+    background-color: #dbdbdb;
+  }
+`;
+
+export const Progress_State = styled.div`
+  width: 30%;
+  padding: 3px 0;
+  border-radius: 15px;
+  position: relative;
+  z-index: 1;
+  /* height: 5px; */
+  overflow: hidden;
+  background-color: black;
+  transform: translateX(100%);
+`;
+
 export const DragScroller = ({ children }) => {
   const mouseScrollRef = useRef(null);
 
-  const { onMouseClick, onDrag } = useDragScroller(mouseScrollRef);
+  const { onMouseClick, onDrag, onDragEnd } = useDragScroller(mouseScrollRef);
 
   return (
-    <StyledContainer
-      ref={mouseScrollRef}
-      onMouseDown={onMouseClick}
-      onMouseMove={onDrag}
-    >
-      {children}
-    </StyledContainer>
+    <>
+      <StyledContainer
+        ref={mouseScrollRef}
+        onMouseDown={onMouseClick}
+        onMouseMove={onDrag}
+        onMouseUp={onDragEnd}
+      >
+        {children}
+      </StyledContainer>
+      <Progress_Bar className='progressBar'>
+        <Progress_State
+        //   key={selected}
+        ></Progress_State>
+      </Progress_Bar>
+    </>
   );
 };
