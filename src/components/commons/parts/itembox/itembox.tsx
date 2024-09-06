@@ -7,15 +7,16 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { FavorToggleActiveState, UserState } from '@/commons/libraries/atom';
 import { useToggleFavor } from '../../hooks/mutation/useMutationToggleFavor';
 import { Flip, toast } from 'react-toastify';
-import { useRef } from 'react';
+import { forwardRef } from 'react';
 
-export default function ItemBox(props: ItemBoxProps) {
+const ItemBox = (
+  props: ItemBoxProps,
+  ref: React.ForwardedRef<HTMLInputElement>
+) => {
   const userInfo = useRecoilValue(UserState);
   const [isActive, setIsActive] = useRecoilState(FavorToggleActiveState);
 
   const { product, ...rest } = props;
-
-  // console.log(product, 'prprpr');
 
   const { mutateAsync: toggleFavor } = useToggleFavor();
 
@@ -59,7 +60,7 @@ export default function ItemBox(props: ItemBoxProps) {
   };
 
   return (
-    <S.ItemBox {...rest} id={product?.id}>
+    <S.ItemBox {...rest} id={product?.id} ref={ref}>
       {/* {props.isBest && <S.Label>BEST</S.Label>} */}
       <S.Item_Contents>
         <S.Image_Section>
@@ -128,4 +129,6 @@ export default function ItemBox(props: ItemBoxProps) {
       </S.Item_Contents>
     </S.ItemBox>
   );
-}
+};
+
+export default forwardRef(ItemBox);

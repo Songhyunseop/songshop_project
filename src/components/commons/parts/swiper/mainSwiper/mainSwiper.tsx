@@ -45,10 +45,13 @@ export default function MainSWiper() {
         speed={500}
         loop
         autoplay={{ delay: 5000, disableOnInteraction: false }}
-        slidesPerView={3}
+        // slidesPerView={3}
         breakpoints={{
-          480: {
+          320: {
             slidesPerView: 1,
+          },
+          480: {
+            slidesPerView: 2,
           },
           768: {
             slidesPerView: 3,

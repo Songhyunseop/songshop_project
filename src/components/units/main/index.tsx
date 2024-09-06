@@ -5,7 +5,7 @@ import ItemSwiper from '@/components/commons/parts/swiper/itemSwiper/itemSwiper'
 
 import ItemBox from '@/components/commons/parts/itembox/itembox';
 
-import { useEffect, useRef, useState } from 'react';
+import { LegacyRef, useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { throttle } from '@/commons/utils/throttle';
 
@@ -15,17 +15,9 @@ import ReviewBox from '@/components/commons/parts/reviewBox/reviewBox';
 import AboutSection from './about/about';
 import { getDataList } from '@/components/commons/hooks/query/useQueryGetAllProducts';
 import { DragScroller } from '@/components/commons/parts/dragScroller/dragScroller';
+import { VideosPlayer } from '@/components/commons/parts/videos/videos';
 
 export default function Main() {
-  const videoUrls = ['/videos/shopvid1.mp4', '/videos/shopvid2.mp4'];
-  const randomPhrases = [
-    '새로운 시작은 늘 캐쥬얼하게 송샵에서',
-    '나만을 위한 코디, 송샵에서 확인해보세요',
-    '나의 트렌디를 뽐내고 싶다면? 지금 해 송샵',
-    '이번 주, 입을게 고민된다면? 역시나 이곳',
-    '당신의 스타일로 당신만의 코디를 맞춰보세요',
-  ];
-
   const selectTag = [
     '#다가오는 여름에 알맞은 Choice',
     '#집에서 입기 편한 데일리 룩',
@@ -43,31 +35,7 @@ export default function Main() {
     queryFn: () => getDataList(12),
   });
 
-  const [phrase, setPhrase] = useState(randomPhrases[0]);
   const [isNav, setIsNav] = useState({ best: false, new: false });
-
-  // 화면 문구 변환 함수
-  const changePhrase = () => {
-    const index = Math.floor(Math.random() * 5);
-
-    return randomPhrases[index];
-  };
-
-  //
-  //
-  let isRunning = false;
-  let timer: ReturnType<typeof setTimeout>;
-
-  const delaytoTrigger = (e) => {
-    if (isRunning) clearTimeout(timer);
-
-    isRunning = true;
-
-    timer = setTimeout(() => {
-      if (e._reactName === 'onMouseLeave') setPhrase(changePhrase());
-      isRunning = false;
-    }, 1500);
-  };
 
   //토글 인자 타입
   type navTypeProps = { best: boolean; new: boolean };
@@ -104,7 +72,6 @@ export default function Main() {
     setSelectedData(selectMockDataImage[selectOne]);
   };
 
-  //
   //
   //
   // mouseScroll
@@ -225,22 +192,43 @@ export default function Main() {
   //   requestAnimationFrame(animateScroll);
   // };
 
+  // resize
+  const recommendRef = useRef(null);
+  const itemsRef = useRef<HTMLDivElement[]>([]);
+
+  useEffect(() => {
+    // 초기 너비 계산 및 설정
+    if (recommendRef.current) {
+      const initWidth = (recommendRef.current.offsetWidth * 18) / 100;
+      itemsRef.current.forEach((el) => {
+        el.style.setProperty('min-width', `${initWidth}px`);
+      });
+    }
+
+    // 반응형 resize 너비 재설정
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { borderBoxSize } = entry;
+        const containerWidth = borderBoxSize[0].inlineSize;
+
+        const calculatedWidth = (containerWidth * 18) / 100;
+
+        itemsRef.current.forEach((el) =>
+          el.style.setProperty('min-width', `${calculatedWidth}px`)
+        );
+      }
+    });
+
+    if (recommendRef.current) resizeObserver.observe(recommendRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [data]);
+
   return (
     <S.Main>
-      <S.VideoWrapper
-        onMouseEnter={delaytoTrigger}
-        onMouseLeave={delaytoTrigger}
-      >
-        <S.Main_Theme>{phrase}</S.Main_Theme>
-        <S.Styled_ReactPlayer
-          url={videoUrls}
-          playing
-          muted
-          loop
-          width={'100%'}
-          height={'100vh'}
-        />
-      </S.VideoWrapper>
+      <VideosPlayer />
       <MainSWiper />
       <S.Main_Body>
         <S.Item_Section>
@@ -273,15 +261,29 @@ export default function Main() {
             list={['OUTWEAR', 'TOP', 'BOTTOM', 'SHOES', 'BAG', 'ACC']}
             isOpen={isNav.new}
           />
+
           <S.Main_ItemsList>
-            {data?.productData?.map((product, idx) => (
-              <ItemBox key={idx} product={product} height={150} />
-            ))}
+            {!isLoading
+              ? data?.productData?.map((product, idx) => (
+                  <ItemBox key={idx} product={product} height={150} />
+                ))
+              : new Array(12).fill(1).map((el, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      width: '100%',
+                      border: '2px solid red',
+                      paddingBottom: '150%',
+                    }}
+                  >
+                    hello
+                  </div>
+                ))}
           </S.Main_ItemsList>
           <S.Button>MORE</S.Button>
         </S.Item_Section>
       </S.Main_Body>
-      <S.Recommend className='recommend'>
+      <S.Recommend className='recommend' ref={recommendRef}>
         <S.Recommend_Contents>
           <S.Recommend_Left>
             <S.Rcmd_Left_Top>
@@ -314,7 +316,13 @@ export default function Main() {
               </S.Scroll_Container> */}
               <DragScroller key={selected}>
                 {data?.productData?.map((product, idx) => (
-                  <ItemBox key={idx} product={product} minWidth={250} />
+                  <ItemBox
+                    // ref={itemsRef}
+                    ref={(el) => (itemsRef.current[idx] = el)}
+                    key={idx}
+                    product={product}
+                    minWidth={200}
+                  />
                 ))}
               </DragScroller>
               {/* <S.Progress_Bar ref={progressBar}>

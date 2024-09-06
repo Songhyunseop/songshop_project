@@ -21,7 +21,7 @@ const globalStyle = css`
 
   .main_swiper .swiper-slide {
     padding-bottom: 50%;
-    min-height: 400px;
+    width: 33.333vw; // layout shift 방지용
   }
 
   .swiper-pagination {
@@ -36,6 +36,8 @@ const globalStyle = css`
 
   .item_swiper .swiper-slide {
     padding-bottom: 35%;
+    width: 33.333%; // 반응형에 따라 처리필요 (2개씩 보일 때는 50%로)
+    min-height: 250px;
   }
 
   // detail 캐러셀

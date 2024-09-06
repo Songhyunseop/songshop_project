@@ -3,17 +3,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const ItemBox = styled.div<{ height: number; minWidth: number }>`
   position: relative;
-  min-width: ${({ minWidth }) => (minWidth ? `${minWidth}px` : 0)};
+  /* min-width: ${({ minWidth }) => (minWidth ? `${minWidth}px` : 0)}; */
   font-size: 2rem;
   padding-bottom: ${({ height }) => (height ? `${height}%` : 0)};
-  /* height: 100%; */
 
   @media screen and (max-width: 1280px) {
     /* min-width: 200px; */
   }
 
   @media screen and (max-width: 780px) {
-    min-width: 140px;
+    /* min-width: 140px; */
   }
 `;
 

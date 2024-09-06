@@ -39,7 +39,11 @@ export default function ItemSwiper() {
         slidesPerView={1}
         breakpoints={{
           320: {
-            slidesPerView: 3,
+            slidesPerView: 1,
+            spaceBetween: 10,
+          },
+          480: {
+            slidesPerView: 2,
             spaceBetween: 10,
           },
           768: {

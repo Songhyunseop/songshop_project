@@ -186,6 +186,9 @@ export const Recommend = styled.article`
   background-color: #f0eded;
   display: flex;
   position: relative;
+  height: 50vw;
+  /* min-width: 380px; */
+  /* min-height: 240px; */
 `;
 
 export const Recommend_Contents = styled.div`
@@ -193,7 +196,7 @@ export const Recommend_Contents = styled.div`
   top: 0;
   left: 0;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   width: 100%;
   height: 100%;
   padding-bottom: 4%;
@@ -201,8 +204,8 @@ export const Recommend_Contents = styled.div`
 
 export const Recommend_Left = styled.article`
   /* width: 55%; */
-  width: 100%;
-  max-width: 60%;
+  width: 60%;
+  /* max-width: 60%; */
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -211,7 +214,7 @@ export const Recommend_Left = styled.article`
 `;
 
 export const Rcmd_Left_Top = styled.div`
-  flex: 1.5;
+  flex: 1.2;
   position: relative;
   display: flex;
   justify-content: center;
@@ -248,16 +251,15 @@ export const Rcmd_Left_Bottom = styled.div`
   flex-direction: column;
   overflow: hidden;
   border: 2px solid green;
-  flex: 4;
+  flex: 5;
 `;
 
 export const Recommend_Right = styled.div`
   height: 100%;
-  margin-left: 50px;
+  margin-left: 5%;
   position: relative;
   animation: appear 0.5s ease-out;
   flex: 1 1;
-  /* margin-right: 7%; */
   border: 3px solid orange;
 `;
 

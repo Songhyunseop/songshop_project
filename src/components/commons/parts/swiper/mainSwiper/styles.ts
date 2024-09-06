@@ -27,7 +27,7 @@ export const Main_Carousel_Title = styled.p`
   bottom: 10px;
   padding-left: 10px;
   color: #f7f3f5;
-  font-size: 4.5rem;
+  font-size: 4.1vw;
   font-weight: 500;
   z-index: 999;
   transition: all 0.3s ease-out;

@@ -7,7 +7,7 @@ const StyledContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  gap: 20px;
+  gap: 2%;
   margin-top: 5%;
   overflow-x: auto;
   scrollbar-width: none;
