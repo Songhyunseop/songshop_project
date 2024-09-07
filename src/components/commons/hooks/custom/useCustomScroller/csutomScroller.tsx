@@ -88,6 +88,7 @@ export const useDragScroller = (
       scrollRef.current.scrollLeft = startX + (targetX - startX) * easing;
 
       const rafId = requestAnimationFrame(animateScroll);
+
       if (progress >= 1) {
         cancelAnimationFrame(rafId);
         smoothScrollbar(getBarProgress(), 100);
@@ -107,16 +108,17 @@ export const useDragScroller = (
     const barWidth = scrollBarRef?.current.getBoundingClientRect().width;
     const stateWidth = progressStateRect?.width;
 
+    console.log(targetX * 100);
+
     // 애니메이션 시작시간, 최초 상태바 width 값
     const startTime = performance.now();
-    const xPosition = ((targetX * 100) / 100) * barWidth;
+    const xPosition = targetX * (barWidth - stateWidth);
 
     const animateScroll = (currentTime: number) => {
       const elapsedTime = currentTime - startTime;
       const progress = Math.min(elapsedTime / duration, 1);
 
-      currentPosition =
-        currentPosition + (xPosition - currentPosition - stateWidth / 2) * 0.2;
+      currentPosition = currentPosition + (xPosition - currentPosition) * 0.2;
 
       progressState.style.transform = `translateX(${currentPosition}px)`;
 

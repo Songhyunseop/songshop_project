@@ -42,7 +42,7 @@ export const Progress_State = styled.div`
   /* height: 5px; */
   overflow: hidden;
   background-color: black;
-  transform: translateX(-100px);
+  transform: translateX(0%);
 `;
 
 export const DragScroller = ({ children }) => {

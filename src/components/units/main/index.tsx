@@ -193,7 +193,7 @@ export default function Main() {
   // };
 
   // resize
-  const recommendRef = useRef(null);
+  const recommendRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
@@ -224,7 +224,7 @@ export default function Main() {
     return () => {
       resizeObserver.disconnect();
     };
-  }, [data]);
+  }, [data, selected]);
 
   return (
     <S.Main>
