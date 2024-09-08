@@ -108,8 +108,6 @@ export const useDragScroller = (
     const barWidth = scrollBarRef?.current.getBoundingClientRect().width;
     const stateWidth = progressStateRect?.width;
 
-    console.log(targetX * 100);
-
     // 애니메이션 시작시간, 최초 상태바 width 값
     const startTime = performance.now();
     const xPosition = targetX * (barWidth - stateWidth);

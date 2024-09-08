@@ -63,16 +63,16 @@ export default function ItemList() {
       <S.BestItem_Section>
         <S.Item_Title>BEST ITEM</S.Item_Title>
         <S.Items>
-          {bestData?.bestProduct?.map((_, idx) => (
-            <ItemBox key={idx} isBest={true} height={150} />
+          {bestData?.bestProduct?.map((data, idx) => (
+            <ItemBox key={idx} data={data} isBest={true} height={150} />
           ))}
         </S.Items>
       </S.BestItem_Section>
       <S.AllItem_Section>
         <S.Item_Title>ALL ITEM</S.Item_Title>
         <S.Items isAll={true}>
-          {productData?.productData?.map((_, idx) => (
-            <ItemBox key={idx} height={150} />
+          {productData?.productData?.map((data, idx) => (
+            <ItemBox key={idx} data={data} height={150} />
           ))}
         </S.Items>
       </S.AllItem_Section>

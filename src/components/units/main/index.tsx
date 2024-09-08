@@ -264,8 +264,8 @@ export default function Main() {
 
           <S.Main_ItemsList>
             {!isLoading
-              ? data?.productData?.map((product, idx) => (
-                  <ItemBox key={idx} product={product} height={150} />
+              ? data?.productData?.map((data, idx) => (
+                  <ItemBox key={idx} data={data} height={150} />
                 ))
               : new Array(12).fill(1).map((el, idx) => (
                   <div
@@ -315,12 +315,12 @@ export default function Main() {
                 ))}
               </S.Scroll_Container> */}
               <DragScroller key={selected}>
-                {data?.productData?.map((product, idx) => (
+                {data?.productData?.map((data, idx) => (
                   <ItemBox
                     // ref={itemsRef}
                     ref={(el) => (itemsRef.current[idx] = el)}
                     key={idx}
-                    product={product}
+                    data={data}
                     minWidth={200}
                   />
                 ))}

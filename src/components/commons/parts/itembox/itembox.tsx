@@ -7,7 +7,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { FavorToggleActiveState, UserState } from '@/commons/libraries/atom';
 import { useToggleFavor } from '../../hooks/mutation/useMutationToggleFavor';
 import { Flip, toast } from 'react-toastify';
-import { forwardRef } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 
 const ItemBox = (
   props: ItemBoxProps,
@@ -15,14 +15,18 @@ const ItemBox = (
 ) => {
   const userInfo = useRecoilValue(UserState);
   const [isActive, setIsActive] = useRecoilState(FavorToggleActiveState);
+  const [colorList, setColorList] = useState([]);
 
-  const { product, ...rest } = props;
+  const { data, ...rest } = props;
+
+  useEffect(() => {
+    const colors =
+      JSON.parse(data?.stock).map((data) => data.selectColor)[0] ?? [];
+
+    setColorList(colors);
+  }, []);
 
   const { mutateAsync: toggleFavor } = useToggleFavor();
-
-  const productColors = product?.stock
-    ? JSON.parse(product?.stock).map((data) => data.selectColor)[0]
-    : [];
 
   const toggleLikeIt = (e) => {
     // 변경사항 업데이트
@@ -34,7 +38,7 @@ const ItemBox = (
       return;
     }
 
-    toggleFavor({ product: product.id, user: userInfo.id });
+    toggleFavor({ product: data.id, user: userInfo.id });
 
     // 토스트 알림
     const message =
@@ -60,16 +64,12 @@ const ItemBox = (
   };
 
   return (
-    <S.ItemBox {...rest} id={product?.id} ref={ref}>
+    <S.ItemBox {...rest} id={data?.id} ref={ref}>
       {/* {props.isBest && <S.Label>BEST</S.Label>} */}
       <S.Item_Contents>
         <S.Image_Section>
           <S.Item_Img
-            src={
-              JSON.parse(product?.product_img)[0]
-              // ? JSON.parse(product?.product_img)[0]
-              // : '/vercel.svg'
-            }
+            src={JSON.parse(data?.product_img)[0]}
             onError={onErrorImg}
           />
         </S.Image_Section>
@@ -78,21 +78,21 @@ const ItemBox = (
             <S.Info_Left_Top>
               <S.Category>
                 <S.Par color={'#6e6e6e'} weight={400} size={0.9}>
-                  [{product?.product_category}]
+                  [{data?.product_category}]
                 </S.Par>
                 <S.Par color={'#6e6e6e'} weight={400} size={0.9}>
-                  [{product?.product_subcategory}]
+                  [{data?.product_subcategory}]
                 </S.Par>
               </S.Category>
             </S.Info_Left_Top>
             <S.Summary_Setcion color={'#6e6e6e'}>
               <S.Bracket>{'['}</S.Bracket>
-              <S.Summary>{product?.product_summary}</S.Summary>
+              <S.Summary>{data?.product_summary}</S.Summary>
               <S.Bracket>{']'}</S.Bracket>
             </S.Summary_Setcion>
-            <S.Item_Name>{product?.product_name}</S.Item_Name>
+            <S.Item_Name>{data?.product_name}</S.Item_Name>
             <S.Info_Left_Bottom>
-              <S.PricePar line>{String(product?.product_price)}</S.PricePar>
+              <S.PricePar line>{String(data?.product_price)}</S.PricePar>
               <S.PricePar size={1.1} weight={400}>
                 38,900
               </S.PricePar>
@@ -103,17 +103,17 @@ const ItemBox = (
           </S.Info_Left>
           <S.Info_Right>
             <S.Colors_Wrapper>
-              {productColors.map((color, idx) => (
+              {colorList.map((color, idx) => (
                 <S.Color color={color} key={idx}></S.Color>
               ))}
             </S.Colors_Wrapper>
             <S.CountsInfo>
               <S.Liked
-                id={String(product?.isLiked)}
+                id={String(data?.isLiked)}
                 onClick={toggleLikeIt}
-                isLiked={product?.isLiked}
+                isLiked={data?.isLiked}
               >
-                {product?.isLiked ? (
+                {data?.isLiked ? (
                   <S.CountIcon icon={solidHeart as IconProp}></S.CountIcon>
                 ) : (
                   <S.CountIcon icon={faHeart}></S.CountIcon>
