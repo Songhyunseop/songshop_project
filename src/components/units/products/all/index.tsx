@@ -23,6 +23,8 @@ export default function ItemList() {
     queryFn: () => getDataList(8),
   });
 
+  console.log(productData, 123);
+
   const {
     data: bestData,
     isLoading: bestProductLoading,
@@ -62,18 +64,29 @@ export default function ItemList() {
       </S.Category_Nav>
       <S.BestItem_Section>
         <S.Item_Title>BEST ITEM</S.Item_Title>
-        <S.Items>
+        {/* <S.Items>
           {bestData?.bestProduct?.map((data, idx) => (
             <ItemBox key={idx} data={data} isBest={true} height={150} />
           ))}
-        </S.Items>
+        </S.Items> */}
       </S.BestItem_Section>
       <S.AllItem_Section>
         <S.Item_Title>ALL ITEM</S.Item_Title>
         <S.Items isAll={true}>
-          {productData?.productData?.map((data, idx) => (
-            <ItemBox key={idx} data={data} height={150} />
-          ))}
+          {!productLoading
+            ? productData?.productData?.map((data, idx) => (
+                <ItemBox key={idx} data={data} height={150} />
+              ))
+            : new Array(8).fill(1).map((_, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    width: '100%',
+                    border: '2px solid red',
+                    paddingBottom: '150%',
+                  }}
+                ></div>
+              ))}
         </S.Items>
       </S.AllItem_Section>
       <S.Pagination>

@@ -5,7 +5,7 @@ import ItemSwiper from '@/components/commons/parts/swiper/itemSwiper/itemSwiper'
 
 import ItemBox from '@/components/commons/parts/itembox/itembox';
 
-import { LegacyRef, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { throttle } from '@/commons/utils/throttle';
 
@@ -267,7 +267,7 @@ export default function Main() {
               ? data?.productData?.map((data, idx) => (
                   <ItemBox key={idx} data={data} height={150} />
                 ))
-              : new Array(12).fill(1).map((el, idx) => (
+              : new Array(12).fill(1).map((_, idx) => (
                   <div
                     key={idx}
                     style={{
@@ -275,9 +275,7 @@ export default function Main() {
                       border: '2px solid red',
                       paddingBottom: '150%',
                     }}
-                  >
-                    hello
-                  </div>
+                  ></div>
                 ))}
           </S.Main_ItemsList>
           <S.Button>MORE</S.Button>
