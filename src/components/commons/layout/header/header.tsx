@@ -8,11 +8,11 @@ import { UserState } from '@/commons/libraries/atom';
 
 export default function Header() {
   const router = useRouter();
-  const headerRef = useRef(null);
 
   const user = useRecoilValue(UserState);
-
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const headerRef = useRef(null);
 
   const navRoute = [
     { route: '/signIn', name: user ? 'LOGOUT' : 'LOGIN' },
@@ -38,12 +38,15 @@ export default function Header() {
   }, [router.asPath]);
 
   const userType = user?.user_metadata.user_type;
-  const optionArr = [
+
+  const mypageOption = [
     '내 정보',
     '장바구니',
     userType === 'seller' ? '내 판매상품' : '주문현황',
     '회원탈퇴',
   ];
+
+  const shopOption = ['장', '보', '기'];
 
   return (
     <>
@@ -83,14 +86,14 @@ export default function Header() {
                     >
                       {name}
                     </CustomLink>
-                    {name === 'MYPAGE' && (
+                    {(name === 'MYPAGE' || name === 'SHOP') && (
                       <DropDown
                         onAnimationEnd={onAnimationEnd}
-                        isHover={isHover === 'MYPAGE'}
-                        isVisible={isVisible === 'MYPAGE'}
+                        isHover={isHover === name}
+                        isVisible={isVisible === name}
                         isScrolled={isScrolled}
                         isChangeStylePath={router.asPath === '/'}
-                        options={optionArr}
+                        options={name === 'MYPAGE' ? mypageOption : shopOption}
                       />
                     )}
                   </S.NavButtonLi>

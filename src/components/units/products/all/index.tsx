@@ -91,7 +91,7 @@ export default function ItemList() {
       </S.AllItem_Section>
       <S.Pagination>
         <FontAwesomeIcon style={{ fontSize: '0.95rem' }} icon={faChevronLeft} />
-        {new Array(5).fill(1).map((el, idx) => (
+        {new Array(5).fill(1).map((_, idx) => (
           <S.Page_Number
             key={idx}
             currentPage={currentPage}

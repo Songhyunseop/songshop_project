@@ -78,7 +78,6 @@ interface IDropDownProps {
   options: string[];
   onAnimationEnd: () => void;
   isHover: boolean | string;
-
   isVisible: boolean | string;
   isScrolled: boolean;
   isChangeStylePath: boolean;
@@ -102,12 +101,11 @@ export const UseDropDown = () => {
   const closeDrop = () => {
     dropDownRef.current = setTimeout(() => {
       setIsVisible(false);
-      console.log(222);
+      // console.log(222);
     }, 200);
   };
 
   const onAnimationEnd = () => {
-    console.log(111);
     if (!isVisible) setIsHover(false);
   };
 
